@@ -1,0 +1,29 @@
+running egg_info
+writing ../../build/wrist_control/wrist_control.egg-info/PKG-INFO
+writing dependency_links to ../../build/wrist_control/wrist_control.egg-info/dependency_links.txt
+writing entry points to ../../build/wrist_control/wrist_control.egg-info/entry_points.txt
+writing requirements to ../../build/wrist_control/wrist_control.egg-info/requires.txt
+writing top-level names to ../../build/wrist_control/wrist_control.egg-info/top_level.txt
+reading manifest file '../../build/wrist_control/wrist_control.egg-info/SOURCES.txt'
+writing manifest file '../../build/wrist_control/wrist_control.egg-info/SOURCES.txt'
+running build
+running build_py
+copying wrist_control/stewart_kinematics.py -> /home/james/wrist_26/odrive_ros_ws/build/wrist_control/build/lib/wrist_control
+copying wrist_control/spacemouse_commander.py -> /home/james/wrist_26/odrive_ros_ws/build/wrist_control/build/lib/wrist_control
+running install
+running install_lib
+copying /home/james/wrist_26/odrive_ros_ws/build/wrist_control/build/lib/wrist_control/stewart_kinematics.py -> /home/james/wrist_26/odrive_ros_ws/install/wrist_control/lib/python3.12/site-packages/wrist_control
+copying /home/james/wrist_26/odrive_ros_ws/build/wrist_control/build/lib/wrist_control/spacemouse_commander.py -> /home/james/wrist_26/odrive_ros_ws/install/wrist_control/lib/python3.12/site-packages/wrist_control
+byte-compiling /home/james/wrist_26/odrive_ros_ws/install/wrist_control/lib/python3.12/site-packages/wrist_control/stewart_kinematics.py to stewart_kinematics.cpython-312.pyc
+byte-compiling /home/james/wrist_26/odrive_ros_ws/install/wrist_control/lib/python3.12/site-packages/wrist_control/spacemouse_commander.py to spacemouse_commander.cpython-312.pyc
+running install_data
+copying doc/running.md -> /home/james/wrist_26/odrive_ros_ws/install/wrist_control/share/wrist_control/doc
+running install_egg_info
+removing '/home/james/wrist_26/odrive_ros_ws/install/wrist_control/lib/python3.12/site-packages/wrist_control-0.1.0-py3.12.egg-info' (and everything under it)
+Copying ../../build/wrist_control/wrist_control.egg-info to /home/james/wrist_26/odrive_ros_ws/install/wrist_control/lib/python3.12/site-packages/wrist_control-0.1.0-py3.12.egg-info
+running install_scripts
+Installing hsa_odrive_control script to /home/james/wrist_26/odrive_ros_ws/install/wrist_control/bin
+Installing joint_commander_gui script to /home/james/wrist_26/odrive_ros_ws/install/wrist_control/bin
+Installing odrive_position_monitor script to /home/james/wrist_26/odrive_ros_ws/install/wrist_control/bin
+Installing spacemouse_commander script to /home/james/wrist_26/odrive_ros_ws/install/wrist_control/bin
+writing list of installed files to '/home/james/wrist_26/odrive_ros_ws/build/wrist_control/install.log'

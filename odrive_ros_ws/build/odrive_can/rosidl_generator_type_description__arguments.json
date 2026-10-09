@@ -1,0 +1,14 @@
+{
+  "package_name": "odrive_can",
+  "output_dir": "/home/james/wrist_26/odrive_ros_ws/build/odrive_can/rosidl_generator_type_description/odrive_can",
+  "idl_tuples": [
+    "/home/james/wrist_26/odrive_ros_ws/build/odrive_can/rosidl_adapter/odrive_can:msg/ControlMessage.idl",
+    "/home/james/wrist_26/odrive_ros_ws/build/odrive_can/rosidl_adapter/odrive_can:msg/ControllerStatus.idl",
+    "/home/james/wrist_26/odrive_ros_ws/build/odrive_can/rosidl_adapter/odrive_can:msg/ODriveStatus.idl",
+    "/home/james/wrist_26/odrive_ros_ws/build/odrive_can/rosidl_adapter/odrive_can:srv/AxisState.idl"
+  ],
+  "include_paths": [
+    "service_msgs:/opt/ros/jazzy/share/service_msgs",
+    "builtin_interfaces:/opt/ros/jazzy/share/builtin_interfaces"
+  ]
+}

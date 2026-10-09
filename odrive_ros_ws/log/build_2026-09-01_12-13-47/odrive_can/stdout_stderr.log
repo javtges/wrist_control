@@ -1,0 +1,344 @@
+-- Found ament_cmake: 2.5.3 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Found rclcpp: 28.1.6 (/opt/ros/jazzy/share/rclcpp/cmake)
+-- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+-- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found rmw_implementation_cmake: 7.3.1 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+-- Found rmw_fastrtps_cpp: 8.4.1 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Found rosidl_default_generators: 1.6.0 (/opt/ros/jazzy/share/rosidl_default_generators/cmake)
+-- Found rosidl_adapter: 4.6.5 (/opt/ros/jazzy/share/rosidl_adapter/cmake)
+-- Found std_srvs: 5.3.5 (/opt/ros/jazzy/share/std_srvs/cmake)
+-- Found ament_cmake_ros: 0.12.0 (/opt/ros/jazzy/share/ament_cmake_ros/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found python_cmake_module: 0.11.1 (/opt/ros/jazzy/share/python_cmake_module/cmake)
+-- Found PythonExtra: /home/james/wrist_26/wrist-odrive/bin/python3  
+-- Found Python3: /home/james/wrist_26/wrist-odrive/bin/python3 (found version "3.12.3") found components: Interpreter Development NumPy Development.Module Development.Embed 
+-- Configuring done (2.8s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/james/wrist_26/odrive_ros_ws/build/odrive_can
+[  1%] Generating type hashes for ROS interfaces
+[  1%] Built target ament_cmake_python_copy_odrive_can
+running egg_info
+creating odrive_can.egg-info
+writing odrive_can.egg-info/PKG-INFO
+writing dependency_links to odrive_can.egg-info/dependency_links.txt
+writing top-level names to odrive_can.egg-info/top_level.txt
+writing manifest file 'odrive_can.egg-info/SOURCES.txt'
+reading manifest file 'odrive_can.egg-info/SOURCES.txt'
+writing manifest file 'odrive_can.egg-info/SOURCES.txt'
+[  1%] Built target ament_cmake_python_build_odrive_can_egg
+[  1%] Built target odrive_can__rosidl_generator_type_description
+[  2%] Generating C code for ROS interfaces
+[  4%] Generating C++ code for ROS interfaces
+[  4%] Built target odrive_can__cpp
+[  8%] Building C object CMakeFiles/odrive_can__rosidl_generator_c.dir/rosidl_generator_c/odrive_can/msg/detail/control_message__type_support.c.o
+[  8%] Building C object CMakeFiles/odrive_can__rosidl_generator_c.dir/rosidl_generator_c/odrive_can/msg/detail/control_message__functions.c.o
+[ 10%] Building C object CMakeFiles/odrive_can__rosidl_generator_c.dir/rosidl_generator_c/odrive_can/msg/detail/controller_status__description.c.o
+[ 11%] Building C object CMakeFiles/odrive_can__rosidl_generator_c.dir/rosidl_generator_c/odrive_can/msg/detail/controller_status__functions.c.o
+[ 13%] Building C object CMakeFiles/odrive_can__rosidl_generator_c.dir/rosidl_generator_c/odrive_can/msg/detail/o_drive_status__description.c.o
+[  8%] Building C object CMakeFiles/odrive_can__rosidl_generator_c.dir/rosidl_generator_c/odrive_can/msg/detail/control_message__description.c.o
+[ 14%] Building C object CMakeFiles/odrive_can__rosidl_generator_c.dir/rosidl_generator_c/odrive_can/msg/detail/controller_status__type_support.c.o
+[ 15%] Building C object CMakeFiles/odrive_can__rosidl_generator_c.dir/rosidl_generator_c/odrive_can/msg/detail/o_drive_status__functions.c.o
+[ 17%] Building C object CMakeFiles/odrive_can__rosidl_generator_c.dir/rosidl_generator_c/odrive_can/msg/detail/o_drive_status__type_support.c.o
+[ 20%] Building C object CMakeFiles/odrive_can__rosidl_generator_c.dir/rosidl_generator_c/odrive_can/srv/detail/axis_state__functions.c.o
+[ 20%] Building C object CMakeFiles/odrive_can__rosidl_generator_c.dir/rosidl_generator_c/odrive_can/srv/detail/axis_state__description.c.o
+[ 21%] Building C object CMakeFiles/odrive_can__rosidl_generator_c.dir/rosidl_generator_c/odrive_can/srv/detail/axis_state__type_support.c.o
+[ 23%] Linking C shared library libodrive_can__rosidl_generator_c.so
+[ 23%] Built target odrive_can__rosidl_generator_c
+[ 26%] Generating C type support for eProsima Fast-RTPS
+[ 26%] Generating C type support dispatch for ROS interfaces
+[ 27%] Generating C++ introspection for ROS interfaces
+[ 30%] Generating C introspection for ROS interfaces
+[ 30%] Generating C++ type support for eProsima Fast-RTPS
+[ 31%] Generating C++ type support dispatch for ROS interfaces
+[ 33%] Building C object CMakeFiles/odrive_can__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/odrive_can/msg/detail/control_message__type_support.c.o
+[ 34%] Building C object CMakeFiles/odrive_can__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/odrive_can/msg/detail/o_drive_status__type_support.c.o
+[ 36%] Building C object CMakeFiles/odrive_can__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/odrive_can/msg/detail/controller_status__type_support.c.o
+[ 37%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/odrive_can/msg/control_message__type_support.cpp.o
+[ 39%] Building C object CMakeFiles/odrive_can__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/odrive_can/srv/detail/axis_state__type_support.c.o
+[ 40%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/odrive_can/msg/controller_status__type_support.cpp.o
+[ 42%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/odrive_can/msg/o_drive_status__type_support.cpp.o
+[ 43%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/odrive_can/msg/detail/control_message__type_support.cpp.o
+[ 44%] Linking C shared library libodrive_can__rosidl_typesupport_introspection_c.so
+[ 44%] Built target odrive_can__rosidl_typesupport_introspection_c
+[ 46%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_c.dir/rosidl_typesupport_c/odrive_can/msg/control_message__type_support.cpp.o
+[ 47%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_c.dir/rosidl_typesupport_c/odrive_can/msg/controller_status__type_support.cpp.o
+[ 49%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/odrive_can/srv/axis_state__type_support.cpp.o
+[ 50%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_c.dir/rosidl_typesupport_c/odrive_can/msg/o_drive_status__type_support.cpp.o
+[ 52%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_c.dir/rosidl_typesupport_c/odrive_can/srv/axis_state__type_support.cpp.o
+[ 53%] Linking CXX shared library libodrive_can__rosidl_typesupport_c.so
+[ 53%] Built target odrive_can__rosidl_typesupport_c
+[ 56%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/odrive_can/msg/detail/o_drive_status__type_support.cpp.o
+[ 55%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/odrive_can/msg/detail/controller_status__type_support.cpp.o
+[ 57%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/odrive_can/msg/detail/dds_fastrtps/control_message__type_support.cpp.o
+[ 59%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/odrive_can/srv/detail/axis_state__type_support.cpp.o
+[ 60%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/odrive_can/msg/detail/control_message__type_support_c.cpp.o
+[ 62%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/odrive_can/msg/detail/dds_fastrtps/controller_status__type_support.cpp.o
+[ 63%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/odrive_can/msg/detail/dds_fastrtps/o_drive_status__type_support.cpp.o
+[ 65%] Linking CXX shared library libodrive_can__rosidl_typesupport_cpp.so
+[ 66%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/odrive_can/msg/detail/controller_status__type_support_c.cpp.o
+[ 66%] Built target odrive_can__rosidl_typesupport_cpp
+[ 68%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/odrive_can/msg/detail/o_drive_status__type_support_c.cpp.o
+[ 69%] Building CXX object CMakeFiles/odrive_can_node.dir/home/james/wrist_26/odrive_ros_ws/src/ros_odrive/odrive_base/src/epoll_event_loop.cpp.o
+[ 71%] Linking CXX shared library libodrive_can__rosidl_typesupport_introspection_cpp.so
+[ 72%] Building CXX object CMakeFiles/odrive_can_node.dir/home/james/wrist_26/odrive_ros_ws/src/ros_odrive/odrive_base/src/socket_can.cpp.o
+[ 73%] Building CXX object CMakeFiles/odrive_can_node.dir/src/odrive_can_node.cpp.o
+[ 73%] Built target odrive_can__rosidl_typesupport_introspection_cpp
+[ 75%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/odrive_can/srv/detail/dds_fastrtps/axis_state__type_support.cpp.o
+[ 76%] Building CXX object CMakeFiles/odrive_can__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/odrive_can/srv/detail/axis_state__type_support_c.cpp.o
+[ 78%] Building CXX object CMakeFiles/odrive_can_node.dir/src/main.cpp.o
+[ 79%] Linking CXX shared library libodrive_can__rosidl_typesupport_fastrtps_c.so
+[ 79%] Built target odrive_can__rosidl_typesupport_fastrtps_c
+[ 81%] Linking CXX shared library libodrive_can__rosidl_typesupport_fastrtps_cpp.so
+[ 81%] Built target odrive_can__rosidl_typesupport_fastrtps_cpp
+[ 81%] Built target odrive_can
+[ 82%] Generating Python code for ROS interfaces
+[ 82%] Built target odrive_can__py
+[ 85%] Building C object CMakeFiles/odrive_can__rosidl_generator_py.dir/rosidl_generator_py/odrive_can/msg/_o_drive_status_s.c.o
+[ 85%] Building C object CMakeFiles/odrive_can__rosidl_generator_py.dir/rosidl_generator_py/odrive_can/srv/_axis_state_s.c.o
+[ 86%] Building C object CMakeFiles/odrive_can__rosidl_generator_py.dir/rosidl_generator_py/odrive_can/msg/_control_message_s.c.o
+[ 88%] Building C object CMakeFiles/odrive_can__rosidl_generator_py.dir/rosidl_generator_py/odrive_can/msg/_controller_status_s.c.o
+[ 89%] Linking C shared library libodrive_can__rosidl_generator_py.so
+[ 89%] Built target odrive_can__rosidl_generator_py
+[ 91%] Building C object CMakeFiles/odrive_can_s__rosidl_typesupport_introspection_c.dir/rosidl_generator_py/odrive_can/_odrive_can_s.ep.rosidl_typesupport_introspection_c.c.o
+[ 92%] Building C object CMakeFiles/odrive_can_s__rosidl_typesupport_c.dir/rosidl_generator_py/odrive_can/_odrive_can_s.ep.rosidl_typesupport_c.c.o
+[ 94%] Building C object CMakeFiles/odrive_can_s__rosidl_typesupport_fastrtps_c.dir/rosidl_generator_py/odrive_can/_odrive_can_s.ep.rosidl_typesupport_fastrtps_c.c.o
+[ 95%] Linking C shared module rosidl_generator_py/odrive_can/odrive_can_s__rosidl_typesupport_c.so
+[ 95%] Built target odrive_can_s__rosidl_typesupport_c
+[ 97%] Linking C shared module rosidl_generator_py/odrive_can/odrive_can_s__rosidl_typesupport_introspection_c.so
+[ 98%] Linking C shared module rosidl_generator_py/odrive_can/odrive_can_s__rosidl_typesupport_fastrtps_c.so
+[ 98%] Built target odrive_can_s__rosidl_typesupport_introspection_c
+[ 98%] Built target odrive_can_s__rosidl_typesupport_fastrtps_c
+[100%] Linking CXX executable odrive_can_node
+[100%] Built target odrive_can_node
+-- Install configuration: ""
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/ament_index/resource_index/rosidl_interfaces/odrive_can
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ControlMessage.json
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ControllerStatus.json
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ODriveStatus.json
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/srv/AxisState.json
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/control_message.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__type_support.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__functions.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__type_support.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__struct.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__type_support.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__functions.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__description.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__description.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__struct.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__functions.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__type_support.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__functions.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__functions.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__functions.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__struct.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__description.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__type_support.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__type_support.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/rosidl_generator_c__visibility_control.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/controller_status.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/o_drive_status.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/axis_state.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__struct.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__type_support.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__functions.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__description.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__functions.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__type_support.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/library_path.sh
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/library_path.dsv
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_generator_c.so
+-- Set non-toolchain portion of runtime path of "/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_generator_c.so" to ""
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__rosidl_typesupport_fastrtps_c.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_fastrtps_c.so
+-- Set non-toolchain portion of runtime path of "/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_fastrtps_c.so" to ""
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/controller_status.hpp
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__builder.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__traits.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__struct.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__builder.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__struct.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__struct.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__traits.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__traits.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__type_support.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__type_support.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__builder.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__type_support.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/rosidl_generator_cpp__visibility_control.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/o_drive_status.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/control_message.hpp
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/axis_state.hpp
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__builder.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__struct.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__type_support.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__traits.hpp
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/dds_fastrtps
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__rosidl_typesupport_fastrtps_cpp.hpp
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__rosidl_typesupport_fastrtps_cpp.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/dds_fastrtps
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_fastrtps_cpp.so
+-- Set non-toolchain portion of runtime path of "/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_fastrtps_cpp.so" to ""
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/rosidl_typesupport_introspection_c__visibility_control.h
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__rosidl_typesupport_introspection_c.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__type_support.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__rosidl_typesupport_introspection_c.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__rosidl_typesupport_introspection_c.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__type_support.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__type_support.c
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__rosidl_typesupport_introspection_c.h
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__type_support.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_introspection_c.so
+-- Set non-toolchain portion of runtime path of "/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_introspection_c.so" to ""
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_c.so
+-- Set non-toolchain portion of runtime path of "/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_c.so" to ""
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__type_support.cpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__type_support.cpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__type_support.cpp
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv
+-- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__type_support.cpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__rosidl_typesupport_introspection_cpp.hpp
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_introspection_cpp.so
+-- Set non-toolchain portion of runtime path of "/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_introspection_cpp.so" to ""
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_cpp.so
+-- Set non-toolchain portion of runtime path of "/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_cpp.so" to ""
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/pythonpath.sh
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/pythonpath.dsv
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can-0.0.1-py3.12.egg-info
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can-0.0.1-py3.12.egg-info/top_level.txt
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can-0.0.1-py3.12.egg-info/PKG-INFO
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can-0.0.1-py3.12.egg-info/dependency_links.txt
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can-0.0.1-py3.12.egg-info/SOURCES.txt
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/_odrive_can_s.ep.rosidl_typesupport_c.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/_o_drive_status.py
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/_controller_status_s.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/_o_drive_status_s.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/_controller_status.py
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/_control_message_s.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/__init__.py
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/_control_message.py
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/_odrive_can_s.ep.rosidl_typesupport_introspection_c.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/odrive_can_s__rosidl_typesupport_c.so
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/odrive_can_s__rosidl_typesupport_fastrtps_c.so
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/__init__.py
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/odrive_can_s__rosidl_typesupport_introspection_c.so
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/_odrive_can_s.ep.rosidl_typesupport_fastrtps_c.c
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/srv
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/srv/_axis_state.py
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/srv/__init__.py
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/srv/_axis_state_s.c
+Listing '/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can'...
+Compiling '/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/__init__.py'...
+Listing '/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg'...
+Compiling '/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/__init__.py'...
+Compiling '/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/_control_message.py'...
+Compiling '/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/_controller_status.py'...
+Compiling '/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/_o_drive_status.py'...
+Listing '/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/srv'...
+Compiling '/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/srv/__init__.py'...
+Compiling '/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/srv/_axis_state.py'...
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/odrive_can_s__rosidl_typesupport_fastrtps_c.so
+-- Set non-toolchain portion of runtime path of "/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/odrive_can_s__rosidl_typesupport_fastrtps_c.so" to ""
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/odrive_can_s__rosidl_typesupport_introspection_c.so
+-- Set non-toolchain portion of runtime path of "/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/odrive_can_s__rosidl_typesupport_introspection_c.so" to ""
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/odrive_can_s__rosidl_typesupport_c.so
+-- Set non-toolchain portion of runtime path of "/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/odrive_can_s__rosidl_typesupport_c.so" to ""
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_generator_py.so
+-- Set non-toolchain portion of runtime path of "/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_generator_py.so" to ""
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ControlMessage.idl
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ControllerStatus.idl
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ODriveStatus.idl
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/srv/AxisState.idl
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ControlMessage.msg
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ControllerStatus.msg
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ODriveStatus.msg
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/srv/AxisState.srv
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/odrive_can/odrive_can_node
+-- Set non-toolchain portion of runtime path of "/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/odrive_can/odrive_can_node" to ""
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/launch
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/launch/example_launch.yaml
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/launch/wrist_launch.yaml
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/ament_index/resource_index/package_run_dependencies/odrive_can
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/ament_index/resource_index/parent_prefix_path/odrive_can
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/ament_prefix_path.sh
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/ament_prefix_path.dsv
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/path.sh
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/path.dsv
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/local_setup.bash
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/local_setup.sh
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/local_setup.zsh
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/local_setup.dsv
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/package.dsv
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/ament_index/resource_index/packages/odrive_can
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_generator_cExport.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_generator_cExport-noconfig.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_typesupport_fastrtps_cExport.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_generator_cppExport.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_typesupport_fastrtps_cppExport.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_introspection_cExport.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_introspection_cExport-noconfig.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_cExport.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_cExport-noconfig.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_introspection_cppExport.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_cppExport.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_cppExport-noconfig.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_generator_pyExport.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_generator_pyExport-noconfig.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/rosidl_cmake-extras.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/ament_cmake_export_libraries-extras.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/ament_cmake_export_targets-extras.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_canConfig.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_canConfig-version.cmake
+-- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/package.xml

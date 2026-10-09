@@ -1,0 +1,31 @@
+[0.008s] Invoking command in '/home/james/wrist_26/odrive_ros_ws/build/odrive_can': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/james/wrist_26/odrive_ros_ws/src/ros_odrive/odrive_node -DCMAKE_INSTALL_PREFIX=/home/james/wrist_26/odrive_ros_ws/install/odrive_can
+[0.021s] -- Found ament_cmake: 2.5.3 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[0.216s] -- Found rclcpp: 28.1.6 (/opt/ros/jazzy/share/rclcpp/cmake)
+[0.239s] -- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[0.246s] -- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[0.255s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.269s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.319s] -- Found rmw_implementation_cmake: 7.3.1 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[0.320s] -- Found rmw_fastrtps_cpp: 8.4.1 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[0.379s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.440s] -- Found rosidl_default_generators: 1.6.0 (/opt/ros/jazzy/share/rosidl_default_generators/cmake)
+[0.446s] -- Found rosidl_adapter: 4.6.5 (/opt/ros/jazzy/share/rosidl_adapter/cmake)
+[0.448s] -- Found std_srvs: 5.3.5 (/opt/ros/jazzy/share/std_srvs/cmake)
+[0.684s] Traceback (most recent call last):
+[0.685s]   File "/opt/ros/jazzy/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py", line 22, in <module>
+[0.685s]     from catkin_pkg.package import parse_package_string
+[0.685s] ModuleNotFoundError: No module named 'catkin_pkg'
+[0.689s] CMake Error at /opt/ros/jazzy/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:95 (message):
+[0.689s]   execute_process(/home/james/wrist_26/wrist-odrive/bin/python3
+[0.689s]   /opt/ros/jazzy/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py
+[0.689s]   /home/james/wrist_26/odrive_ros_ws/src/ros_odrive/odrive_node/package.xml
+[0.689s]   /home/james/wrist_26/odrive_ros_ws/build/odrive_can/ament_cmake_core/package.cmake)
+[0.689s]   returned error code 1
+[0.689s] Call Stack (most recent call first):
+[0.689s]   /opt/ros/jazzy/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:49 (_ament_package_xml)
+[0.690s]   /opt/ros/jazzy/share/rosidl_cmake/cmake/rosidl_generate_interfaces.cmake:220 (ament_package_xml)
+[0.690s]   CMakeLists.txt:14 (rosidl_generate_interfaces)
+[0.690s] 
+[0.690s] 
+[0.690s] -- Configuring incomplete, errors occurred!
+[0.698s] Invoked command in '/home/james/wrist_26/odrive_ros_ws/build/odrive_can' returned '1': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/james/wrist_26/odrive_ros_ws/src/ros_odrive/odrive_node -DCMAKE_INSTALL_PREFIX=/home/james/wrist_26/odrive_ros_ws/install/odrive_can

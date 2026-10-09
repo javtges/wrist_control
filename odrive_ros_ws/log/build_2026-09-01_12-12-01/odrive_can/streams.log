@@ -1,0 +1,56 @@
+[0.008s] Invoking command in '/home/james/wrist_26/odrive_ros_ws/build/odrive_can': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/james/wrist_26/odrive_ros_ws/src/ros_odrive/odrive_node -DCMAKE_INSTALL_PREFIX=/home/james/wrist_26/odrive_ros_ws/install/odrive_can
+[0.020s] -- Found ament_cmake: 2.5.3 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[0.238s] -- Found rclcpp: 28.1.6 (/opt/ros/jazzy/share/rclcpp/cmake)
+[0.293s] -- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[0.309s] -- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[0.326s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.348s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.425s] -- Found rmw_implementation_cmake: 7.3.1 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[0.427s] -- Found rmw_fastrtps_cpp: 8.4.1 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[0.492s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.547s] -- Found rosidl_default_generators: 1.6.0 (/opt/ros/jazzy/share/rosidl_default_generators/cmake)
+[0.554s] -- Found rosidl_adapter: 4.6.5 (/opt/ros/jazzy/share/rosidl_adapter/cmake)
+[0.556s] -- Found std_srvs: 5.3.5 (/opt/ros/jazzy/share/std_srvs/cmake)
+[0.732s] CMake Error at /opt/ros/jazzy/share/rosidl_adapter/cmake/rosidl_adapt_interfaces.cmake:57 (message):
+[0.732s]   execute_process(/home/james/wrist_26/wrist-odrive/bin/python3 -m
+[0.732s]   rosidl_adapter --package-name odrive_can --arguments-file
+[0.733s]   /home/james/wrist_26/odrive_ros_ws/build/odrive_can/rosidl_adapter__arguments__odrive_can.json
+[0.733s]   --output-dir
+[0.733s]   /home/james/wrist_26/odrive_ros_ws/build/odrive_can/rosidl_adapter/odrive_can
+[0.733s]   --output-file
+[0.733s]   /home/james/wrist_26/odrive_ros_ws/build/odrive_can/rosidl_adapter/odrive_can.idls)
+[0.733s]   returned error code 1:
+[0.733s] 
+[0.733s]   AttributeError processing template 'msg.idl.em'
+[0.733s] 
+[0.733s]   Traceback (most recent call last):
+[0.733s] 
+[0.733s]     File "<frozen runpy>", line 198, in _run_module_as_main
+[0.733s]     File "<frozen runpy>", line 88, in _run_code
+[0.733s]     File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/__main__.py", line 19, in <module>
+[0.734s]       sys.exit(main())
+[0.734s]                ^^^^^^
+[0.734s]     File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/main.py", line 53, in main
+[0.734s]       abs_idl_file = convert_to_idl(
+[0.734s]                      ^^^^^^^^^^^^^^^
+[0.734s]     File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/__init__.py", line 19, in convert_to_idl
+[0.734s]       return convert_msg_to_idl(
+[0.734s]              ^^^^^^^^^^^^^^^^^^^
+[0.734s]     File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/msg/__init__.py", line 39, in convert_msg_to_idl
+[0.734s]       expand_template('msg.idl.em', data, output_file, encoding='iso-8859-1')
+[0.734s]     File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/resource/__init__.py", line 29, in expand_template
+[0.734s]       content = evaluate_template(template_name, data)
+[0.734s]                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0.734s]     File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/resource/__init__.py", line 65, in evaluate_template
+[0.735s]       _interpreter = em.Interpreter(
+[0.735s]                      ^^^^^^^^^^^^^^
+[0.735s] 
+[0.735s]   AttributeError: module 'em' has no attribute 'Interpreter'
+[0.735s] 
+[0.735s] Call Stack (most recent call first):
+[0.735s]   /opt/ros/jazzy/share/rosidl_cmake/cmake/rosidl_generate_interfaces.cmake:132 (rosidl_adapt_interfaces)
+[0.735s]   CMakeLists.txt:14 (rosidl_generate_interfaces)
+[0.735s] 
+[0.735s] 
+[0.735s] -- Configuring incomplete, errors occurred!
+[0.742s] Invoked command in '/home/james/wrist_26/odrive_ros_ws/build/odrive_can' returned '1': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/james/wrist_26/odrive_ros_ws/src/ros_odrive/odrive_node -DCMAKE_INSTALL_PREFIX=/home/james/wrist_26/odrive_ros_ws/install/odrive_can

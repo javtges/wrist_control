@@ -1,0 +1,3 @@
+#!/usr/bin/env python3
+from wrist_control.hsa_odrive_control import main
+main()

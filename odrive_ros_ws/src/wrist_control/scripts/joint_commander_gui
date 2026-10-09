@@ -1,0 +1,3 @@
+#!/usr/bin/env python3
+from wrist_control.joint_commander_gui import main
+main()

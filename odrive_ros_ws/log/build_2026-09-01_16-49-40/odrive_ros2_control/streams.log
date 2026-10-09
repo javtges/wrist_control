@@ -1,0 +1,32 @@
+[0.014s] Invoking command in '/home/james/wrist_26/odrive_ros_ws/build/odrive_ros2_control': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/james/wrist_26/odrive_ros_ws/install/wrist_control:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PS1=(wrist-odrive) \[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ /usr/bin/cmake /home/james/wrist_26/odrive_ros_ws/src/ros_odrive/odrive_ros2_control -DCMAKE_INSTALL_PREFIX=/home/james/wrist_26/odrive_ros_ws/install/odrive_ros2_control
+[0.075s] -- The C compiler identification is GNU 13.3.0
+[0.153s] -- The CXX compiler identification is GNU 13.3.0
+[0.170s] -- Detecting C compiler ABI info
+[0.275s] -- Detecting C compiler ABI info - done
+[0.287s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.287s] -- Detecting C compile features
+[0.288s] -- Detecting C compile features - done
+[0.300s] -- Detecting CXX compiler ABI info
+[0.408s] -- Detecting CXX compiler ABI info - done
+[0.423s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.423s] -- Detecting CXX compile features
+[0.424s] -- Detecting CXX compile features - done
+[0.428s] -- Found ament_cmake: 2.5.3 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[0.613s] -- Found Python3: /home/james/wrist_26/wrist-odrive/bin/python3 (found version "3.12.3") found components: Interpreter 
+[0.725s] -- Found rclcpp: 28.1.6 (/opt/ros/jazzy/share/rclcpp/cmake)
+[0.772s] -- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[0.788s] -- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[0.807s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.824s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.905s] -- Found rmw_implementation_cmake: 7.3.1 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[0.908s] -- Found rmw_fastrtps_cpp: 8.4.1 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[0.990s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.13")  
+[1.028s] -- Found FastRTPS: /opt/ros/jazzy/include (Required is at least version "2.13") 
+[1.064s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[1.164s] -- Found ament_cmake_auto: 2.5.3 (/opt/ros/jazzy/share/ament_cmake_auto/cmake)
+[1.299s] [31mCMake Error at CMakeLists.txt:30 (pluginlib_export_plugin_description_file):
+[1.300s]   Unknown CMake command "pluginlib_export_plugin_description_file".
+[1.300s] 
+[1.300s] [0m
+[1.300s] -- Configuring incomplete, errors occurred!
+[1.311s] Invoked command in '/home/james/wrist_26/odrive_ros_ws/build/odrive_ros2_control' returned '1': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/james/wrist_26/odrive_ros_ws/install/wrist_control:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PS1=(wrist-odrive) \[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ /usr/bin/cmake /home/james/wrist_26/odrive_ros_ws/src/ros_odrive/odrive_ros2_control -DCMAKE_INSTALL_PREFIX=/home/james/wrist_26/odrive_ros_ws/install/odrive_ros2_control

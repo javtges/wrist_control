@@ -1,0 +1,70 @@
+[0.000000] (-) TimerEvent: {}
+[0.000454] (-) JobUnselected: {'identifier': 'odrive_botwheel_explorer'}
+[0.000686] (-) JobUnselected: {'identifier': 'odrive_ros2_control'}
+[0.000710] (odrive_can) JobQueued: {'identifier': 'odrive_can', 'dependencies': OrderedDict()}
+[0.000731] (odrive_can) JobStarted: {'identifier': 'odrive_can'}
+[0.007954] (odrive_can) JobProgress: {'identifier': 'odrive_can', 'progress': 'cmake'}
+[0.008814] (odrive_can) Command: {'cmd': ['/usr/bin/cmake', '/home/james/wrist_26/odrive_ros_ws/src/ros_odrive/odrive_node', '-DCMAKE_INSTALL_PREFIX=/home/james/wrist_26/odrive_ros_ws/install/odrive_can'], 'cwd': '/home/james/wrist_26/odrive_ros_ws/build/odrive_can', 'env': OrderedDict({'GJS_DEBUG_TOPICS': 'JS ERROR;JS LOG', 'XDG_ACTIVATION_TOKEN': 'gnome-shell/Terminator/2905-0-sapling_TIME108034', 'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'james', 'XDG_SESSION_TYPE': 'wayland', 'CLUTTER_DISABLE_MIPMAPPED_TEXT': '1', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/home/james/odrive_ros_ws/src/install/odrive_can/lib:/home/james/odrive_ros_ws/src/ros_odrive/install/odrive_can/lib:/opt/ros/jazzy/opt/rviz_ogre_vendor/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu:/opt/ros/jazzy/opt/gz_math_vendor/lib:/opt/ros/jazzy/opt/gz_utils_vendor/lib:/opt/ros/jazzy/opt/gz_cmake_vendor/lib:/opt/ros/jazzy/lib', 'HOME': '/home/james', 'OLDPWD': '/home/james/wrist_26', 'DESKTOP_SESSION': 'ubuntu', 'GIO_LAUNCHED_DESKTOP_FILE': '/usr/share/applications/terminator.desktop', 'ROS_PYTHON_VERSION': '3', 'GNOME_SHELL_SESSION_MODE': 'ubuntu', 'GTK_MODULES': 'gail:atk-bridge', 'PS1': '(wrist-odrive) \\[\\e]0;\\u@\\h: \\w\\a\\]${debian_chroot:+($debian_chroot)}\\[\\033[01;32m\\]\\u@\\h\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w\\[\\033[00m\\]\\$', 'MANAGERPID': '2615', 'SYSTEMD_EXEC_PID': '2905', 'GSM_SKIP_SSH_AGENT_WORKAROUND': 'true', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLORTERM': 'truecolor', 'TERMINATOR_DBUS_NAME': 'net.tenshu.Terminator25ef4b219e3b005583550f2b0f9f990c3', 'GIO_LAUNCHED_DESKTOP_FILE_PID': '4087', 'DEBUGINFOD_URLS': 'https://debuginfod.ubuntu.com', 'IM_CONFIG_PHASE': '1', 'WAYLAND_DISPLAY': 'wayland-0', 'COLCON_PREFIX_PATH': '/home/james/odrive_ros_ws/src/install:/home/james/odrive_ros_ws/src/ros_odrive/install', 'ROS_DISTRO': 'jazzy', 'LOGNAME': 'james', 'JOURNAL_STREAM': '9:23720', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'MEMORY_PRESSURE_WATCH': '/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/session.slice/org.gnome.Shell@wayland.service/memory.pressure', 'XDG_SESSION_CLASS': 'user', 'USERNAME': 'james', 'TERM': 'xterm-256color', 'GNOME_DESKTOP_SESSION_ID': 'this-is-deprecated', 'PATH': '/home/james/wrist_26/wrist-odrive/bin:/opt/ros/jazzy/bin:/home/james/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin', 'SESSION_MANAGER': 'local/sapling:@/tmp/.ICE-unix/2873,unix/sapling:/tmp/.ICE-unix/2873', 'INVOCATION_ID': '13be18f3bc744315bdbda443000f770a', 'XDG_MENU_PREFIX': 'gnome-', 'GNOME_SETUP_DISPLAY': ':1', 'XDG_RUNTIME_DIR': '/run/user/1000', 'DISPLAY': ':0', 'TERMINATOR_DBUS_PATH': '/net/tenshu/Terminator2', 'LANG': 'en_US.UTF-8', 'XDG_CURRENT_DESKTOP': 'ubuntu:GNOME', 'VIRTUAL_ENV_PROMPT': 'wrist-odrive', 'XMODIFIERS': '@im=ibus', 'XDG_SESSION_DESKTOP': 'ubuntu', 'XAUTHORITY': '/run/user/1000/.mutter-Xwaylandauth.0SPAV3', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'SSH_AUTH_SOCK': '/run/user/1000/keyring/ssh', 'AMENT_PREFIX_PATH': '/home/james/odrive_ros_ws/src/install/odrive_can:/home/james/odrive_ros_ws/src/ros_odrive/install/odrive_can:/opt/ros/jazzy', 'SHELL': '/bin/bash', 'TERMINATOR_UUID': 'urn:uuid:c3ec89bb-a5e9-4565-8b27-5f69a57300d3', 'QT_ACCESSIBILITY': '1', 'GDMSESSION': 'ubuntu', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'GJS_DEBUG_OUTPUT': 'stderr', 'VIRTUAL_ENV': '/home/james/wrist_26/wrist-odrive', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'SUBNET', 'QT_IM_MODULE': 'ibus', 'PWD': '/home/james/wrist_26/odrive_ros_ws/build/odrive_can', 'XDG_CONFIG_DIRS': '/etc/xdg/xdg-ubuntu:/etc/xdg', 'XDG_DATA_DIRS': '/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop', 'QTWEBENGINE_DICTIONARIES_PATH': '/usr/share/hunspell-bdic/', 'PYTHONPATH': '/home/james/odrive_ros_ws/src/install/odrive_can/lib/python3.12/site-packages:/home/james/odrive_ros_ws/src/ros_odrive/install/odrive_can/lib/python3.12/site-packages:/opt/ros/jazzy/lib/python3.12/site-packages', 'COLCON': '1', 'MEMORY_PRESSURE_WRITE': 'c29tZSAyMDAwMDAgMjAwMDAwMAA=', 'VTE_VERSION': '7600', 'CMAKE_PREFIX_PATH': '/home/james/odrive_ros_ws/src/install/odrive_can:/home/james/odrive_ros_ws/src/ros_odrive/install/odrive_can:/opt/ros/jazzy/opt/gz_math_vendor:/opt/ros/jazzy/opt/gz_utils_vendor:/opt/ros/jazzy/opt/gz_cmake_vendor:/opt/ros/jazzy'}), 'shell': False}
+[0.024653] (odrive_can) StdoutLine: {'line': b'-- Found ament_cmake: 2.5.3 (/opt/ros/jazzy/share/ament_cmake/cmake)\n'}
+[0.099803] (-) TimerEvent: {}
+[0.200105] (-) TimerEvent: {}
+[0.211095] (odrive_can) StdoutLine: {'line': b'-- Found rclcpp: 28.1.6 (/opt/ros/jazzy/share/rclcpp/cmake)\n'}
+[0.237479] (odrive_can) StdoutLine: {'line': b'-- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)\n'}
+[0.245056] (odrive_can) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)\n'}
+[0.253870] (odrive_can) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[0.264005] (odrive_can) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[0.300215] (-) TimerEvent: {}
+[0.315758] (odrive_can) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 7.3.1 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)\n'}
+[0.316552] (odrive_can) StdoutLine: {'line': b'-- Found rmw_fastrtps_cpp: 8.4.1 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)\n'}
+[0.375709] (odrive_can) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[0.400397] (-) TimerEvent: {}
+[0.428568] (odrive_can) StdoutLine: {'line': b'-- Found rosidl_default_generators: 1.6.0 (/opt/ros/jazzy/share/rosidl_default_generators/cmake)\n'}
+[0.434998] (odrive_can) StdoutLine: {'line': b'-- Found rosidl_adapter: 4.6.5 (/opt/ros/jazzy/share/rosidl_adapter/cmake)\n'}
+[0.436282] (odrive_can) StdoutLine: {'line': b'-- Found std_srvs: 5.3.5 (/opt/ros/jazzy/share/std_srvs/cmake)\n'}
+[0.500733] (-) TimerEvent: {}
+[0.599209] (odrive_can) StderrLine: {'line': b'\x1b[31mCMake Error at /opt/ros/jazzy/share/rosidl_adapter/cmake/rosidl_adapt_interfaces.cmake:57 (message):\n'}
+[0.599772] (odrive_can) StderrLine: {'line': b'  execute_process(/home/james/wrist_26/wrist-odrive/bin/python3 -m\n'}
+[0.599888] (odrive_can) StderrLine: {'line': b'  rosidl_adapter --package-name odrive_can --arguments-file\n'}
+[0.599970] (odrive_can) StderrLine: {'line': b'  /home/james/wrist_26/odrive_ros_ws/build/odrive_can/rosidl_adapter__arguments__odrive_can.json\n'}
+[0.600043] (odrive_can) StderrLine: {'line': b'  --output-dir\n'}
+[0.600114] (odrive_can) StderrLine: {'line': b'  /home/james/wrist_26/odrive_ros_ws/build/odrive_can/rosidl_adapter/odrive_can\n'}
+[0.600187] (odrive_can) StderrLine: {'line': b'  --output-file\n'}
+[0.600257] (odrive_can) StderrLine: {'line': b'  /home/james/wrist_26/odrive_ros_ws/build/odrive_can/rosidl_adapter/odrive_can.idls)\n'}
+[0.600332] (odrive_can) StderrLine: {'line': b'  returned error code 1:\n'}
+[0.600415] (odrive_can) StderrLine: {'line': b'\n'}
+[0.600495] (odrive_can) StderrLine: {'line': b"  AttributeError processing template 'msg.idl.em'\n"}
+[0.600571] (odrive_can) StderrLine: {'line': b'\n'}
+[0.600644] (odrive_can) StderrLine: {'line': b'  Traceback (most recent call last):\n'}
+[0.600716] (-) TimerEvent: {}
+[0.600801] (odrive_can) StderrLine: {'line': b'\n'}
+[0.600894] (odrive_can) StderrLine: {'line': b'    File "<frozen runpy>", line 198, in _run_module_as_main\n'}
+[0.600966] (odrive_can) StderrLine: {'line': b'    File "<frozen runpy>", line 88, in _run_code\n'}
+[0.601038] (odrive_can) StderrLine: {'line': b'    File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/__main__.py", line 19, in <module>\n'}
+[0.601110] (odrive_can) StderrLine: {'line': b'      sys.exit(main())\n'}
+[0.601178] (odrive_can) StderrLine: {'line': b'               ^^^^^^\n'}
+[0.601248] (odrive_can) StderrLine: {'line': b'    File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/main.py", line 53, in main\n'}
+[0.601317] (odrive_can) StderrLine: {'line': b'      abs_idl_file = convert_to_idl(\n'}
+[0.601389] (odrive_can) StderrLine: {'line': b'                     ^^^^^^^^^^^^^^^\n'}
+[0.601481] (odrive_can) StderrLine: {'line': b'    File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/__init__.py", line 19, in convert_to_idl\n'}
+[0.601554] (odrive_can) StderrLine: {'line': b'      return convert_msg_to_idl(\n'}
+[0.601626] (odrive_can) StderrLine: {'line': b'             ^^^^^^^^^^^^^^^^^^^\n'}
+[0.601697] (odrive_can) StderrLine: {'line': b'    File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/msg/__init__.py", line 39, in convert_msg_to_idl\n'}
+[0.601765] (odrive_can) StderrLine: {'line': b"      expand_template('msg.idl.em', data, output_file, encoding='iso-8859-1')\n"}
+[0.601837] (odrive_can) StderrLine: {'line': b'    File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/resource/__init__.py", line 29, in expand_template\n'}
+[0.601909] (odrive_can) StderrLine: {'line': b'      content = evaluate_template(template_name, data)\n'}
+[0.601984] (odrive_can) StderrLine: {'line': b'                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n'}
+[0.602052] (odrive_can) StderrLine: {'line': b'    File "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_adapter/resource/__init__.py", line 65, in evaluate_template\n'}
+[0.602126] (odrive_can) StderrLine: {'line': b'      _interpreter = em.Interpreter(\n'}
+[0.602198] (odrive_can) StderrLine: {'line': b'                     ^^^^^^^^^^^^^^\n'}
+[0.602268] (odrive_can) StderrLine: {'line': b'\n'}
+[0.602340] (odrive_can) StderrLine: {'line': b"  AttributeError: module 'em' has no attribute 'Interpreter'\n"}
+[0.602418] (odrive_can) StderrLine: {'line': b'\n'}
+[0.602503] (odrive_can) StderrLine: {'line': b'Call Stack (most recent call first):\n'}
+[0.602575] (odrive_can) StderrLine: {'line': b'  /opt/ros/jazzy/share/rosidl_cmake/cmake/rosidl_generate_interfaces.cmake:132 (rosidl_adapt_interfaces)\n'}
+[0.602655] (odrive_can) StderrLine: {'line': b'  CMakeLists.txt:14 (rosidl_generate_interfaces)\n'}
+[0.602723] (odrive_can) StderrLine: {'line': b'\n'}
+[0.602795] (odrive_can) StderrLine: {'line': b'\x1b[0m\n'}
+[0.602864] (odrive_can) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[0.609478] (odrive_can) CommandEnded: {'returncode': 1}
+[0.628646] (odrive_can) JobEnded: {'identifier': 'odrive_can', 'rc': 1}
+[0.639396] (-) EventReactorShutdown: {}

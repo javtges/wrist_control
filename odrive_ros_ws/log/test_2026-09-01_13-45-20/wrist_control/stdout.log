@@ -1,0 +1,62 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.6.0
+cachedir: /home/james/wrist_26/odrive_ros_ws/build/wrist_control/.pytest_cache
+rootdir: /home/james/wrist_26/odrive_ros_ws/src/wrist_control
+plugins: launch-testing-3.4.3, ament-flake8-0.17.1, ament-xmllint-0.17.1, ament-copyright-0.17.1, ament-pep257-0.17.1, launch-testing-ros-0.26.6, ament-lint-0.17.1, repeat-0.9.4, colcon-core-0.19.0, cov-7.1.0, rerunfailures-16.6
+collected 34 items
+
+test/test_conversion.py .............FFFF..F......F....                  [ 91%]
+test/test_node.py ...                                                    [100%]
+
+=================================== FAILURES ===================================
+_______________________ test_setpoint_gear_ratio_cw_180 ________________________
+test/test_conversion.py:127: in test_setpoint_gear_ratio_cw_180
+    assert compute_setpoint(180.0, hsa, 0.0) == pytest.approx(1.0)
+E   assert 0.5 == 1.0 ± 1.0e-06
+E     comparison failed
+E     Obtained: 0.5
+E     Expected: 1.0 ± 1.0e-06
+_______________________ test_setpoint_gear_ratio_cw_360 ________________________
+test/test_conversion.py:133: in test_setpoint_gear_ratio_cw_360
+    assert compute_setpoint(360.0, hsa, 0.0) == pytest.approx(2.0)
+E   assert 1.0 == 2.0 ± 2.0e-06
+E     comparison failed
+E     Obtained: 1.0
+E     Expected: 2.0 ± 2.0e-06
+______________________ test_setpoint_gear_ratio_ccw_zero _______________________
+test/test_conversion.py:139: in test_setpoint_gear_ratio_ccw_zero
+    assert compute_setpoint(0.0, hsa, 0.0) == pytest.approx(2.0)
+E   assert 1.0 == 2.0 ± 2.0e-06
+E     comparison failed
+E     Obtained: 1.0
+E     Expected: 2.0 ± 2.0e-06
+_______________________ test_setpoint_gear_ratio_ccw_180 _______________________
+test/test_conversion.py:145: in test_setpoint_gear_ratio_ccw_180
+    assert compute_setpoint(180.0, hsa, 0.0) == pytest.approx(1.0)
+E   assert 0.5 == 1.0 ± 1.0e-06
+E     comparison failed
+E     Obtained: 0.5
+E     Expected: 1.0 ± 1.0e-06
+___________________ test_safety_clamp_scales_with_gear_ratio ___________________
+test/test_conversion.py:167: in test_safety_clamp_scales_with_gear_ratio
+    assert compute_setpoint(900.0, hsa, 0.0) == pytest.approx(SAFETY_MAX_TURNS * 2.0)
+E   assert 1.5 == 3.0 ± 3.0e-06
+E     comparison failed
+E     Obtained: 1.5
+E     Expected: 3.0 ± 3.0e-06
+_______________________ test_zero_offset_ccw_gear_ratio ________________________
+test/test_conversion.py:220: in test_zero_offset_ccw_gear_ratio
+    assert compute_zero_offset(3.0, hsa) == pytest.approx(1.0)
+E   assert 2.0 == 1.0 ± 1.0e-06
+E     comparison failed
+E     Obtained: 2.0
+E     Expected: 1.0 ± 1.0e-06
+- generated xml file: /home/james/wrist_26/odrive_ros_ws/build/wrist_control/pytest.xml -
+=========================== short test summary info ============================
+FAILED test/test_conversion.py::test_setpoint_gear_ratio_cw_180 - assert 0.5 ...
+FAILED test/test_conversion.py::test_setpoint_gear_ratio_cw_360 - assert 1.0 ...
+FAILED test/test_conversion.py::test_setpoint_gear_ratio_ccw_zero - assert 1....
+FAILED test/test_conversion.py::test_setpoint_gear_ratio_ccw_180 - assert 0.5...
+FAILED test/test_conversion.py::test_safety_clamp_scales_with_gear_ratio - as...
+FAILED test/test_conversion.py::test_zero_offset_ccw_gear_ratio - assert 2.0 ...
+========================= 6 failed, 28 passed in 0.66s =========================

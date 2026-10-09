@@ -1,0 +1,41 @@
+running egg_info
+creating ../../build/wrist_control/wrist_control.egg-info
+writing ../../build/wrist_control/wrist_control.egg-info/PKG-INFO
+writing dependency_links to ../../build/wrist_control/wrist_control.egg-info/dependency_links.txt
+writing entry points to ../../build/wrist_control/wrist_control.egg-info/entry_points.txt
+writing requirements to ../../build/wrist_control/wrist_control.egg-info/requires.txt
+writing top-level names to ../../build/wrist_control/wrist_control.egg-info/top_level.txt
+writing manifest file '../../build/wrist_control/wrist_control.egg-info/SOURCES.txt'
+reading manifest file '../../build/wrist_control/wrist_control.egg-info/SOURCES.txt'
+writing manifest file '../../build/wrist_control/wrist_control.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/james/wrist_26/odrive_ros_ws/build/wrist_control/build/lib/wrist_control
+copying wrist_control/hsa_odrive_control.py -> /home/james/wrist_26/odrive_ros_ws/build/wrist_control/build/lib/wrist_control
+copying wrist_control/__init__.py -> /home/james/wrist_26/odrive_ros_ws/build/wrist_control/build/lib/wrist_control
+copying wrist_control/conversion.py -> /home/james/wrist_26/odrive_ros_ws/build/wrist_control/build/lib/wrist_control
+running install
+running install_lib
+creating /home/james/wrist_26/odrive_ros_ws/install/wrist_control/lib/python3.12/site-packages/wrist_control
+copying /home/james/wrist_26/odrive_ros_ws/build/wrist_control/build/lib/wrist_control/hsa_odrive_control.py -> /home/james/wrist_26/odrive_ros_ws/install/wrist_control/lib/python3.12/site-packages/wrist_control
+copying /home/james/wrist_26/odrive_ros_ws/build/wrist_control/build/lib/wrist_control/__init__.py -> /home/james/wrist_26/odrive_ros_ws/install/wrist_control/lib/python3.12/site-packages/wrist_control
+copying /home/james/wrist_26/odrive_ros_ws/build/wrist_control/build/lib/wrist_control/conversion.py -> /home/james/wrist_26/odrive_ros_ws/install/wrist_control/lib/python3.12/site-packages/wrist_control
+byte-compiling /home/james/wrist_26/odrive_ros_ws/install/wrist_control/lib/python3.12/site-packages/wrist_control/hsa_odrive_control.py to hsa_odrive_control.cpython-312.pyc
+byte-compiling /home/james/wrist_26/odrive_ros_ws/install/wrist_control/lib/python3.12/site-packages/wrist_control/__init__.py to __init__.cpython-312.pyc
+byte-compiling /home/james/wrist_26/odrive_ros_ws/install/wrist_control/lib/python3.12/site-packages/wrist_control/conversion.py to conversion.cpython-312.pyc
+running install_data
+creating /home/james/wrist_26/odrive_ros_ws/install/wrist_control/share/ament_index/resource_index/packages
+copying resource/wrist_control -> /home/james/wrist_26/odrive_ros_ws/install/wrist_control/share/ament_index/resource_index/packages
+copying package.xml -> /home/james/wrist_26/odrive_ros_ws/install/wrist_control/share/wrist_control
+creating /home/james/wrist_26/odrive_ros_ws/install/wrist_control/share/wrist_control/config
+copying config/wrist.yaml -> /home/james/wrist_26/odrive_ros_ws/install/wrist_control/share/wrist_control/config
+creating /home/james/wrist_26/odrive_ros_ws/install/wrist_control/share/wrist_control/launch
+copying launch/wrist_control.launch.py -> /home/james/wrist_26/odrive_ros_ws/install/wrist_control/share/wrist_control/launch
+creating /home/james/wrist_26/odrive_ros_ws/install/wrist_control/share/wrist_control/doc
+copying doc/usage.md -> /home/james/wrist_26/odrive_ros_ws/install/wrist_control/share/wrist_control/doc
+copying doc/odrive_settings.md -> /home/james/wrist_26/odrive_ros_ws/install/wrist_control/share/wrist_control/doc
+running install_egg_info
+Copying ../../build/wrist_control/wrist_control.egg-info to /home/james/wrist_26/odrive_ros_ws/install/wrist_control/lib/python3.12/site-packages/wrist_control-0.1.0-py3.12.egg-info
+running install_scripts
+Installing hsa_odrive_control script to /home/james/wrist_26/odrive_ros_ws/install/wrist_control/bin
+writing list of installed files to '/home/james/wrist_26/odrive_ros_ws/build/wrist_control/install.log'

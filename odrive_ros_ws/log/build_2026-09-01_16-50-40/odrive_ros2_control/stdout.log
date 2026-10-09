@@ -1,0 +1,17 @@
+-- Found ament_cmake: 2.5.3 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Found rclcpp: 28.1.6 (/opt/ros/jazzy/share/rclcpp/cmake)
+-- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+-- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found rmw_implementation_cmake: 7.3.1 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+-- Found rmw_fastrtps_cpp: 8.4.1 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Found ament_cmake_auto: 2.5.3 (/opt/ros/jazzy/share/ament_cmake_auto/cmake)
+-- Found pluginlib: 5.4.2 (/opt/ros/jazzy/share/pluginlib/cmake)
+-- Configuring done (0.7s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/james/wrist_26/odrive_ros_ws/build/odrive_ros2_control
+[ 75%] [32mBuilding CXX object CMakeFiles/odrive_ros2_control_plugin.dir/src/odrive_hardware_interface.cpp.o[0m
+[ 75%] [32mBuilding CXX object CMakeFiles/odrive_ros2_control_plugin.dir/home/james/wrist_26/odrive_ros_ws/src/ros_odrive/odrive_base/src/epoll_event_loop.cpp.o[0m
+[ 75%] [32mBuilding CXX object CMakeFiles/odrive_ros2_control_plugin.dir/home/james/wrist_26/odrive_ros_ws/src/ros_odrive/odrive_base/src/socket_can.cpp.o[0m

@@ -1,0 +1,3 @@
+#!/usr/bin/env python3
+from wrist_control.spacemouse_commander import main
+main()

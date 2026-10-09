@@ -1,0 +1,237 @@
+[0.021s] Invoking command in '/home/james/wrist_26/odrive_ros_ws/build/odrive_can': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/james/wrist_26/odrive_ros_ws/install/wrist_control:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PS1=(wrist-odrive) \[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ /usr/bin/cmake --build /home/james/wrist_26/odrive_ros_ws/build/odrive_can -- -j8 -l8
+[0.077s] [  1%] Built target odrive_can__rosidl_generator_type_description
+[0.086s] [  1%] Built target ament_cmake_python_copy_odrive_can
+[0.097s] [  2%] Built target odrive_can__cpp
+[0.103s] [ 23%] Built target odrive_can__rosidl_generator_c
+[0.142s] [ 33%] Built target odrive_can__rosidl_typesupport_c
+[0.142s] [ 40%] Built target odrive_can__rosidl_typesupport_introspection_c
+[0.142s] [ 57%] Built target odrive_can__rosidl_typesupport_fastrtps_c
+[0.142s] [ 57%] Built target odrive_can__rosidl_typesupport_introspection_cpp
+[0.142s] [ 66%] Built target odrive_can__rosidl_typesupport_fastrtps_cpp
+[0.143s] [ 75%] Built target odrive_can__rosidl_typesupport_cpp
+[0.165s] [ 75%] Built target odrive_can
+[0.184s] [ 82%] Built target odrive_can_node
+[0.185s] [ 84%] Built target odrive_can__py
+[0.211s] [ 91%] Built target odrive_can__rosidl_generator_py
+[0.237s] [ 94%] Built target odrive_can_s__rosidl_typesupport_introspection_c
+[0.238s] [ 97%] Built target odrive_can_s__rosidl_typesupport_c
+[0.238s] [100%] Built target odrive_can_s__rosidl_typesupport_fastrtps_c
+[0.370s] running egg_info
+[0.386s] writing odrive_can.egg-info/PKG-INFO
+[0.387s] writing dependency_links to odrive_can.egg-info/dependency_links.txt
+[0.387s] writing top-level names to odrive_can.egg-info/top_level.txt
+[0.436s] reading manifest file 'odrive_can.egg-info/SOURCES.txt'
+[0.437s] writing manifest file 'odrive_can.egg-info/SOURCES.txt'
+[0.470s] [100%] Built target ament_cmake_python_build_odrive_can_egg
+[0.484s] Invoked command in '/home/james/wrist_26/odrive_ros_ws/build/odrive_can' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/james/wrist_26/odrive_ros_ws/install/wrist_control:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PS1=(wrist-odrive) \[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ /usr/bin/cmake --build /home/james/wrist_26/odrive_ros_ws/build/odrive_can -- -j8 -l8
+[0.500s] Invoking command in '/home/james/wrist_26/odrive_ros_ws/build/odrive_can': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/james/wrist_26/odrive_ros_ws/install/wrist_control:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PS1=(wrist-odrive) \[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ /usr/bin/cmake --install /home/james/wrist_26/odrive_ros_ws/build/odrive_can
+[0.513s] -- Install configuration: ""
+[0.513s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/ament_index/resource_index/rosidl_interfaces/odrive_can
+[0.514s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ControlMessage.json
+[0.514s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ControllerStatus.json
+[0.514s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ODriveStatus.json
+[0.514s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/srv/AxisState.json
+[0.515s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can
+[0.515s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg
+[0.516s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/control_message.h
+[0.516s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail
+[0.516s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__type_support.c
+[0.517s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__functions.h
+[0.517s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__type_support.h
+[0.517s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__struct.h
+[0.517s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__type_support.h
+[0.518s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__functions.c
+[0.518s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__description.c
+[0.518s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__description.c
+[0.518s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__struct.h
+[0.518s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__functions.h
+[0.519s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__type_support.h
+[0.519s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__functions.c
+[0.519s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__functions.h
+[0.519s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__functions.c
+[0.519s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__struct.h
+[0.520s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__description.c
+[0.520s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__type_support.c
+[0.520s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__type_support.c
+[0.521s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/rosidl_generator_c__visibility_control.h
+[0.521s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/controller_status.h
+[0.521s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/o_drive_status.h
+[0.521s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv
+[0.521s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/axis_state.h
+[0.521s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail
+[0.522s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__struct.h
+[0.522s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__type_support.h
+[0.522s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__functions.h
+[0.522s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__description.c
+[0.522s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__functions.c
+[0.522s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__type_support.c
+[0.522s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/library_path.sh
+[0.523s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/library_path.dsv
+[0.523s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_generator_c.so
+[0.523s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can
+[0.523s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg
+[0.523s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail
+[0.523s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__rosidl_typesupport_fastrtps_c.h
+[0.524s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__rosidl_typesupport_fastrtps_c.h
+[0.524s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__rosidl_typesupport_fastrtps_c.h
+[0.524s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[0.524s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv
+[0.524s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail
+[0.525s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__rosidl_typesupport_fastrtps_c.h
+[0.525s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_fastrtps_c.so
+[0.525s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can
+[0.525s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg
+[0.525s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/controller_status.hpp
+[0.526s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail
+[0.526s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__builder.hpp
+[0.526s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__traits.hpp
+[0.526s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__struct.hpp
+[0.526s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__builder.hpp
+[0.526s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__struct.hpp
+[0.526s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__struct.hpp
+[0.527s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__traits.hpp
+[0.527s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__traits.hpp
+[0.527s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__type_support.hpp
+[0.527s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__type_support.hpp
+[0.527s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__builder.hpp
+[0.527s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__type_support.hpp
+[0.528s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/rosidl_generator_cpp__visibility_control.hpp
+[0.528s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/o_drive_status.hpp
+[0.528s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/control_message.hpp
+[0.528s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv
+[0.528s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/axis_state.hpp
+[0.528s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail
+[0.528s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__builder.hpp
+[0.529s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__struct.hpp
+[0.529s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__type_support.hpp
+[0.529s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__traits.hpp
+[0.529s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can
+[0.529s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg
+[0.529s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[0.529s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail
+[0.530s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/dds_fastrtps
+[0.530s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__rosidl_typesupport_fastrtps_cpp.hpp
+[0.530s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__rosidl_typesupport_fastrtps_cpp.hpp
+[0.530s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__rosidl_typesupport_fastrtps_cpp.hpp
+[0.530s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv
+[0.530s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail
+[0.531s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__rosidl_typesupport_fastrtps_cpp.hpp
+[0.531s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/dds_fastrtps
+[0.531s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_fastrtps_cpp.so
+[0.531s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can
+[0.531s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg
+[0.531s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[0.531s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail
+[0.532s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__rosidl_typesupport_introspection_c.h
+[0.532s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__type_support.c
+[0.532s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__rosidl_typesupport_introspection_c.h
+[0.532s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__rosidl_typesupport_introspection_c.h
+[0.532s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__type_support.c
+[0.533s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__type_support.c
+[0.533s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv
+[0.533s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail
+[0.533s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__rosidl_typesupport_introspection_c.h
+[0.533s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__type_support.c
+[0.533s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_introspection_c.so
+[0.534s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_c.so
+[0.534s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can
+[0.534s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg
+[0.534s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail
+[0.534s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__type_support.cpp
+[0.535s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/controller_status__rosidl_typesupport_introspection_cpp.hpp
+[0.535s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__rosidl_typesupport_introspection_cpp.hpp
+[0.535s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/o_drive_status__type_support.cpp
+[0.535s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__rosidl_typesupport_introspection_cpp.hpp
+[0.535s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/msg/detail/control_message__type_support.cpp
+[0.535s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv
+[0.536s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail
+[0.536s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__type_support.cpp
+[0.536s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/include/odrive_can/odrive_can/srv/detail/axis_state__rosidl_typesupport_introspection_cpp.hpp
+[0.536s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_introspection_cpp.so
+[0.536s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_typesupport_cpp.so
+[0.537s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/pythonpath.sh
+[0.537s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/pythonpath.dsv
+[0.537s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can-0.0.1-py3.12.egg-info
+[0.537s] -- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can-0.0.1-py3.12.egg-info/top_level.txt
+[0.537s] -- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can-0.0.1-py3.12.egg-info/PKG-INFO
+[0.538s] -- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can-0.0.1-py3.12.egg-info/dependency_links.txt
+[0.538s] -- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can-0.0.1-py3.12.egg-info/SOURCES.txt
+[0.538s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can
+[0.538s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/_odrive_can_s.ep.rosidl_typesupport_c.c
+[0.538s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg
+[0.539s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/_o_drive_status.py
+[0.539s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/_controller_status_s.c
+[0.539s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/_o_drive_status_s.c
+[0.539s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/_controller_status.py
+[0.539s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/_control_message_s.c
+[0.539s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/__init__.py
+[0.540s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg/_control_message.py
+[0.540s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/_odrive_can_s.ep.rosidl_typesupport_introspection_c.c
+[0.540s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/odrive_can_s__rosidl_typesupport_c.so
+[0.540s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/odrive_can_s__rosidl_typesupport_fastrtps_c.so
+[0.540s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/__init__.py
+[0.540s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/odrive_can_s__rosidl_typesupport_introspection_c.so
+[0.540s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/_odrive_can_s.ep.rosidl_typesupport_fastrtps_c.c
+[0.541s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/srv
+[0.541s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/srv/_axis_state.py
+[0.541s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/srv/__init__.py
+[0.541s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/srv/_axis_state_s.c
+[0.573s] Listing '/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can'...
+[0.573s] Listing '/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/msg'...
+[0.573s] Listing '/home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/srv'...
+[0.579s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/odrive_can_s__rosidl_typesupport_fastrtps_c.so
+[0.579s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/odrive_can_s__rosidl_typesupport_introspection_c.so
+[0.579s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/python3.12/site-packages/odrive_can/odrive_can_s__rosidl_typesupport_c.so
+[0.579s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/libodrive_can__rosidl_generator_py.so
+[0.580s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ControlMessage.idl
+[0.580s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ControllerStatus.idl
+[0.580s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ODriveStatus.idl
+[0.580s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/srv/AxisState.idl
+[0.580s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ControlMessage.msg
+[0.581s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ControllerStatus.msg
+[0.581s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/msg/ODriveStatus.msg
+[0.581s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/srv/AxisState.srv
+[0.581s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/lib/odrive_can/odrive_can_node
+[0.581s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/launch
+[0.582s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/launch/example_launch.yaml
+[0.582s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/launch/wrist_launch.yaml
+[0.582s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/ament_index/resource_index/package_run_dependencies/odrive_can
+[0.582s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/ament_index/resource_index/parent_prefix_path/odrive_can
+[0.582s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/ament_prefix_path.sh
+[0.583s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/ament_prefix_path.dsv
+[0.583s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/path.sh
+[0.583s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/environment/path.dsv
+[0.583s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/local_setup.bash
+[0.583s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/local_setup.sh
+[0.583s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/local_setup.zsh
+[0.583s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/local_setup.dsv
+[0.583s] -- Installing: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/package.dsv
+[0.584s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/ament_index/resource_index/packages/odrive_can
+[0.584s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_generator_cExport.cmake
+[0.584s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_generator_cExport-noconfig.cmake
+[0.584s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_typesupport_fastrtps_cExport.cmake
+[0.584s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+[0.585s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_generator_cppExport.cmake
+[0.586s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_typesupport_fastrtps_cppExport.cmake
+[0.586s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+[0.586s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_introspection_cExport.cmake
+[0.586s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[0.587s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_cExport.cmake
+[0.587s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_cExport-noconfig.cmake
+[0.587s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_introspection_cppExport.cmake
+[0.588s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[0.588s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_cppExport.cmake
+[0.588s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_can__rosidl_typesupport_cppExport-noconfig.cmake
+[0.589s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_generator_pyExport.cmake
+[0.589s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/export_odrive_can__rosidl_generator_pyExport-noconfig.cmake
+[0.589s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/rosidl_cmake-extras.cmake
+[0.589s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/ament_cmake_export_dependencies-extras.cmake
+[0.589s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/ament_cmake_export_include_directories-extras.cmake
+[0.590s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/ament_cmake_export_libraries-extras.cmake
+[0.590s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/ament_cmake_export_targets-extras.cmake
+[0.591s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[0.591s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[0.591s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_canConfig.cmake
+[0.591s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/cmake/odrive_canConfig-version.cmake
+[0.592s] -- Up-to-date: /home/james/wrist_26/odrive_ros_ws/install/odrive_can/share/odrive_can/package.xml
+[0.592s] Invoked command in '/home/james/wrist_26/odrive_ros_ws/build/odrive_can' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/james/wrist_26/odrive_ros_ws/install/wrist_control:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PS1=(wrist-odrive) \[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ /usr/bin/cmake --install /home/james/wrist_26/odrive_ros_ws/build/odrive_can
