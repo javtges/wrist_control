@@ -4,3 +4,10 @@
 build/
 install/
 log/
+.github/
+.vscode/
+.claude/
+__pycache__/
+.pytest
+.pre-commit-config*
+build_feather/
