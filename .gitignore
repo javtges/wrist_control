@@ -11,3 +11,4 @@ __pycache__/
 .pytest
 .pre-commit-config*
 build_feather/
+.devcontainer/
