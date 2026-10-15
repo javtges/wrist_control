@@ -4,7 +4,12 @@ joint_commander_gui — Tkinter + ROS2 GUI for commanding HSA wrist joints.
 
 Publishes Float32MultiArray to /hsa_odrive_control/joint_commands and
 controls ODrive parameters on the hsa_odrive_control node in real time.
-Also shows each ODrive's DC bus current from /odrive_axis{N}/odrive_status.
+Shows each HSA's measured position from /hsa_positions and each ODrive's DC
+bus current from /odrive_axis{N}/odrive_status.
+
+This is the only place the software (physical) zero is set: jog each HSA
+with its ±2° buttons (which, unlike the sliders, may go below the current
+zero) to where the physical zero should be, then press Set Physical Zero.
 
 Usage:
     ros2 run wrist_control joint_commander_gui
@@ -12,11 +17,9 @@ Usage:
 """
 
 import math
-import os
 import signal
 import threading
 import time
-from pathlib import Path
 
 import tkinter as tk
 from tkinter import ttk
@@ -24,13 +27,14 @@ from tkinter import ttk
 import rclpy
 from rclpy.node import Node
 from rclpy.parameter import Parameter
-from ament_index_python.packages import get_package_share_directory
 
 from std_msgs.msg import Float32MultiArray
 from std_srvs.srv import Empty, Trigger
 from odrive_can.msg import ODriveStatus
 
 from hsa_robots import HSA, HSARobot
+
+from .robot_config import default_robot_config
 
 # ── ODrive option maps ────────────────────────────────────────────────────────
 
@@ -56,6 +60,9 @@ _CW_FILL = "#4fc3f7"
 _CCW_FILL = "#f48fb1"
 _MEASURED_COLOR = "#ffeb3b"
 
+# Extension-angle step for the per-HSA jog buttons
+JOG_STEP_DEG = 2.0
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Per-joint panel (one per HSA)
@@ -64,9 +71,10 @@ _MEASURED_COLOR = "#ffeb3b"
 class JointPanel:
     """Vertical slider + bar canvas for one HSA joint."""
 
-    def __init__(self, parent: tk.Widget, hsa: HSA, on_change=None):
+    def __init__(self, parent: tk.Widget, hsa: HSA, on_change=None, on_jog=None):
         self.hsa = hsa
         self._on_change = on_change
+        self._on_jog = on_jog
         fill = _CW_FILL if hsa.handedness == HSA.CW else _CCW_FILL
         hand = "CW" if hsa.handedness == HSA.CW else "CCW"
 
@@ -113,6 +121,16 @@ class JointPanel:
             orient="vertical", variable=self._var,
             command=self._on_drag, length=210,
         ).pack(padx=4, pady=2)
+
+        # Jog buttons — step the motor setpoint by ±JOG_STEP_DEG. Unlike the
+        # slider, these may take the motor below the current zero.
+        jog = ttk.Frame(self.frame)
+        jog.pack(pady=(0, 2))
+        for col, step in enumerate((-JOG_STEP_DEG, +JOG_STEP_DEG)):
+            ttk.Button(
+                jog, text=f"{step:+.0f}°", width=4,
+                command=lambda s=step: self._jog(s),
+            ).grid(row=0, column=col, padx=1)
 
         # Numeric readout — commanded (slider) position
         self._lbl = ttk.Label(
@@ -178,6 +196,10 @@ class JointPanel:
         frac = (angle - self.hsa.min_angle) / span if span > 0 else 0.0
         return max(0.0, min(1.0, frac))
 
+    def _jog(self, step: float) -> None:
+        if self._on_jog is not None:
+            self._on_jog(self, step)
+
     def _on_drag(self, _val: str) -> None:
         angle = self._var.get()
         self._update_canvas(angle)
@@ -210,14 +232,16 @@ class GUINode(Node):
         self._pub = self.create_publisher(
             Float32MultiArray, f"/{self._TARGET}/joint_commands", 10
         )
+        self._jog_pub = self.create_publisher(
+            Float32MultiArray, f"/{self._TARGET}/jog", 10
+        )
 
-        # Live measured joint states from hsa_odrive_control — written from
-        # this node's spin thread, read from the Tk mainloop via a lock.
+        # Live measured HSA positions from odrive_position_monitor — written
+        # from this node's spin thread, read from the Tk mainloop via a lock.
         self._joint_states_lock = threading.Lock()
         self._latest_joint_states: list[float] = [float("nan")] * self.n
         self.create_subscription(
-            Float32MultiArray, f"/{self._TARGET}/joint_states",
-            self._on_joint_states, 10,
+            Float32MultiArray, "/hsa_positions", self._on_joint_states, 10,
         )
 
         # Live DC bus current per ODrive, from each axis's odrive_status.
@@ -255,6 +279,12 @@ class GUINode(Node):
         msg = Float32MultiArray()
         msg.data = [float(a) for a in angles]
         self._pub.publish(msg)
+
+    def publish_jog(self, steps: list[float]) -> None:
+        """Step each axis by steps[i] degrees (0 = leave it alone)."""
+        msg = Float32MultiArray()
+        msg.data = [float(s) for s in steps]
+        self._jog_pub.publish(msg)
 
     # ── Measured joint states ────────────────────────────────────────────────
 
@@ -344,6 +374,7 @@ class JointCommanderApp:
         self.root = root
         self.node = node
         self._publishing = False
+        self._next_publish = 0.0
         self._syncing = False
         self._running = True
 
@@ -365,7 +396,9 @@ class JointCommanderApp:
         outer.grid(row=0, column=0, columnspan=2, sticky="ew")
         self.panels: list[JointPanel] = []
         for hsa in self.node.robot.hsas:
-            p = JointPanel(outer, hsa, on_change=self._on_slider_change)
+            p = JointPanel(
+                outer, hsa, on_change=self._on_slider_change, on_jog=self._on_jog,
+            )
             p.frame.grid(row=0, column=hsa.index, padx=3, pady=3, sticky="n")
             self.panels.append(p)
 
@@ -464,7 +497,7 @@ class JointCommanderApp:
         ).grid(row=1, column=0, padx=6, pady=4)
 
         ttk.Button(
-            f, text="⦿  Set Zero Here", width=18, command=self._set_zero_here
+            f, text="⦿  Set Physical Zero", width=18, command=self._set_zero_here
         ).grid(row=1, column=1, padx=6, pady=4)
 
         ttk.Button(
@@ -491,7 +524,7 @@ class JointCommanderApp:
         rate_row = ttk.Frame(f)
         rate_row.grid(row=4, column=0, columnspan=2, pady=(10, 2))
         ttk.Label(rate_row, text="Publish rate (Hz):").pack(side="left")
-        self._hz_var = tk.IntVar(value=20)
+        self._hz_var = tk.IntVar(value=100)
         ttk.Spinbox(
             rate_row, from_=1, to=200, textvariable=self._hz_var, width=6
         ).pack(side="left", padx=6)
@@ -519,17 +552,43 @@ class JointCommanderApp:
             return
         self._publish_once()
         hz = max(1, min(200, self._hz_var.get()))
-        self.root.after(1000 // hz, self._publish_loop)
+        # Schedule against a fixed deadline rather than "period after this
+        # tick", so the time spent publishing doesn't slow the rate. If the
+        # loop falls a whole period behind, restart the deadline instead of
+        # bursting to catch up.
+        now = time.monotonic()
+        self._next_publish += 1.0 / hz
+        if self._next_publish < now - 1.0 / hz:
+            self._next_publish = now
+        delay_ms = max(0, round((self._next_publish - now) * 1000))
+        self.root.after(delay_ms, self._publish_loop)
 
     # ── Callbacks ─────────────────────────────────────────────────────────────
 
     def _toggle_publish(self) -> None:
-        self._publishing = not self._publishing
-        if self._publishing:
+        self._set_publishing(not self._publishing)
+
+    def _set_publishing(self, on: bool) -> None:
+        if on == self._publishing:
+            return
+        self._publishing = on
+        if on:
             self._pub_btn.config(text="◉  PUBLISHING", bg="#2e7d32")
+            self._next_publish = time.monotonic()
             self._publish_loop()
         else:
             self._pub_btn.config(text="◉  NOT PUBLISHING", bg="#424242")
+
+    def _on_jog(self, panel: "JointPanel", step: float) -> None:
+        """Jog only this joint; 'Link' applies to the sliders, not the jog
+        buttons. Publishing is turned off first, since the slider loop would
+        otherwise immediately command the joints back to the sliders."""
+        if self._publishing:
+            self._set_publishing(False)
+            self.node.get_logger().info("Jog: publishing turned off.")
+        steps = [0.0] * len(self.panels)
+        steps[self.panels.index(panel)] = step
+        self.node.publish_jog(steps)
 
     def _on_slider_change(self, panel: "JointPanel", angle: float) -> None:
         """Propagate a slider move to every other 'Link'-checked joint."""
@@ -552,8 +611,12 @@ class JointCommanderApp:
         self._publish_once()
 
     def _set_zero_here(self) -> None:
-        """Tell hsa_odrive_control to snapshot current positions as its zero."""
+        """Tell hsa_odrive_control to snapshot current positions as the
+        physical zero, and move the sliders to each zero_point to match, so
+        turning publishing on holds the motors where they are."""
         self.node.call_zero_encoders()
+        for p in self.panels:
+            p.set_angle(float(p.hsa.zero_point))
 
     def _reset_ff(self, var: tk.DoubleVar, lbl: ttk.Label, param: str) -> None:
         var.set(0.0)
@@ -573,15 +636,7 @@ class JointCommanderApp:
 def main(args=None) -> None:
     rclpy.init(args=args)
 
-    try:
-        pkg_share = get_package_share_directory("wrist_control")
-        default_config = os.path.join(pkg_share, "config", "wrist.yaml")
-    except Exception:
-        default_config = str(
-            Path(__file__).parent.parent / "config" / "wrist.yaml"
-        )
-
-    node = GUINode(default_config)
+    node = GUINode(default_robot_config())
     executor = rclpy.executors.SingleThreadedExecutor()
     executor.add_node(node)
     spin_thread = threading.Thread(target=executor.spin, daemon=True)

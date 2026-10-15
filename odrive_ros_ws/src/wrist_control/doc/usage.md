@@ -104,7 +104,7 @@ ros2 service call /hsa_odrive_control/disable std_srvs/srv/Trigger '{}'
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `robot_config` | string | `<pkg>/config/wrist.yaml` | Path to robot YAML config |
+| `robot_config` | string | `hsa_robots/wrist.yaml` | Path to robot YAML config |
 | `control_mode` | int | `3` | ODrive ControlMode (3=position, 2=velocity, 1=torque) |
 | `input_mode` | int | `1` | ODrive InputMode (1=passthrough, 5=trap_traj) |
 | `vel_ff` | float | `0.0` | Velocity feed-forward (turns/s) in position mode |
@@ -131,7 +131,7 @@ on each ODrive — see [odrive_settings.md](odrive_settings.md).
 
 | Service | Type | Description |
 |---------|------|-------------|
-| `~/zero_encoders` | `std_srvs/Empty` | Snapshot current positions as software zero |
+| `~/zero_encoders` | `std_srvs/Empty` | Snapshot current positions as the physical (software) zero; saves `zero_offset` to `hsa_robots/wrist.yaml` and publishes `/hsa_zero_offsets` |
 | `~/enable` | `std_srvs/Trigger` | CLOSED_LOOP_CONTROL on all axes |
 | `~/disable` | `std_srvs/Trigger` | IDLE on all axes |
 
@@ -142,6 +142,8 @@ on each ODrive — see [odrive_settings.md](odrive_settings.md).
 | Topic | Direction | Type | Description |
 |-------|-----------|------|-------------|
 | `~/joint_commands` | Sub | `std_msgs/Float32MultiArray` | 6 extension angles (degrees) |
+| `~/jog` | Sub | `std_msgs/Float32MultiArray` | 6 per-axis steps (degrees, 0 = no change); may go below 0, down to −180° |
+| `/hsa_zero_offsets` | Pub (latched) | `std_msgs/Float32MultiArray` | Software zero offset per axis, motor turns |
 | `/odrive_axisN/control_message` | Pub | `odrive_can/ControlMessage` | Per-axis ODrive command |
 | `/odrive_axisN/controller_status` | Sub | `odrive_can/ControllerStatus` | Per-axis position feedback |
 
@@ -158,8 +160,9 @@ colcon test-result --verbose
 
 ## Robot config (wrist.yaml)
 
-The config lives at `config/wrist.yaml` inside this package (and at
-`~/wrist_26/hsa_robots/wrist.yaml`). Each entry maps to one ODrive axis:
+The config lives at `~/wrist_26/hsa_robots/wrist.yaml` and nodes read it from
+the `hsa_robots` package; `config/wrist.yaml` here is a symlink to it. Each
+entry maps to one ODrive axis:
 
 ```yaml
 hsas:

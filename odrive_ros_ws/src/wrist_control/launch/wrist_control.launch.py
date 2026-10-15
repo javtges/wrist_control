@@ -8,7 +8,6 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     odrive_share = get_package_share_directory('odrive_can')
-    wrist_share = get_package_share_directory('wrist_control')
 
     odrive_nodes = IncludeLaunchDescription(
         AnyLaunchDescriptionSource(
@@ -22,7 +21,7 @@ def generate_launch_description():
         name='hsa_odrive_control',
         output='screen',
         parameters=[{
-            'robot_config': os.path.join(wrist_share, 'config', 'wrist.yaml'),
+            # robot_config defaults to hsa_robots/wrist.yaml
             'control_mode': 3,    # POSITION_CONTROL
             'input_mode': 1,      # PASSTHROUGH
             'vel_ff': 0.0,

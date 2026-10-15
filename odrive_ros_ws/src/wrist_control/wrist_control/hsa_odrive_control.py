@@ -6,18 +6,31 @@ Subscribes to extension-angle commands (degrees), converts them through the
 HSA kinematics model, and publishes ControlMessage to each ODrive CAN node.
 
 Topics subscribed:
-  ~/joint_commands  (std_msgs/Float32MultiArray)  — 6 extension angles, degrees
+  ~/joint_commands  (std_msgs/Float32MultiArray)  — 6 extension angles, degrees,
+                     clamped to each HSA's [min_angle, max_angle]
+  ~/jog             (std_msgs/Float32MultiArray)  — 6 extension-angle steps,
+                     degrees (0 = leave that axis alone). Moves each stepped axis
+                     from its current setpoint; may go below min_angle, down to
+                     JOG_MIN_DEG, so the physical zero can be found below the
+                     current zero. Only joint_commander_gui's jog buttons use it.
 
 Topics published:
   /odrive_axis{N}/control_message  (odrive_can/ControlMessage)
-  ~/joint_states    (std_msgs/Float32MultiArray) — 6 measured extension angles,
-                     degrees, converted from each axis's live encoder position
-                     estimate (NaN for an axis with no feedback yet)
+  /hsa_zero_offsets (std_msgs/Float32MultiArray, transient local) — software
+                     zero offset per axis in motor turns; odrive_position_monitor
+                     adds it to /odrive_positions to get /hsa_positions
+
+Zero offsets are loaded from each HSA's `zero_offset` in wrist.yaml at startup
+and written back there by ~/zero_encoders and ~/reset_zero, so the physical
+zero survives a restart of this node.
 
 Services provided:
-  ~/zero_encoders  (std_srvs/Empty)   — snapshot current positions as software zero
-  ~/reset_zero     (std_srvs/Empty)   — clear the software zero offset, so extension
-                     angle 0 goes back to meaning the ODrive's own raw pos_estimate 0
+  ~/zero_encoders  (std_srvs/Empty)   — set the physical zero: snapshot current
+                     positions as each axis's zero_point and save the offsets to
+                     wrist.yaml. Called by joint_commander_gui's "Set Physical Zero".
+  ~/reset_zero     (std_srvs/Empty)   — clear the software zero offset (in wrist.yaml
+                     too), so extension angle 0 goes back to meaning the ODrive's
+                     own raw pos_estimate 0
   ~/enable         (std_srvs/Trigger) — put all axes in CLOSED_LOOP_CONTROL
   ~/disable        (std_srvs/Trigger) — put all axes in IDLE
 
@@ -25,20 +38,19 @@ Services called:
   /odrive_axis{N}/request_axis_state  (odrive_can/AxisState)
 
 Parameters:
-  robot_config   (str)   — path to wrist.yaml; defaults to package config/wrist.yaml
+  robot_config   (str)   — path to wrist.yaml; defaults to hsa_robots/wrist.yaml
   control_mode   (int)   — ODrive ControlMode (3 = position, 2 = velocity, 1 = torque)
   input_mode     (int)   — ODrive InputMode   (1 = passthrough, 5 = trap_traj)
   vel_ff         (float) — velocity feed-forward in turns/s (position mode only)
   torque_ff      (float) — torque feed-forward in Nm
 """
 
-import os
+import math
 import time
 
 import rclpy
 from rclpy.node import Node
-from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
-from ament_index_python.packages import get_package_share_directory
+from rclpy.qos import DurabilityPolicy, QoSProfile, ReliabilityPolicy, HistoryPolicy
 
 from std_msgs.msg import Float32MultiArray
 from std_srvs.srv import Empty, Trigger
@@ -46,7 +58,13 @@ from odrive_can.msg import ControlMessage, ControllerStatus
 from odrive_can.srv import AxisState
 
 from hsa_robots import HSARobot
-from .conversion import compute_setpoint, compute_zero_offset, compute_extension_angle
+from .conversion import (
+    compute_extension_angle,
+    compute_jog_setpoint,
+    compute_setpoint,
+    compute_zero_offset,
+)
+from .robot_config import default_robot_config
 
 # ODrive axis state constants
 AXIS_STATE_IDLE = 1
@@ -55,6 +73,14 @@ AXIS_STATE_CLOSED_LOOP = 8
 # ODrive control mode defaults
 CONTROL_MODE_POSITION = 3
 INPUT_MODE_PASSTHROUGH = 1
+
+# Latched so late subscribers (position monitor, GUI) get the current offsets.
+ZERO_OFFSETS_QOS = QoSProfile(
+    reliability=ReliabilityPolicy.RELIABLE,
+    durability=DurabilityPolicy.TRANSIENT_LOCAL,
+    history=HistoryPolicy.KEEP_LAST,
+    depth=1,
+)
 
 
 class HSAODriveControl(Node):
@@ -68,18 +94,18 @@ class HSAODriveControl(Node):
         self.declare_parameter('vel_ff', 0.0)
         self.declare_parameter('torque_ff', 0.0)
 
-        config_path: str = self.get_parameter('robot_config').value
-        if not config_path:
-            pkg_share = get_package_share_directory('wrist_control')
-            config_path = os.path.join(pkg_share, 'config', 'wrist.yaml')
+        config_path: str = self.get_parameter('robot_config').value or default_robot_config()
 
         self.robot = HSARobot(config_path)
         self.n: int = len(self.robot.hsas)
         self.get_logger().info(f'Loaded {self.n}-axis robot from {config_path}')
 
-        # Per-axis state: latest position estimates and software zero offsets
+        # Per-axis state: latest position estimates, software zero offsets and
+        # the last setpoint sent (raw ODrive turns; None = not commanded since
+        # the last enable/disable, so a jog starts from the measured position)
         self._pos_estimate: list[float | None] = [None] * self.n
-        self._zero_offsets: list[float] = [0.0] * self.n
+        self._zero_offsets: list[float] = [h.zero_offset for h in self.robot.hsas]
+        self._setpoints: list[float | None] = [None] * self.n
 
         # QoS: reliable, keep-last-10 for control topics
         ctrl_qos = QoSProfile(
@@ -98,9 +124,9 @@ class HSAODriveControl(Node):
             for i in range(self.n)
         ]
 
-        # Publisher: live measured extension angles (degrees), one per axis
-        self._joint_state_pub = self.create_publisher(
-            Float32MultiArray, '~/joint_states', ctrl_qos
+        # Publisher: software zero offsets (motor turns), one per axis
+        self._zero_offsets_pub = self.create_publisher(
+            Float32MultiArray, '/hsa_zero_offsets', ZERO_OFFSETS_QOS
         )
 
         # Subscribers: controller_status per axis for position feedback
@@ -119,6 +145,7 @@ class HSAODriveControl(Node):
             self._on_joint_commands,
             10,
         )
+        self.create_subscription(Float32MultiArray, '~/jog', self._on_jog, 10)
 
         # Services provided by this node
         self.create_service(Empty, '~/zero_encoders', self._svc_zero_encoders)
@@ -132,9 +159,17 @@ class HSAODriveControl(Node):
             for i in range(self.n)
         ]
 
+        self._publish_zero_offsets()
+
         self.get_logger().info('hsa_odrive_control ready.')
         self.get_logger().info(
-            'Call ~/zero_encoders before commanding motion to establish the home position.'
+            f'Zero offsets from {config_path} (motor turns): '
+            + ', '.join(f'{o:+.4f}' for o in self._zero_offsets)
+        )
+        self.get_logger().info(
+            'These assume the ODrive positions are unchanged since the zero was set. '
+            "If an ODrive has rebooted, check /hsa_positions and use joint_commander_gui's "
+            'Set Physical Zero to re-zero before commanding motion.'
         )
 
     # ------------------------------------------------------------------
@@ -143,7 +178,6 @@ class HSAODriveControl(Node):
 
     def _on_controller_status(self, axis_idx: int, msg: ControllerStatus) -> None:
         self._pos_estimate[axis_idx] = msg.pos_estimate
-        self._publish_joint_states()
 
     def _on_joint_commands(self, msg: Float32MultiArray) -> None:
         if len(msg.data) != self.n:
@@ -153,41 +187,62 @@ class HSAODriveControl(Node):
             return
         self._publish_commands(list(msg.data))
 
+    def _on_jog(self, msg: Float32MultiArray) -> None:
+        if len(msg.data) != self.n:
+            self.get_logger().error(f'jog: expected {self.n} values, got {len(msg.data)}')
+            return
+        for i, (hsa, step) in enumerate(zip(self.robot.hsas, msg.data)):
+            if step == 0.0 or math.isnan(step):
+                continue
+            # Step from what the axis is being held at; fall back to where it
+            # actually is if it hasn't been commanded since enable.
+            base_turns = self._setpoints[i]
+            if base_turns is None:
+                base_turns = self._pos_estimate[i]
+            if base_turns is None:
+                self.get_logger().warning(f'jog: axis {i} has no position feedback yet; ignored.')
+                continue
+            base_deg = compute_extension_angle(base_turns, hsa, self._zero_offsets[i])
+            target_deg = base_deg + float(step)
+            setpoint = compute_jog_setpoint(target_deg, hsa, self._zero_offsets[i])
+            self._send_setpoint(i, setpoint)
+            reached = compute_extension_angle(setpoint, hsa, self._zero_offsets[i])
+            self.get_logger().info(f'jog axis {i}: {base_deg:+.2f}° → {reached:+.2f}°')
+
     # ------------------------------------------------------------------
     # Internal helpers
     # ------------------------------------------------------------------
 
     def _publish_commands(self, extension_angles_deg: list[float]) -> None:
-        ctrl_mode: int = int(self.get_parameter('control_mode').value)
-        in_mode: int = int(self.get_parameter('input_mode').value)
-        vel_ff: float = float(self.get_parameter('vel_ff').value)
-        torque_ff: float = float(self.get_parameter('torque_ff').value)
-
         for i, (hsa, angle_deg) in enumerate(zip(self.robot.hsas, extension_angles_deg)):
-            setpoint = compute_setpoint(angle_deg, hsa, self._zero_offsets[i])
+            self._send_setpoint(i, compute_setpoint(angle_deg, hsa, self._zero_offsets[i]))
 
-            cmd = ControlMessage()
-            cmd.control_mode = ctrl_mode
-            cmd.input_mode = in_mode
-            cmd.input_pos = float(setpoint)
-            cmd.input_vel = vel_ff
-            cmd.input_torque = torque_ff
-            self._ctrl_pubs[i].publish(cmd)
+    def _send_setpoint(self, axis_idx: int, setpoint_turns: float) -> None:
+        cmd = ControlMessage()
+        cmd.control_mode = int(self.get_parameter('control_mode').value)
+        cmd.input_mode = int(self.get_parameter('input_mode').value)
+        cmd.input_pos = float(setpoint_turns)
+        cmd.input_vel = float(self.get_parameter('vel_ff').value)
+        cmd.input_torque = float(self.get_parameter('torque_ff').value)
+        self._ctrl_pubs[axis_idx].publish(cmd)
+        self._setpoints[axis_idx] = float(setpoint_turns)
 
-    def _publish_joint_states(self) -> None:
-        """Publish each axis's live measured extension angle (degrees),
-        converted from its encoder position estimate. NaN where no feedback
-        has arrived yet for that axis."""
-        angles: list[float] = []
-        for i, hsa in enumerate(self.robot.hsas):
-            pos = self._pos_estimate[i]
-            if pos is None:
-                angles.append(float('nan'))
-            else:
-                angles.append(compute_extension_angle(pos, hsa, self._zero_offsets[i]))
+    def _publish_zero_offsets(self) -> None:
         msg = Float32MultiArray()
-        msg.data = angles
-        self._joint_state_pub.publish(msg)
+        msg.data = [float(o) for o in self._zero_offsets]
+        self._zero_offsets_pub.publish(msg)
+
+    def _save_zero_offsets(self) -> None:
+        """Persist the offsets as each HSA's zero_offset in wrist.yaml."""
+        try:
+            self.robot.save_zero_offsets(self._zero_offsets)
+        except Exception as e:
+            self.get_logger().error(
+                f'Could not save zero offsets to {self.robot.config_path}: {e}. '
+                'They apply until this node restarts.'
+            )
+            return
+        self.get_logger().info(f'Zero offsets saved to {self.robot.config_path}.')
 
     def _request_axis_state_all(self, state: int) -> list[int]:
         """Request `state` on every axis, one at a time with a small stagger
@@ -228,21 +283,26 @@ class HSAODriveControl(Node):
     # ------------------------------------------------------------------
 
     def _svc_zero_encoders(self, _request: Empty.Request, response: Empty.Response):
-        """Record current ODrive positions as the software zero for each axis."""
+        """Record current ODrive positions as the physical zero for each axis.
+
+        An axis with no position feedback keeps its previous offset rather
+        than being zeroed at a guessed position."""
         missing = [i for i, p in enumerate(self._pos_estimate) if p is None]
         if missing:
             self.get_logger().warning(
-                f'No position feedback yet for axes {missing}. '
-                'Those axes will be zeroed at 0.0 turns.'
+                f'No position feedback yet for axes {missing}; their zero is unchanged.'
             )
         for i, hsa in enumerate(self.robot.hsas):
-            current = self._pos_estimate[i] if self._pos_estimate[i] is not None else 0.0
+            current = self._pos_estimate[i]
+            if current is None:
+                continue
             self._zero_offsets[i] = compute_zero_offset(current, hsa)
             self.get_logger().info(
                 f'Axis {i} ({hsa.handedness}): '
                 f'pos={current:.4f} turns  →  offset={self._zero_offsets[i]:.4f} turns'
             )
-        self._publish_joint_states()
+        self._publish_zero_offsets()
+        self._save_zero_offsets()
         return response
 
     def _svc_reset_zero(self, _request: Empty.Request, response: Empty.Response):
@@ -254,10 +314,14 @@ class HSAODriveControl(Node):
             'Zero offsets reset to 0.0 for all axes — extension angle now follows '
             "each ODrive's own raw pos_estimate directly."
         )
-        self._publish_joint_states()
+        self._publish_zero_offsets()
+        self._save_zero_offsets()
         return response
 
     def _svc_enable(self, _request: Trigger.Request, response: Trigger.Response):
+        # Each ODrive holds its current position on entering closed loop, so
+        # any setpoint remembered from before is stale.
+        self._setpoints = [None] * self.n
         unavailable = self._request_axis_state_all(AXIS_STATE_CLOSED_LOOP)
         response.success = not unavailable
         response.message = (
@@ -268,6 +332,7 @@ class HSAODriveControl(Node):
         return response
 
     def _svc_disable(self, _request: Trigger.Request, response: Trigger.Response):
+        self._setpoints = [None] * self.n
         unavailable = self._request_axis_state_all(AXIS_STATE_IDLE)
         response.success = not unavailable
         response.message = (

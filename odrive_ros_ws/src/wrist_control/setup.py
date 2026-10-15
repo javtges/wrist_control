@@ -11,7 +11,9 @@ setup(
     data_files=[
         ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name, 'config'), glob('config/*.yaml')),
+        # config/wrist.yaml is a symlink to hsa_robots/wrist.yaml, which nodes
+        # read directly (wrist_control.robot_config) — not installed, so no
+        # stale copy ends up in share/.
         (os.path.join('share', package_name, 'launch'), glob('launch/*')),
         (os.path.join('share', package_name, 'doc'), glob('doc/*.md')),
         # ros2 run looks in lib/<package>/ — setuptools 84 ignores [install] install_scripts

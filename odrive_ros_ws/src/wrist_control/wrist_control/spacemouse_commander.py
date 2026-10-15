@@ -9,23 +9,35 @@ joint_commander_gui does.
 
 Topics published:
   /hsa_odrive_control/joint_commands  (std_msgs/Float32MultiArray)
-      6 extension angles in degrees, clamped to each joint's
-      [min_angle, max_angle] from wrist.yaml. Only while publishing is on.
+      6 extension angles in degrees, clamped to the HSARobot action space
+      ([min_angle, max_angle] from wrist.yaml, i.e. 0–360 from the physical
+      zero). Only while publishing is on.
   ~/joint_preview  (std_msgs/Float32MultiArray)
       The same 6 angles, published at every tick whether or not publishing
       is on, so the output can be checked without moving the motors.
 
+Topics subscribed:
+  /odrive_axis{N}/controller_status  (odrive_can/ControllerStatus) — axis state,
+      to decide whether the right button enables or disables
+
 Services provided:
   ~/set_publishing  (std_srvs/SetBool) — turn publishing on/off
 
+Services called:
+  /hsa_odrive_control/enable, /hsa_odrive_control/disable  (std_srvs/Trigger)
+
 SpaceMouse buttons:
   Button 0 (left)  — toggle publishing on/off
-  Button 1 (right) — Go to Zero: publish every joint's zero_point once,
-                     then turn publishing off
+  Button 1 (right) — enable/disable the motors: disables if any axis is in
+                     closed-loop control, otherwise enables. Either way
+                     publishing is turned off first, so motors never jump to
+                     the SpaceMouse pose the moment they are enabled.
+
+The software zero is set only from joint_commander_gui.
 
 Parameters:
-  robot_config     (str)   — path to wrist.yaml; defaults to package config/wrist.yaml
-  publish_rate     (float) — Hz, default 20 (joint_commander_gui's default)
+  robot_config     (str)   — path to wrist.yaml; defaults to hsa_robots/wrist.yaml
+  publish_rate     (float) — Hz, default 100 (joint_commander_gui's default)
   start_publishing (bool)  — publish from startup, default False
   max_rot          (float) — rad of rotation at full SpaceMouse deflection
   max_lin          (float) — cm of z translation at full SpaceMouse deflection
@@ -34,17 +46,15 @@ Parameters:
   leg_offset       (int)   — rotate the motor numbering by this many legs
 """
 
-import os
 import threading
-from pathlib import Path
 
 import numpy as np
 import rclpy
 from rclpy.node import Node
-from ament_index_python.packages import get_package_share_directory
 
 from std_msgs.msg import Float32MultiArray
-from std_srvs.srv import SetBool
+from std_srvs.srv import SetBool, Trigger
+from odrive_can.msg import ControllerStatus
 
 from hsa_robots import HSARobot
 
@@ -55,10 +65,12 @@ from .stewart_kinematics import (
     clamp_to_limits,
     spacemouse_to_joint_angles,
 )
+from .robot_config import default_robot_config
 
 BUTTON_TOGGLE_PUBLISH = 0
-BUTTON_GO_TO_ZERO = 1
+BUTTON_TOGGLE_ENABLE = 1
 READ_TIMEOUT_MS = 50
+AXIS_STATE_CLOSED_LOOP = 8
 
 
 class SpacemouseCommander(Node):
@@ -68,7 +80,7 @@ class SpacemouseCommander(Node):
         super().__init__("spacemouse_commander")
 
         self.declare_parameter("robot_config", default_config)
-        self.declare_parameter("publish_rate", 20.0)
+        self.declare_parameter("publish_rate", 100.0)
         self.declare_parameter("start_publishing", False)
         self.declare_parameter("max_rot", float(MAX_ROT))
         self.declare_parameter("max_lin", float(MAX_LIN))
@@ -80,9 +92,8 @@ class SpacemouseCommander(Node):
         self.n = len(self.robot.hsas)
         if self.n != 6:
             raise ValueError(f"spacemouse_commander needs 6 joints, {cfg} has {self.n}")
-        self._low = np.array([h.min_angle for h in self.robot.hsas], dtype=float)
-        self._high = np.array([h.max_angle for h in self.robot.hsas], dtype=float)
-        self._zero = [float(h.zero_point) for h in self.robot.hsas]
+        self._low = np.asarray(self.robot.action_space["low"], dtype=float)
+        self._high = np.asarray(self.robot.action_space["high"], dtype=float)
 
         self._max_rot = float(self.get_parameter("max_rot").value)
         self._max_lin = float(self.get_parameter("max_lin").value)
@@ -96,6 +107,16 @@ class SpacemouseCommander(Node):
             Float32MultiArray, "~/joint_preview", 10
         )
         self.create_service(SetBool, "~/set_publishing", self._svc_set_publishing)
+        self._svc_enable = self.create_client(Trigger, f"/{self._TARGET}/enable")
+        self._svc_disable = self.create_client(Trigger, f"/{self._TARGET}/disable")
+
+        # Latest ODrive axis_state per axis (None = no status received yet)
+        self._axis_states: list[int | None] = [None] * self.n
+        for i in range(self.n):
+            self.create_subscription(
+                ControllerStatus, f"/odrive_axis{i}/controller_status",
+                lambda msg, idx=i: self._on_controller_status(idx, msg), 10,
+            )
 
         # Latest SpaceMouse state (pyspacemouse namedtuple), written by the
         # reader thread and read by the publish timer.
@@ -153,8 +174,8 @@ class SpacemouseCommander(Node):
                 with self._lock:
                     publishing = self._publishing
                 self._set_publishing(not publishing)
-            if self._pressed(BUTTON_GO_TO_ZERO, buttons, old_buttons):
-                self._go_to_zero()
+            if self._pressed(BUTTON_TOGGLE_ENABLE, buttons, old_buttons):
+                self._toggle_enable()
             old_buttons = buttons
 
     @staticmethod
@@ -200,14 +221,36 @@ class SpacemouseCommander(Node):
             self.get_logger().info("PUBLISHING" if on else "NOT PUBLISHING")
         return True
 
-    def _go_to_zero(self) -> None:
-        """Publish every joint's zero_point once and stop publishing, like
-        joint_commander_gui's Go to Zero followed by toggling publishing off."""
+    # ── Enable / disable ──────────────────────────────────────────────────────
+
+    def _on_controller_status(self, idx: int, msg: ControllerStatus) -> None:
+        with self._lock:
+            self._axis_states[idx] = msg.axis_state
+
+    def _toggle_enable(self) -> None:
+        """Disable if any axis is in closed loop, otherwise enable."""
         self._set_publishing(False)
-        msg = Float32MultiArray()
-        msg.data = list(self._zero)
-        self._cmd_pub.publish(msg)
-        self.get_logger().info(f"Go to Zero: {self._zero}")
+        with self._lock:
+            any_enabled = any(s == AXIS_STATE_CLOSED_LOOP for s in self._axis_states)
+        client, name = (
+            (self._svc_disable, "disable") if any_enabled else (self._svc_enable, "enable")
+        )
+        if not client.service_is_ready():
+            self.get_logger().warning(f"{name} service not ready.")
+            return
+        self.get_logger().info(f"{name} called.")
+        client.call_async(Trigger.Request()).add_done_callback(
+            lambda fut, name=name: self._on_enable_result(name, fut)
+        )
+
+    def _on_enable_result(self, name: str, fut) -> None:
+        try:
+            res = fut.result()
+        except Exception as e:
+            self.get_logger().error(f"{name} failed: {e}")
+            return
+        log = self.get_logger().info if res.success else self.get_logger().error
+        log(f"{name}: {res.message}")
 
     def _svc_set_publishing(self, request: SetBool.Request, response: SetBool.Response):
         response.success = self._set_publishing(request.data)
@@ -231,14 +274,7 @@ class SpacemouseCommander(Node):
 
 def main(args=None) -> None:
     rclpy.init(args=args)
-
-    try:
-        pkg_share = get_package_share_directory("wrist_control")
-        default_config = os.path.join(pkg_share, "config", "wrist.yaml")
-    except Exception:
-        default_config = str(Path(__file__).parent.parent / "config" / "wrist.yaml")
-
-    node = SpacemouseCommander(default_config)
+    node = SpacemouseCommander(default_robot_config())
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
