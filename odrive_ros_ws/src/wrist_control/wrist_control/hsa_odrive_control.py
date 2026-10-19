@@ -167,9 +167,9 @@ class HSAODriveControl(Node):
             + ', '.join(f'{o:+.4f}' for o in self._zero_offsets)
         )
         self.get_logger().info(
-            'These assume the ODrive positions are unchanged since the zero was set. '
-            "If an ODrive has rebooted, check /hsa_positions and use joint_commander_gui's "
-            'Set Physical Zero to re-zero before commanding motion.'
+            'These survive ODrive power cycles if each HSA was powered on near its zero '
+            '(an HSA powered on far from it can read 180° off). Check /hsa_positions against '
+            "the hardware before publishing; if it's off, re-zero with joint_commander_gui."
         )
 
     # ------------------------------------------------------------------

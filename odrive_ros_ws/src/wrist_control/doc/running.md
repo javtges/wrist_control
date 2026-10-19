@@ -115,12 +115,13 @@ The software zero is stored per HSA as `zero_offset` (motor turns) in
 **Set Physical Zero** / **Clear Physical Zero…** write it back, so the zero
 survives restarting the ROS nodes.
 
-The offset is only correct while each ODrive's `pos_estimate` is unchanged
-from when the zero was set. If an ODrive reboots or loses power, its encoder
-position can come back different (the motor turns more than once across the
-0–360° range), and the saved offset will then be off. After any ODrive power
-cycle, check `/hsa_positions` against the hardware, and if it's off, jog to the
-physical zero and press **Set Physical Zero** again.
+The zero also survives ODrive power cycles: the encoder position comes back
+the same after power-up. The encoder is absolute only within one motor turn,
+though, and each HSA's 0–360° range spans two motor turns (2:1 gear). An HSA
+that is powered on far from its zero can come back reading 180° off. So **park
+with Go to Zero, then Disable, before powering off**. After powering on, check
+`/hsa_positions` against the hardware before publishing; if an HSA is off, jog
+it to its physical zero and press **Set Physical Zero** again.
 
 Topic consumed:
 
