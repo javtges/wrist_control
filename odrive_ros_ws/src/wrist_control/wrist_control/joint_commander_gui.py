@@ -22,7 +22,7 @@ import threading
 import time
 
 import tkinter as tk
-from tkinter import ttk
+from tkinter import messagebox, ttk
 
 import rclpy
 from rclpy.node import Node
@@ -501,8 +501,8 @@ class JointCommanderApp:
         ).grid(row=1, column=1, padx=6, pady=4)
 
         ttk.Button(
-            f, text="⟲  Reset to ODrive Zero", width=18 * 2 + 3,
-            command=self.node.call_reset_zero,
+            f, text="⟲  Clear Physical Zero…", width=18 * 2 + 3,
+            command=self._clear_zero,
         ).grid(row=2, column=0, columnspan=2, padx=6, pady=4, sticky="ew")
 
         # Enable / Disable
@@ -617,6 +617,20 @@ class JointCommanderApp:
         self.node.call_zero_encoders()
         for p in self.panels:
             p.set_angle(float(p.hsa.zero_point))
+
+    def _clear_zero(self) -> None:
+        """Ask before deleting the saved physical zero — it can't be undone
+        from the GUI, only re-set by jogging and pressing Set Physical Zero."""
+        if messagebox.askyesno(
+            "Clear physical zero?",
+            "This deletes the saved physical zero for every HSA (zero_offset "
+            "in hsa_robots/wrist.yaml). Positions will then be measured from "
+            "each ODrive's raw encoder zero, and you will need to jog and press "
+            "Set Physical Zero again.\n\nThe motors do not move.\n\n"
+            "Clear the physical zero?",
+            icon=messagebox.WARNING, default=messagebox.NO, parent=self.root,
+        ):
+            self.node.call_reset_zero()
 
     def _reset_ff(self, var: tk.DoubleVar, lbl: ttk.Label, param: str) -> None:
         var.set(0.0)

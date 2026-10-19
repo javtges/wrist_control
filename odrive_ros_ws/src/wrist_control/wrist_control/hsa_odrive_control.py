@@ -232,6 +232,14 @@ class HSAODriveControl(Node):
         msg.data = [float(o) for o in self._zero_offsets]
         self._zero_offsets_pub.publish(msg)
 
+    def _log_previous_offsets(self, action: str) -> None:
+        """Log the offsets about to be replaced at full precision, so a zero
+        replaced by mistake can be restored by hand into wrist.yaml."""
+        self.get_logger().info(
+            f'{action}: previous zero_offset values (motor turns): '
+            + ', '.join(repr(float(o)) for o in self._zero_offsets)
+        )
+
     def _save_zero_offsets(self) -> None:
         """Persist the offsets as each HSA's zero_offset in wrist.yaml."""
         try:
@@ -292,6 +300,7 @@ class HSAODriveControl(Node):
             self.get_logger().warning(
                 f'No position feedback yet for axes {missing}; their zero is unchanged.'
             )
+        self._log_previous_offsets('Set Physical Zero')
         for i, hsa in enumerate(self.robot.hsas):
             current = self._pos_estimate[i]
             if current is None:
@@ -309,6 +318,7 @@ class HSAODriveControl(Node):
         """Clear the software zero offset for every axis, so extension angle 0
         again means the ODrive's own raw pos_estimate 0 — undoes any prior
         ~/zero_encoders calibration without needing to restart the node."""
+        self._log_previous_offsets('Clear Physical Zero')
         self._zero_offsets = [0.0] * self.n
         self.get_logger().info(
             'Zero offsets reset to 0.0 for all axes — extension angle now follows '

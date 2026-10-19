@@ -112,7 +112,7 @@ Services published by this node:
 
 The software zero is stored per HSA as `zero_offset` (motor turns) in
 `hsa_robots/wrist.yaml`. `hsa_odrive_control` loads it at startup, and
-**Set Physical Zero** / **Reset to ODrive Zero** write it back, so the zero
+**Set Physical Zero** / **Clear Physical Zero…** write it back, so the zero
 survives restarting the ROS nodes.
 
 The offset is only correct while each ODrive's `pos_estimate` is unchanged
@@ -175,6 +175,12 @@ ros2 run wrist_control joint_commander_gui \
   records current motor positions as the physical zero (motors do not move),
   saves it to `zero_offset` in `hsa_robots/wrist.yaml`, and resets the sliders
   to 0 to match. This is the only place the zero is set.
+- **Clear Physical Zero…** — after a confirmation, deletes the saved zero for
+  every HSA (all `zero_offset` back to 0 in `wrist.yaml`), so positions are
+  measured from each ODrive's raw encoder zero. The motors do not move. The
+  old values are printed in the `hsa_odrive_control` log, so they can be typed
+  back into `wrist.yaml` if it was a mistake (only valid if the ODrives
+  haven't rebooted since).
 - **Enable / Disable** — calls the `enable`/`disable` services on the node.
 
 ---
