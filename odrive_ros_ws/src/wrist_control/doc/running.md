@@ -180,6 +180,19 @@ meet at the top), `leg_offset` (0: rotate the motor numbering by this many legs)
 
 ---
 
+## Step 5 (optional) — Camera tracking of the platform
+
+A baseplate USB camera tracks an AprilTag on the platform and `tag_monitor`
+shows the camera view with the motor positions, saving screenshots + positions
+whenever the tag is lost. See
+[camera_tracking.md](../../camera_tracking/doc/camera_tracking.md).
+
+```bash
+ros2 launch camera_tracking tracking.launch.py tag_id:=0   # Arducam OV9281 on /dev/video8, 120 fps
+```
+
+---
+
 ## Typical workflow
 
 ```

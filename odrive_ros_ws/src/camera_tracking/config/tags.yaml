@@ -1,0 +1,23 @@
+# AprilTagNode parameters (apriltag_ros 3.x nested format).
+/**:
+  ros__parameters:
+    image_transport: raw
+    family: 36h11
+    size: 0.06                # tag edge size in metres (black border to black border) — measure yours
+    max_hamming: 0
+    pose_estimation_method: pnp
+
+    detector:
+      threads: 4
+      decimate: 2.0           # 2.0 keeps up with 120 fps (1.0 = full-res quad search, ~70 Hz on 22 cores)
+      blur: 0.0
+      refine: true
+      sharpening: 0.25
+      debug: false
+
+    # Restrict to the platform tag and give its frame a fixed name.
+    # Leave commented to detect every 36h11 tag (frames are then tag36h11:<id>).
+    # tag:
+    #   ids: [0]
+    #   frames: [platform_tag]
+    #   sizes: [0.06]

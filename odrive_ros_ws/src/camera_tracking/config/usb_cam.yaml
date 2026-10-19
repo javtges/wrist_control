@@ -1,0 +1,27 @@
+# usb_cam parameters for the baseplate tracking camera (Arducam OV9281, global shutter, mono).
+# Full sensor is 1280x800; MJPG at 120 fps (YUYV only reaches 10 fps). Use the current
+# device: `v4l2-ctl --list-devices`, formats: `v4l2-ctl -d /dev/videoN --list-formats-ext`.
+# video_device and camera_info_url are overridden from camera.launch.py.
+/**:
+  ros__parameters:
+    video_device: "/dev/video8"
+    framerate: 120.0
+    io_method: "mmap"
+    frame_id: "camera"          # TF parent of every tag frame
+    pixel_format: "mjpeg2rgb"   # see usb_cam/supported_formats
+    image_width: 1280
+    image_height: 800
+    camera_name: "tracking_cam" # must match camera_name in camera_info.yaml
+    brightness: -1
+    contrast: -1
+    saturation: -1
+    sharpness: -1
+    gain: -1
+    auto_white_balance: true
+    white_balance: 4000
+    # These two have no effect on the OV9281 (old V4L2 control names); camera.launch.py
+    # sets manual exposure with v4l2-ctl instead (exposure:= launch argument).
+    autoexposure: false
+    exposure: 50
+    autofocus: false            # fixed focus keeps the tag edges sharp
+    focus: -1

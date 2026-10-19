@@ -1,0 +1,3 @@
+#!/usr/bin/env python3
+from camera_tracking.platform_pose import main
+main()
