@@ -182,14 +182,22 @@ meet at the top), `leg_offset` (0: rotate the motor numbering by this many legs)
 
 ## Step 5 (optional) — Camera tracking of the platform
 
-A baseplate USB camera tracks an AprilTag on the platform and `tag_monitor`
-shows the camera view with the motor positions, saving screenshots + positions
-whenever the tag is lost. See
+A baseplate USB camera tracks the four AprilTags on the platform (16h5, ids
+0–3). `platform_pose` publishes the platform's pose relative to its zero on
+`/platform_pose`, and `tag_monitor` shows the camera view with the motor
+positions, saving screenshots + positions whenever the tags are lost. See
 [camera_tracking.md](../../camera_tracking/doc/camera_tracking.md).
 
 ```bash
-ros2 launch camera_tracking tracking.launch.py tag_id:=0   # Arducam OV9281 on /dev/video8, 120 fps
+ros2 launch camera_tracking tracking.launch.py   # Arducam OV9281 on /dev/video8, 1280x720 @ 120 fps
 ```
+
+Zero the camera once per mount: with the motors enabled, encoders zeroed and
+every joint commanded to 0° (plate flat on the table), press **⌖ Set Platform
+Zero (camera)** in `joint_commander_gui` (it only enables while all HSAs read
+0 ± 1°), or `ros2 service call /set_platform_zero std_srvs/srv/Trigger`. The
+zero is saved to `~/.config/camera_tracking/platform_zero.yaml` and reloaded
+on later starts.
 
 ---
 

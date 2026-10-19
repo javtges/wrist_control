@@ -2,19 +2,22 @@
 tracking.launch.py — full platform-tracking stack:
 camera + rectification + AprilTag (one container, intra-process) + platform_pose + tag_monitor.
 
-Run alongside the wrist stack (odrive_can + hsa_odrive_control) so tag_monitor
-can record motor positions.
+Run alongside the wrist stack (odrive_can + hsa_odrive_control): platform_pose
+needs the joint states to allow /set_platform_zero and tag_monitor records
+the motor positions.
 
 Launch arguments:
-  video_device   baseplate camera device (default /dev/video8, the Arducam OV9281)
-  tag_id         platform tag id; -1 = any tag (default -1)
-  output_dir     where tag_monitor writes screenshots (default ~/wrist_captures)
-  show_window    open the live OpenCV window (default true)
-  image_topic    image_rect (default) or image_raw
-  start_camera   false = no usb_cam, e.g. when replaying a bag
+  video_device     baseplate camera device (default /dev/video8, the Arducam OV9281)
+  platform_config  platform_pose parameters: tag layout, zero file, zeroing guard
+                   (default config/platform.yaml)
+  tag_id           tag the monitor watches for "lost"; -1 = any tag (default -1)
+  output_dir       where tag_monitor writes screenshots (default ~/wrist_captures)
+  show_window      open the live OpenCV window (default true)
+  image_topic      image_rect (default) or image_raw
+  start_camera     false = no usb_cam, e.g. when replaying a bag
 
 Example:
-  ros2 launch camera_tracking tracking.launch.py video_device:=/dev/video2 tag_id:=0
+  ros2 launch camera_tracking tracking.launch.py video_device:=/dev/video2
 """
 
 import os
@@ -31,6 +34,7 @@ def generate_launch_description():
     share = get_package_share_directory('camera_tracking')
 
     video_device = LaunchConfiguration('video_device')
+    platform_config = LaunchConfiguration('platform_config')
     tag_id = LaunchConfiguration('tag_id')
     output_dir = LaunchConfiguration('output_dir')
     show_window = LaunchConfiguration('show_window')
@@ -39,6 +43,9 @@ def generate_launch_description():
 
     args = [
         DeclareLaunchArgument('video_device', default_value='/dev/video8'),
+        DeclareLaunchArgument(
+            'platform_config',
+            default_value=os.path.join(share, 'config', 'platform.yaml')),
         DeclareLaunchArgument('tag_id', default_value='-1'),
         DeclareLaunchArgument('output_dir', default_value='~/wrist_captures'),
         DeclareLaunchArgument('show_window', default_value='true'),
@@ -68,7 +75,7 @@ def generate_launch_description():
         executable='platform_pose',
         name='platform_pose',
         output='screen',
-        parameters=[{'tag_id': tag_id}],
+        parameters=[platform_config],
     )
 
     tag_monitor = Node(

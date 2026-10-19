@@ -1,0 +1,30 @@
+# platform_pose parameters: the plate's tag layout and the zeroing guard.
+platform_pose:
+  ros__parameters:
+    detections_topic: /apriltag/detections
+    camera_info_topic: /tracking_cam/camera_info
+    joint_states_topic: /hsa_odrive_control/joint_states
+    camera_frame: camera            # usb_cam frame_id (TF parent of everything)
+    platform_frame: platform
+    zero_frame: platform_zero
+
+    # Tag layout in the ID0 frame (x right, y up along the printed tag), mm.
+    # ID1 straight above ID0, ID2 lower right, ID3 lower left; 40 mm centre to
+    # centre at 120 degrees. All four tags printed with the same orientation.
+    tag_size: 0.012                 # edge of the black square, m (12 mm tag, 18 mm with border)
+    tag_ids:  [0,   1,    2,       3]
+    tag_x_mm: [0.0, 0.0,  34.641, -34.641]
+    tag_y_mm: [0.0, 40.0, -20.0,  -20.0]
+    tag_priority: [0, 1, 2, 3]      # ID0 when visible, else the first visible outer tag
+    pose_source: priority           # priority = that one tag; all = refine over every visible tag
+
+    max_age: 0.1                    # s, the pose must be this fresh to become the zero
+    stale_after: 1.0                # s without detections before "not visible"
+    zero_file: ~/.config/camera_tracking/platform_zero.yaml
+
+    # /set_platform_zero is refused unless every HSA extension angle is within
+    # joints_zero_tol_deg of 0 (fresh within joints_max_age). false = no guard.
+    require_joints_zero: true
+    joints_zero_tol_deg: 1.0
+    joints_max_age: 1.0
+    publish_consistency: true       # ~/tag_consistency_mm when >1 tag is visible

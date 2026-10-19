@@ -4,7 +4,9 @@ joint_commander_gui — Tkinter + ROS2 GUI for commanding HSA wrist joints.
 
 Publishes Float32MultiArray to /hsa_odrive_control/joint_commands and
 controls ODrive parameters on the hsa_odrive_control node in real time.
-Also shows each ODrive's DC bus current from /odrive_axis{N}/odrive_status.
+Also shows each ODrive's DC bus current from /odrive_axis{N}/odrive_status,
+and calls /set_platform_zero (camera_tracking platform_pose) once every HSA
+reads 0 deg, so the camera's platform zero is taken with the plate at rest.
 
 Usage:
     ros2 run wrist_control joint_commander_gui
@@ -235,6 +237,9 @@ class GUINode(Node):
         self._svc_reset_zero = self.create_client(Empty, f"/{self._TARGET}/reset_zero")
         self._svc_enable = self.create_client(Trigger, f"/{self._TARGET}/enable")
         self._svc_disable = self.create_client(Trigger, f"/{self._TARGET}/disable")
+        self._svc_platform_zero = self.create_client(Trigger, "/set_platform_zero")
+        self._platform_zero_lock = threading.Lock()
+        self._platform_zero_result: str | None = None
 
         try:
             from rclpy.parameter_client import AsyncParametersClient
@@ -288,6 +293,44 @@ class GUINode(Node):
             else:
                 out.append(entry[0])
         return out
+
+    # ── Platform zero (camera_tracking) ───────────────────────────────────────
+
+    PLATFORM_ZERO_TOL_DEG = 1.0
+
+    def platform_zero_ready(self) -> bool:
+        return self._svc_platform_zero.service_is_ready()
+
+    def joints_at_zero(self) -> bool:
+        """True when every measured extension angle is within tolerance of 0."""
+        angles = self.get_measured_angles()
+        return all(math.isfinite(a) and abs(a) <= self.PLATFORM_ZERO_TOL_DEG for a in angles)
+
+    def call_set_platform_zero(self) -> None:
+        if not self._svc_platform_zero.service_is_ready():
+            self._set_platform_zero_result("platform_pose not running")
+            return
+        future = self._svc_platform_zero.call_async(Trigger.Request())
+        future.add_done_callback(self._on_platform_zero_done)
+        self._set_platform_zero_result("setting platform zero…")
+
+    def _on_platform_zero_done(self, future) -> None:
+        try:
+            res = future.result()
+            text = ("OK: " if res.success else "REFUSED: ") + res.message
+        except Exception as e:  # service died mid-call
+            text = f"failed: {e}"
+        self._set_platform_zero_result(text)
+        self.get_logger().info("set_platform_zero -> " + text)
+
+    def _set_platform_zero_result(self, text: str) -> None:
+        with self._platform_zero_lock:
+            self._platform_zero_result = text
+
+    def take_platform_zero_result(self) -> str | None:
+        with self._platform_zero_lock:
+            text, self._platform_zero_result = self._platform_zero_result, None
+        return text
 
     # ── Service calls (fire-and-forget) ───────────────────────────────────────
 
@@ -496,6 +539,18 @@ class JointCommanderApp:
             rate_row, from_=1, to=200, textvariable=self._hz_var, width=6
         ).pack(side="left", padx=6)
 
+        # Camera platform zero: enabled only while every HSA reads 0 deg and
+        # the platform_pose service exists; the plate must sit flat first.
+        self._platform_zero_btn = ttk.Button(
+            f, text="⌖  Set Platform Zero (camera)", width=18 * 2 + 3,
+            command=self.node.call_set_platform_zero, state="disabled",
+        )
+        self._platform_zero_btn.grid(row=5, column=0, columnspan=2, padx=6, pady=(10, 2), sticky="ew")
+        self._platform_zero_lbl = ttk.Label(
+            f, text="", font=("Courier", 8), wraplength=330, justify="left",
+        )
+        self._platform_zero_lbl.grid(row=6, column=0, columnspan=2, padx=6, pady=(0, 4), sticky="w")
+
     # ── Measured-state poll loop ─────────────────────────────────────────────
 
     MEASURED_POLL_MS = 150
@@ -507,7 +562,21 @@ class JointCommanderApp:
             panel.set_measured_angle(angle)
         for panel, amps in zip(self.panels, self.node.get_bus_currents()):
             panel.set_bus_current(amps)
+        self._poll_platform_zero()
         self.root.after(self.MEASURED_POLL_MS, self._poll_measured)
+
+    def _poll_platform_zero(self) -> None:
+        ready = self.node.platform_zero_ready()
+        at_zero = self.node.joints_at_zero()
+        self._platform_zero_btn.config(state="normal" if ready and at_zero else "disabled")
+        result = self.node.take_platform_zero_result()
+        if result is not None:
+            self._platform_zero_lbl.config(text=result)
+        elif not ready:
+            self._platform_zero_lbl.config(text="platform_pose not running (camera_tracking)")
+        elif not at_zero:
+            self._platform_zero_lbl.config(
+                text=f"HSAs must all read 0 ± {self.node.PLATFORM_ZERO_TOL_DEG:g}° to set the zero")
 
     # ── Publish loop ──────────────────────────────────────────────────────────
 

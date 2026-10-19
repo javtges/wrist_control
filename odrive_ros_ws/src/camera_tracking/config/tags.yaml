@@ -1,23 +1,26 @@
-# AprilTagNode parameters (apriltag_ros 3.x nested format).
+# AprilTagNode parameters (apriltag_ros 3.x nested format) for the platform tags:
+# family 16h5, ids 0-3, 12 mm black square (18 mm with the white border).
+# 16h5 has few bits, so keep max_hamming 0 and restrict ids to the plate's four.
 /**:
   ros__parameters:
     image_transport: raw
-    family: 36h11
-    size: 0.06                # tag edge size in metres (black border to black border) — measure yours
+    family: 16h5
+    size: 0.012               # tag edge in metres (black border to black border)
     max_hamming: 0
     pose_estimation_method: pnp
 
     detector:
       threads: 4
-      decimate: 2.0           # 2.0 keeps up with 120 fps (1.0 = full-res quad search, ~70 Hz on 22 cores)
+      decimate: 2.0           # quad search at half resolution keeps up with the camera;
+                              # set 1.0 if the 12 mm tags are missed (corners are always
+                              # refined at full resolution)
       blur: 0.0
       refine: true
       sharpening: 0.25
       debug: false
 
-    # Restrict to the platform tag and give its frame a fixed name.
-    # Leave commented to detect every 36h11 tag (frames are then tag36h11:<id>).
-    # tag:
-    #   ids: [0]
-    #   frames: [platform_tag]
-    #   sizes: [0.06]
+    # Only the plate's tags; frames are tag16h5:<id> (platform_pose does its own
+    # PnP from the detections and does not use these TFs).
+    tag:
+      ids: [0, 1, 2, 3]
+      sizes: [0.012, 0.012, 0.012, 0.012]
