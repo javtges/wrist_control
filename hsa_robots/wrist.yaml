@@ -7,15 +7,16 @@
 # gear_ratio: gear ratio of the actuator (wrists have a 2:1 gear ratio)
 # zero_offset: software zero (motor turns), added to the raw ODrive position so
 #             zero_point is the physical zero. Written by joint_commander_gui's
-#             "Set Physical Zero"; only valid while the ODrive positions are
-#             unchanged since it was set (see wrist_control doc/running.md)
+#             "Set Physical Zero". Survives ODrive power cycles if each HSA is
+#             powered on near its zero: park with "Go to Zero" before powering
+#             off (see wrist_control doc/running.md)
 
 hsas:
   - handedness: CW
     min_angle: 0.0
     max_angle: 360.0
     zero_point: 0.0
-    zero_offset: 0.0
+    zero_offset: 0.2786
     index: 0
     motor: odrive
     gear_ratio: 2.0
@@ -24,7 +25,7 @@ hsas:
     min_angle: 0.0
     max_angle: 360.0
     zero_point: 0.0
-    zero_offset: 0.0
+    zero_offset: 0.3341
     index: 1
     motor: odrive
     gear_ratio: 2.0
@@ -33,7 +34,7 @@ hsas:
     min_angle: 0.0
     max_angle: 360.0
     zero_point: 0.0
-    zero_offset: 0.0
+    zero_offset: 0.2876
     index: 2
     motor: odrive
     gear_ratio: 2.0
@@ -42,7 +43,7 @@ hsas:
     min_angle: 0.0
     max_angle: 360.0
     zero_point: 0.0
-    zero_offset: 0.0
+    zero_offset: 0.3459
     index: 3
     motor: odrive
     gear_ratio: 2.0
@@ -51,7 +52,7 @@ hsas:
     min_angle: 0.0
     max_angle: 360.0
     zero_point: 0.0
-    zero_offset: 0.0
+    zero_offset: 0.2495
     index: 4
     motor: odrive
     gear_ratio: 2.0
@@ -60,7 +61,7 @@ hsas:
     min_angle: 0.0
     max_angle: 360.0
     zero_point: 0.0
-    zero_offset: 0.0
+    zero_offset: 0.2509
     index: 5
     motor: odrive
     gear_ratio: 2.0
