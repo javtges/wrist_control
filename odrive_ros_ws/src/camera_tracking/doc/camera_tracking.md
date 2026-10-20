@@ -121,6 +121,7 @@ Motors in closed loop, plate zeroed at rest, calibrated camera, `pose_source: al
 | all six HSAs +20 deg | plate rises 1.3 mm along its normal, tilt < 0.1 deg (the rigid-leg model in `stewart_kinematics` predicts 5.2 mm: the HSA extends far less than 1.23 cm/rad at small twists) |
 | one HSA +20 deg | 0.2–0.3 mm rise, 0.65 deg tilt leaning toward that leg; all six lean in distinct directions ~60 deg apart, so the handedness config is consistent |
 | pair (0,1) +20 deg | 1.3 deg tilt about the platform x axis |
+| all six 0 → 360 deg in 60 deg steps, and back | rise 4.3 / 8.3 / 8.9 / 9.8 / 10.8 / 12.3 mm at 60…360 deg going up; 10.8 / 8.0 / 7.3 / 7.6 / 4.5 / 0.4 mm coming down. Nearly linear to 120 deg (~0.07 mm/deg), then a knee at ~0.015 mm/deg; up to 1.5 mm of hysteresis and 0.3 mm left at 0. Tilt grows to 5.7 deg at 360 and the centre wanders ~2.5 mm sideways: the six legs do not extend equally. Mean motor current 0.05 → 2.0 A. All tags stayed in view (ID0 anchored throughout). |
 
 Found on the way: a six-axis setpoint burst lost the last axis's CAN frame
 (`ENOBUFS` on the gs_usb adapter, 56 % bus load from ODrive telemetry at
