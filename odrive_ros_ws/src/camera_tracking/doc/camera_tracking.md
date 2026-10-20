@@ -111,6 +111,24 @@ at the frame edge does not matter. If the camera is remounted, read the new
 bearings from `plate_check` and update the number. `tolerance_deg` (15) is
 the allowed error before WRONG.
 
+## Measured on the wrist (2026-10-20)
+
+Motors in closed loop, plate zeroed at rest, calibrated camera, `pose_source: all`:
+
+| motion | `/platform_pose` |
+|---|---|
+| rest, repeated | identity within 0.02 mm / 0.1 deg; returns to it after every move (no visible hysteresis at 20 deg) |
+| all six HSAs +20 deg | plate rises 1.3 mm along its normal, tilt < 0.1 deg (the rigid-leg model in `stewart_kinematics` predicts 5.2 mm: the HSA extends far less than 1.23 cm/rad at small twists) |
+| one HSA +20 deg | 0.2–0.3 mm rise, 0.65 deg tilt leaning toward that leg; all six lean in distinct directions ~60 deg apart, so the handedness config is consistent |
+| pair (0,1) +20 deg | 1.3 deg tilt about the platform x axis |
+
+Found on the way: a six-axis setpoint burst lost the last axis's CAN frame
+(`ENOBUFS` on the gs_usb adapter, 56 % bus load from ODrive telemetry at
+100 Hz × 4 messages × 6 nodes); fixed in the vendored `ros_odrive` (mode frame
+only on change, retry on a full queue) and by `txqueuelen 1000` at bring-up.
+The camera stream also stalled silently once (container alive, no frames, no
+error); relaunching the stack recovered it. Cause unknown.
+
 ## Zeroing the platform
 
 The zero is the platform pose with the HSAs at 0° and the plate sitting flat
