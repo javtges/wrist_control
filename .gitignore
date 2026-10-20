@@ -12,3 +12,5 @@ __pycache__/
 .pre-commit-config*
 build_feather/
 .devcontainer/
+# usb_cam 0.8.1 overlay with the timestamp patch (built by camera_tracking/tools/build_usb_cam_patched.sh)
+odrive_ros_ws/src/usb_cam/
