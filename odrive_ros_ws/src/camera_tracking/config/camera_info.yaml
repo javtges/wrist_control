@@ -1,12 +1,12 @@
 image_width: 1280
-image_height: 720
+image_height: 800
 camera_name: tracking_cam
-# PLACEHOLDER: old Brio intrinsics, principal point moved to the 1280x720 centre.
+# PLACEHOLDER: old Brio intrinsics, principal point moved to the 1280x800 centre.
 # Recalibrate for the OV9281 (see doc/camera_tracking.md) before trusting /platform_pose.
 camera_matrix:
   rows: 3
   cols: 3
-  data: [771.502343, 0.000000, 630.213000, 0.000000, 773.350714, 360.000000, 0.000000, 0.000000, 1.000000]
+  data: [771.502343, 0.000000, 630.213000, 0.000000, 773.350714, 400.000000, 0.000000, 0.000000, 1.000000]
 distortion_model: plumb_bob
 distortion_coefficients:
   rows: 1
@@ -19,4 +19,4 @@ rectification_matrix:
 projection_matrix:
   rows: 3
   cols: 4
-  data: [758.332764, 0.000000, 621.674977, 0.000000, 0.000000, 788.599304, 360.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000]
+  data: [758.332764, 0.000000, 621.674977, 0.000000, 0.000000, 788.599304, 400.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000]

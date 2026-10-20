@@ -132,9 +132,11 @@ v4l2-ctl --list-devices
 v4l2-ctl -d /dev/video8 --list-formats-ext     # MJPG: 120 fps at 1280x800 / 1280x720
 ```
 
-`config/usb_cam.yaml` asks for 1280x720 MJPG at 120 fps, which meets the
-perception spec's 720p at ≥ 100 Hz (120 is the camera's listed rate for that
-mode). YUYV only reaches 10 fps. The sensor is monochrome but the only fast
+`config/usb_cam.yaml` asks for 1280x800 MJPG at 120 fps: the full sensor,
+which covers the perception spec's 720p at ≥ 100 Hz with 80 more rows. Those
+rows matter: with the plate ~80 mm from the lens the 40 mm tag ring reaches
+the top and bottom edges of the frame, and at 1280x720 the tag at 6 o'clock
+was cut off. YUYV only reaches 10 fps. The sensor is monochrome but the only fast
 path is MJPG decoded to rgb8; the detector converts to grey itself. Exposure is forced to manual by `camera.launch.py` through v4l2-ctl
 (`exposure:=50` = 5 ms, in 100 us units; one frame at 120 fps is 8.3 ms),
 because usb_cam's own exposure parameters do not reach this camera and its

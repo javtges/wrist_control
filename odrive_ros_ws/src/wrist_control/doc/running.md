@@ -189,7 +189,7 @@ positions, saving screenshots + positions whenever the tags are lost. See
 [camera_tracking.md](../../camera_tracking/doc/camera_tracking.md).
 
 ```bash
-ros2 launch camera_tracking tracking.launch.py   # Arducam OV9281 on /dev/video8, 1280x720 @ 120 fps
+ros2 launch camera_tracking tracking.launch.py   # Arducam OV9281 on /dev/video8, 1280x800 @ 120 fps
 ```
 
 After mounting the top plate, `ros2 run camera_tracking plate_check` reports
