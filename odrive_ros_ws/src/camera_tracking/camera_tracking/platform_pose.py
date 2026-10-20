@@ -256,10 +256,12 @@ class PlatformPose(Node):
         if self._T_cam_platform is None:
             res.success, res.message = False, 'no platform pose yet (tag never seen)'
             return res
-        age = _stamp_s(self.get_clock().now().to_msg()) - self._pose_stamp
-        if age > self.max_age:
+        # age by receipt time, not header stamp: usb_cam stamps frames on a clock
+        # that can sit a few hundred ms behind the node clock
+        age = time.monotonic() - self._last_detections_wall
+        if age > self.max_age or not self._visible:
             res.success = False
-            res.message = f'latest platform pose is {age:.2f} s old (max_age {self.max_age:g}); tag not visible?'
+            res.message = f'no fresh platform pose ({age:.2f} s since the last detections, max_age {self.max_age:g}); tag not visible?'
             return res
         self._T_cam_zero = self._T_cam_platform.copy()
         self._broadcast_zero()
