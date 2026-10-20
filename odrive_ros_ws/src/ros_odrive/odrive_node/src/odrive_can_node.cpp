@@ -283,6 +283,7 @@ void ODriveCanNode::request_clear_errors_callback() {
 void ODriveCanNode::ctrl_msg_callback() {
 
     uint32_t control_mode;
+    uint32_t input_mode;
     struct can_frame frame;
     frame.can_id = node_id_ << 5 | kSetControllerMode;
     {
@@ -290,9 +291,19 @@ void ODriveCanNode::ctrl_msg_callback() {
         write_le<uint32_t>(ctrl_msg_.control_mode, frame.data);
         write_le<uint32_t>(ctrl_msg_.input_mode,   frame.data + 4);
         control_mode = ctrl_msg_.control_mode;
+        input_mode = ctrl_msg_.input_mode;
     }
     frame.can_dlc = 8;
-    can_intf_.send_can_frame(frame);
+    // Only re-send the mode when it changes: with six axes commanded at once the
+    // mode + setpoint pair per axis overran the adapter's transmit queue and the
+    // last axes lost their setpoints.
+    if (!mode_sent_ || control_mode != last_control_mode_ || input_mode != last_input_mode_) {
+        if (can_intf_.send_can_frame(frame)) {
+            mode_sent_ = true;
+            last_control_mode_ = control_mode;
+            last_input_mode_ = input_mode;
+        }
+    }
     
     frame = can_frame{};
     switch (control_mode) {

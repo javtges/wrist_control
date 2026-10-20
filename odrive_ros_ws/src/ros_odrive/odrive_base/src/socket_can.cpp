@@ -10,6 +10,7 @@
 #include <cerrno>
 #include <net/if.h>
 #include <sys/ioctl.h>
+#include <poll.h>
 
 bool SocketCanIntf::init(const std::string& interface, EpollEventLoop* event_loop, FrameProcessor frame_processor) {
     interface_ = interface;
@@ -75,13 +76,25 @@ void SocketCanIntf::deinit() {
 }
 
 bool SocketCanIntf::send_can_frame(const can_frame& frame) {
-    ssize_t nbytes = write(socket_id_, &frame, sizeof(frame));
-    if (nbytes == -1) {
-        std::cerr << "Failed to send CAN frame" << std::endl;
-        return false;
+    // Six nodes writing a setpoint each in the same millisecond overrun the
+    // interface's transmit queue (gs_usb adapter, txqueuelen 10): write() then
+    // fails with ENOBUFS and the frame was silently lost, so the last axis in a
+    // burst never got its command. Wait for the socket to drain and retry.
+    for (int attempt = 0; attempt < 100; ++attempt) {  // up to ~0.5 s
+        ssize_t nbytes = write(socket_id_, &frame, sizeof(frame));
+        if (nbytes == sizeof(frame)) {
+            return true;
+        }
+        if (nbytes == -1 && (errno == ENOBUFS || errno == EAGAIN || errno == EWOULDBLOCK)) {
+            struct pollfd pfd = {.fd = socket_id_, .events = POLLOUT, .revents = 0};
+            poll(&pfd, 1, 5);  // ms; the gs_usb adapter frees its slots slowly on a loaded bus
+            continue;
+        }
+        break;
     }
-
-    return true;
+    std::cerr << "Failed to send CAN frame (id 0x" << std::hex << frame.can_id << std::dec
+              << "): " << std::strerror(errno) << std::endl;
+    return false;
 }
 
 void SocketCanIntf::on_socket_event(uint32_t mask) {
