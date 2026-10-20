@@ -192,6 +192,11 @@ positions, saving screenshots + positions whenever the tags are lost. See
 ros2 launch camera_tracking tracking.launch.py   # Arducam OV9281 on /dev/video8, 1280x720 @ 120 fps
 ```
 
+After mounting the top plate, `ros2 run camera_tracking plate_check` reports
+the clock position of each tag in the image (ID1 should be at 12 o'clock with
+the camera upright) and, with `-p drive:=true`, which leg pair sits under each
+tag.
+
 Zero the camera once per mount: with the motors enabled, encoders zeroed and
 every joint commanded to 0° (plate flat on the table), press **⌖ Set Platform
 Zero (camera)** in `joint_commander_gui` (it only enables while all HSAs read

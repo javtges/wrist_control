@@ -275,3 +275,71 @@ def project_points(T_cam_obj: np.ndarray, points_obj: np.ndarray, K: np.ndarray)
     rvec, tvec = matrix_to_rt(T_cam_obj)
     px, _ = cv2.projectPoints(np.asarray(points_obj, dtype=float), rvec, tvec, K, None)
     return px.reshape(-1, 2)
+
+
+# ------------------------------------------------ plate orientation checks ---
+
+def solve_tag_centre_pose(layout: TagLayout, corners: np.ndarray, K: np.ndarray) -> np.ndarray | None:
+    """camera -> this tag's own frame (origin at the tag centre)."""
+    img = np.asarray(corners, dtype=float).reshape(4, 2)
+    obj = layout.centred_object_points()
+    order = [3, 2, 1, 0]
+    ok, rvec, tvec = cv2.solvePnP(obj[order], img[order], K, None, flags=cv2.SOLVEPNP_IPPE_SQUARE)
+    return rt_to_matrix(rvec, tvec) if ok else None
+
+
+def clock_angle_deg(centre_xy, point_xy) -> float:
+    """Bearing of `point` from `centre` in image pixels: 0 = straight up on
+    screen, increasing clockwise (image y points down), in [0, 360)."""
+    dx = float(point_xy[0]) - float(centre_xy[0])
+    dy = float(point_xy[1]) - float(centre_xy[1])
+    return math.degrees(math.atan2(dx, -dy)) % 360.0
+
+
+def clock_position(angle_deg: float) -> int:
+    """Nearest hour on a clock face for a bearing from `clock_angle_deg` (12 = up)."""
+    h = int(round(angle_deg / 30.0)) % 12
+    return 12 if h == 0 else h
+
+
+def plate_centre_px(centres: dict[int, np.ndarray], layout: TagLayout) -> np.ndarray | None:
+    """Pixel centre of the plate: ID0's centre, else the centroid of the outer
+    tags when all of them are visible (they are equally spaced around ID0)."""
+    ids = list(layout.ids)
+    if ids[0] in centres:
+        return np.asarray(centres[ids[0]], dtype=float)
+    outer = [i for i in ids[1:]]
+    if all(i in centres for i in outer):
+        return np.mean([np.asarray(centres[i], dtype=float) for i in outer], axis=0)
+    return None
+
+
+def outer_tag_order(bearings: dict[int, float]) -> tuple[list[int], list[float]]:
+    """Outer tags sorted clockwise on screen from the first one, with the
+    clockwise gaps between successive tags (should all be ~120 for 3 tags)."""
+    ids = sorted(bearings, key=lambda i: bearings[i])
+    if not ids:
+        return [], []
+    gaps = [(bearings[ids[(k + 1) % len(ids)]] - bearings[ids[k]]) % 360.0 for k in range(len(ids))]
+    return ids, gaps
+
+
+def is_layout_order(ids_clockwise: list[int], expected: list[int]) -> bool:
+    """True if `ids_clockwise` is `expected` up to a cyclic shift (same
+    chirality); False if it runs the other way (mirrored) or ids are missing."""
+    if sorted(ids_clockwise) != sorted(expected) or not expected:
+        return False
+    n = len(expected)
+    start = ids_clockwise.index(expected[0])
+    return [ids_clockwise[(start + k) % n] for k in range(n)] == list(expected)
+
+
+def tag_over_pair(dz_mm: dict[int, float], min_mm: float = 2.0) -> tuple[int | None, float]:
+    """The tag whose camera distance changed most when one leg pair moved,
+    and that change in mm; None when nothing moved more than `min_mm`."""
+    if not dz_mm:
+        return None, 0.0
+    tag = max(dz_mm, key=lambda i: abs(dz_mm[i]))
+    if abs(dz_mm[tag]) < min_mm:
+        return None, dz_mm[tag]
+    return tag, dz_mm[tag]

@@ -162,3 +162,60 @@ def test_relative_to_zero_is_the_displacement_from_rest():
     rel = pg.relative_to_zero(T_zero, T_now)
     assert np.allclose(rel, delta, atol=1e-12)
     assert np.allclose(pg.relative_to_zero(T_zero, T_zero), np.eye(4), atol=1e-12)
+
+
+# ------------------------------------------------ plate orientation checks ---
+
+def test_clock_angle_and_position():
+    c = (640, 360)
+    assert pg.clock_angle_deg(c, (640, 300)) == pytest.approx(0.0)      # up
+    assert pg.clock_angle_deg(c, (700, 360)) == pytest.approx(90.0)     # right
+    assert pg.clock_angle_deg(c, (640, 420)) == pytest.approx(180.0)    # down
+    assert pg.clock_angle_deg(c, (580, 360)) == pytest.approx(270.0)    # left
+    assert pg.clock_position(0.0) == 12
+    assert pg.clock_position(355.0) == 12
+    assert pg.clock_position(90.0) == 3
+    assert pg.clock_position(200.0) == 7
+
+
+def test_plate_centre_px_falls_back_to_outer_centroid():
+    lay = pg.TagLayout()
+    T = plate_pose()
+    centres = {i: pg.project_points(T, lay.offset(i)[None, :], K)[0] for i in lay.ids}
+    assert np.allclose(pg.plate_centre_px(centres, lay), centres[0])
+    no0 = {i: c for i, c in centres.items() if i != 0}
+    # perspective on a tilted plate shifts the centroid a few px (~1 deg of bearing); fine for a clock position
+    assert np.allclose(pg.plate_centre_px(no0, lay), centres[0], atol=8.0)
+    assert pg.plate_centre_px({1: centres[1]}, lay) is None
+
+
+def test_outer_tag_order_matches_the_drawing_when_viewed_face_on():
+    lay = pg.TagLayout()
+    T = plate_pose(tilt_x=180, tilt_y=0, spin=0)   # face on, no spin: tag y up = screen up
+    centres = {i: pg.project_points(T, lay.offset(i)[None, :], K)[0] for i in lay.ids}
+    bearings = {i: pg.clock_angle_deg(centres[0], centres[i]) for i in (1, 2, 3)}
+    assert bearings[1] == pytest.approx(0.0, abs=0.5)
+    ids, gaps = pg.outer_tag_order(bearings)
+    assert ids == [1, 2, 3]
+    assert all(g == pytest.approx(120.0, abs=0.5) for g in gaps)
+    assert pg.is_layout_order(ids, [1, 2, 3])
+    assert pg.is_layout_order([2, 3, 1], [1, 2, 3])
+    assert not pg.is_layout_order([1, 3, 2], [1, 2, 3])
+    assert not pg.is_layout_order([1, 2], [1, 2, 3])
+
+
+def test_tag_over_pair_picks_the_largest_move():
+    assert pg.tag_over_pair({1: 0.4, 2: -6.0, 3: 1.0}) == (2, -6.0)
+    tag, dz = pg.tag_over_pair({1: 0.4, 2: -1.0, 3: 1.0})
+    assert tag is None
+    assert pg.tag_over_pair({}) == (None, 0.0)
+
+
+def test_solve_tag_centre_pose_lands_on_the_tag_centre():
+    lay = pg.TagLayout()
+    T = plate_pose()
+    for i in lay.ids:
+        corners = pg.project_points(T, lay.object_points(i), K)
+        T_tag = pg.solve_tag_centre_pose(lay, corners, K)
+        expected = T @ pg.translation(lay.offset(i))
+        assert_close(T_tag, expected)

@@ -57,6 +57,34 @@ platform origin computed from that tag alone lands from the published pose.
 Values of a few tenths of a millimetre are corner noise; a steady offset on
 one tag means its `tag_x_mm`/`tag_y_mm` (or its printed orientation) is wrong.
 
+## Is the plate mounted the right way round?
+
+`plate_check` answers two things while the tracking stack runs:
+
+```bash
+ros2 run camera_tracking plate_check                        # report only; you move the pairs
+ros2 run camera_tracking plate_check --ros-args -p drive:=true   # moves each leg pair itself
+```
+
+1. **Where the tags are in the image**: the clock position of ID1, ID2 and
+   ID3 around the plate centre (12 o'clock = top of the image), and whether
+   the outer tags run ID1 → ID2 → ID3 clockwise 120° apart as in the
+   drawing. With the camera mounted upright on the baseplate, "tag 1 on top"
+   is ID1 at 12 o'clock. The clockwise order can only come out wrong if the
+   tags are printed differently from the drawing; a plate rotated by 120°
+   keeps the order and moves ID1 to 4 or 8 o'clock.
+2. **Which leg pair is under each tag**: moving one pair of HSAs tilts the
+   plate, and the tag whose distance to the camera changes most is the one
+   above that pair. With `drive:=true` the node commands pairs (0,1), (2,3),
+   (4,5) to `wiggle_deg` (20°) in turn, `settle_s` (2 s) each, returns to 0
+   and prints `leg pair -> tag above it`. Without it, take the plate to rest
+   first (the rest distances are snapshotted when all four tags are first
+   visible), move one pair from `joint_commander_gui` and read "ID<k> moved
+   most" in the report. Compare with the pair the design puts under ID1.
+
+The check needs all four tags visible at rest and an approximate
+`camera_info.yaml` (distances are only compared to each other).
+
 ## Zeroing the platform
 
 The zero is the platform pose with the HSAs at 0° and the plate sitting flat
@@ -264,6 +292,10 @@ Parameters: `tag_id`, `lost_after`, `stale_after`, `capture_on_lost`, `capture_i
 | `/set_platform_zero` | std_srvs/Trigger (service) | platform_pose |
 | `/platform_tag_detected` | std_msgs/Bool | tag_monitor |
 | `/tag_monitor/image_annotated` | sensor_msgs/Image | tag_monitor |
+
+`plate_check` parameters: `drive` (false), `wiggle_deg` (20), `settle_s` (2),
+`min_move_mm` (2), `pairs` (flat list, default 0 1 2 3 4 5), `report_period`
+(1 s), the tag layout parameters and the three topic names.
 
 `platform_pose` parameters (`config/platform.yaml`): `detections_topic`,
 `camera_info_topic`, `joint_states_topic`, `camera_frame`, `platform_frame`,
