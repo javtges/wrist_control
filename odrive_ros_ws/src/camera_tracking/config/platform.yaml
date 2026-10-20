@@ -11,17 +11,21 @@ platform_pose:
     # Tag layout in the ID0 frame (x right, y up along the printed tag), mm.
     # ID1 straight above ID0, ID2 lower right, ID3 lower left, 120 degrees apart.
     # The drawing says 40 mm centre to centre at exactly 120 degrees. ID1 and ID2
-    # are the centres measured in the ID0 frame with the calibrated camera
-    # (2026-10-20, 966 frames, tags verified 12.0 mm): ID1 at 38.4 mm / 89.9 deg,
-    # ID2 at 39.0 mm / -31.8 deg. ID3 is never in frame in the approved mounting,
-    # so it keeps the nominal 39 mm / 210 deg. All four tags printed with the same
-    # orientation.
+    # come from the centre-to-centre distances measured with the calibrated camera
+    # (2026-10-20, 906 frames, tags verified 12.0 mm): ID0-ID1 38.95, ID0-ID2 39.05,
+    # ID1-ID2 68.04 mm, so ID1 at 38.95 mm on +y and ID2 at 39.05 mm, 121.5 deg from it.
+    # Distances are used rather than single-tag poses because a 12 mm tag's tilt is
+    # ambiguous and biases per-tag positions by 1-2 mm. ID3 is never in frame in the
+    # approved mounting, so it keeps the nominal 39 mm / 210 deg. All four tags are
+    # printed with the same orientation.
     tag_size: 0.012                 # edge of the black square, m (12 mm tag, 18 mm with border)
     tag_ids:  [0,   1,    2,       3]
-    tag_x_mm: [0.0, 0.06,  33.14, -33.775]
-    tag_y_mm: [0.0, 38.38, -20.53, -19.5]
+    tag_x_mm: [0.0, 0.0,   33.31, -33.775]
+    tag_y_mm: [0.0, 38.95, -20.38, -19.5]
     tag_priority: [0, 1, 2, 3]      # ID0 when visible, else the first visible outer tag
-    pose_source: priority           # priority = that one tag; all = refine over every visible tag
+    pose_source: all                # all = anchor on the priority tag, refine over every visible tag's
+                                    # corners (a 70 mm baseline pins the tilt a lone 12 mm tag cannot);
+                                    # priority = that one tag only
 
     max_age: 0.1                    # s, the pose must be this fresh to become the zero
     stale_after: 1.0                # s without detections before "not visible"
@@ -45,8 +49,8 @@ plate_guard:
     detections_topic: /apriltag/detections
     tag_size: 0.012
     tag_ids:  [0,   1,    2,       3]
-    tag_x_mm: [0.0, 0.06,  33.14, -33.775]
-    tag_y_mm: [0.0, 38.38, -20.53, -19.5]
+    tag_x_mm: [0.0, 0.0,   33.31, -33.775]
+    tag_y_mm: [0.0, 38.95, -20.38, -19.5]
     expected_id1_bearing_deg: 283.5
     tolerance_deg: 15.0
     stale_after: 1.0

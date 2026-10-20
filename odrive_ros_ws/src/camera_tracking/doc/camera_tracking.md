@@ -54,8 +54,12 @@ tag's corners (anchored on the priority tag), which is less noisy; the default
 **Checking the layout on hardware:** with more than one tag visible the node
 publishes `/platform_pose/tag_consistency_mm`, one value per tag: how far the
 platform origin computed from that tag alone lands from the published pose.
-Values of a few tenths of a millimetre are corner noise; a steady offset on
-one tag means its `tag_x_mm`/`tag_y_mm` (or its printed orientation) is wrong.
+Expect 1–2 mm even with a correct layout: a lone 12 mm tag's tilt is ambiguous
+by a few degrees, and that times the 39 mm lever arm is the floor. A tag that
+sits well above the others, or a jump when ID0 drops out, points at that tag's
+`tag_x_mm`/`tag_y_mm` or its printed orientation. To measure the layout
+itself, use centre-to-centre distances between tags (orientation-free), as
+done for the values in `platform.yaml`.
 
 ## Is the plate mounted the right way round?
 
