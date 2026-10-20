@@ -201,8 +201,8 @@ ros2 launch camera_tracking tracking.launch.py   # Arducam OV9281 on /dev/video8
 `plate WRONG: plate turned +120 deg (one slot clockwise); ID1 9 o'clock,
 ID2 1 o'clock` (repeated as a WARN every 5 s), and `joint_commander_gui`
 shows the same text in a banner at the top: green OK, red wrong, grey when the
-camera stack is not running. Expected mounting: ID2 at 9 o'clock and ID3 at
-1 o'clock in the image (ID1 at the bottom). If the camera is ever remounted,
+camera stack is not running. Expected mounting: ID1 at 9 o'clock and ID2 at
+1 o'clock in the image (ID3 at the bottom). If the camera is ever remounted,
 run `plate_check`, read ID1's bearing and put it in
 `camera_tracking/config/platform.yaml` as `expected_id1_bearing_deg`.
 

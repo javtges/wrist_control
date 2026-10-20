@@ -101,8 +101,8 @@ mounting and reports continuously:
 
 The expected mounting is one number in `config/platform.yaml`:
 `expected_id1_bearing_deg`, ID1's bearing around the plate centre, clockwise
-from the top of the image (163.5 = ID1 at ~6 o'clock, ID2 at 9, ID3 at 1 as
-measured on 2026-10-20). One visible outer tag is enough, so the tag clipped
+from the top of the image (283.5 = ID1 at 9 o'clock, ID2 at 1, ID3 at the
+bottom, as measured on the approved mounting on 2026-10-20). One visible outer tag is enough, so the tag clipped
 at the frame edge does not matter. If the camera is remounted, read the new
 bearings from `plate_check` and update the number. `tolerance_deg` (15) is
 the allowed error before WRONG.

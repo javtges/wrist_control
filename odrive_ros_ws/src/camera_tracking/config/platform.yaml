@@ -32,9 +32,9 @@ platform_pose:
 # plate_guard: the expected mounting of the top plate, as seen by the camera.
 # expected_id1_bearing_deg = where ID1 sits around the plate centre, degrees
 # clockwise from the top of the image (12 o'clock = 0, 3 o'clock = 90); the
-# other tags follow from the layout. Measured 2026-10-20 with ID2 at 9 o'clock
-# and ID3 at 1 o'clock: ID1 at ~6 o'clock. Re-measure with plate_check if the
-# camera is remounted.
+# other tags follow from the layout. Measured 2026-10-20 on the approved mounting:
+# ID1 at 9 o'clock, ID2 at 1 o'clock, ID3 at the bottom (clipped). Re-measure with
+# plate_check if the camera is remounted.
 plate_guard:
   ros__parameters:
     detections_topic: /apriltag/detections
@@ -42,7 +42,7 @@ plate_guard:
     tag_ids:  [0,   1,    2,       3]
     tag_x_mm: [0.0, 0.0,  34.641, -34.641]
     tag_y_mm: [0.0, 40.0, -20.0,  -20.0]
-    expected_id1_bearing_deg: 163.5
+    expected_id1_bearing_deg: 283.5
     tolerance_deg: 15.0
     stale_after: 1.0
     warn_period: 5.0

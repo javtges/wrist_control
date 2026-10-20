@@ -45,7 +45,7 @@ class PlateGuard(Node):
         self.declare_parameter('tag_ids', pg.DEFAULT_TAG_IDS)
         self.declare_parameter('tag_x_mm', pg.DEFAULT_TAG_X_MM)
         self.declare_parameter('tag_y_mm', pg.DEFAULT_TAG_Y_MM)
-        self.declare_parameter('expected_id1_bearing_deg', 163.5)
+        self.declare_parameter('expected_id1_bearing_deg', 283.5)
         self.declare_parameter('tolerance_deg', 15.0)
         self.declare_parameter('stale_after', 1.0)
         self.declare_parameter('warn_period', 5.0)
@@ -62,8 +62,7 @@ class PlateGuard(Node):
 
         self._centres: dict[int, np.ndarray] = {}
         self._last_det_wall = 0.0
-        self._status: str | None = None
-        self._ok: bool | None = None
+        self._key: tuple | None = None      # (ok, verdict, clock positions): what counts as a change
         self._last_warn_wall = 0.0
 
         self._ok_pub = self.create_publisher(Bool, '/plate_mount_ok', 10)
@@ -79,37 +78,44 @@ class PlateGuard(Node):
         self._centres = {int(d.id): np.array([[c.x, c.y] for c in d.corners]).mean(axis=0)
                          for d in msg.detections if int(d.id) in self.layout.ids}
 
-    def evaluate(self) -> tuple[bool, str]:
-        """(ok, status text) for the latest detections."""
+    def evaluate(self) -> tuple[bool, str, tuple]:
+        """(ok, status text, change key) for the latest detections. The key
+        is (ok, verdict, clock positions): degree jitter is not a change."""
         if time.monotonic() - self._last_det_wall > self.stale_after:
-            return False, 'NO TAGS: no detections (camera_tracking running? plate in view?)'
+            return False, 'NO TAGS: no detections (camera_tracking running? plate in view?)', (False, 'NO TAGS', '')
         centre = pg.plate_centre_px(self._centres, self.layout)
         outer = [i for i in self.layout.ids[1:] if i in self._centres]
         if centre is None or not outer:
             seen = ' '.join(f'ID{i}' for i in sorted(self._centres)) or 'none'
-            return False, f'NO TAGS: need ID0 (or all outer tags) plus one outer tag; seen {seen}'
+            return (False, f'NO TAGS: need ID0 (or all outer tags) plus one outer tag; seen {seen}',
+                    (False, 'NO TAGS', seen))
         bearings = {i: pg.clock_angle_deg(centre, self._centres[i]) for i in outer}
         where = ', '.join(f'ID{i} {pg.clock_position(b)} o\'clock' for i, b in sorted(bearings.items()))
         if len(outer) == 3:
             ids, _ = pg.outer_tag_order(bearings)
             if not pg.is_layout_order(ids, self.layout.ids[1:]):
-                return False, f'MIRRORED: tags run {"->".join(f"ID{i}" for i in ids)} clockwise; {where}'
+                return (False, f'MIRRORED: tags run {"->".join(f"ID{i}" for i in ids)} clockwise; {where}',
+                        (False, 'MIRRORED', where))
         err, _ = pg.plate_spin_error(bearings, self.expected)
         if err is None:
-            return False, f'NO TAGS: no expected outer tag visible; {where}'
+            return False, f'NO TAGS: no expected outer tag visible; {where}', (False, 'NO TAGS', where)
         if abs(err) <= self.tol:
-            return True, f'OK: plate as expected ({err:+.0f} deg); {where}'
-        return False, f'WRONG: plate turned {pg.describe_spin(err)}; {where}'
+            return True, f'OK: plate as expected ({int(round(err)):+d} deg); {where}', (True, 'OK', where)
+        return False, f'WRONG: plate turned {pg.describe_spin(err)}; {where}', (False, 'WRONG', where)
 
     def _tick(self) -> None:
-        ok, status = self.evaluate()
+        ok, status, key = self.evaluate()
         self._ok_pub.publish(Bool(data=ok))
         self._status_pub.publish(String(data=status))
         now = time.monotonic()
-        if status != self._status:
-            self._status, self._ok = status, ok
+        if key != self._key:
+            self._key = key
             self._last_warn_wall = now
-            (self.get_logger().info if ok else self.get_logger().error)('plate ' + status)
+            # separate call sites: rclpy pins one severity per source line
+            if ok:
+                self.get_logger().info('plate ' + status)
+            else:
+                self.get_logger().error('plate ' + status)
         elif not ok and now - self._last_warn_wall >= self.warn_period:
             self._last_warn_wall = now
             self.get_logger().warning('plate ' + status)
