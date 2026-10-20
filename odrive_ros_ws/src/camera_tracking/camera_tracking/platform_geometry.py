@@ -343,3 +343,50 @@ def tag_over_pair(dz_mm: dict[int, float], min_mm: float = 2.0) -> tuple[int | N
     if abs(dz_mm[tag]) < min_mm:
         return None, dz_mm[tag]
     return tag, dz_mm[tag]
+
+
+# ------------------------------------------------------- mount orientation ---
+
+def expected_bearings(layout: TagLayout, id1_bearing_deg: float) -> dict[int, float]:
+    """Screen bearing (clock_angle_deg convention) of every outer tag when the
+    first outer tag sits at `id1_bearing_deg`, from the layout's angles.
+    Screen bearings run clockwise, layout angles counter-clockwise."""
+    outer = layout.ids[1:]
+    if not outer:
+        return {}
+    ref = outer[0]
+    ox, oy, _ = layout.offset(ref)
+    theta_ref = math.degrees(math.atan2(oy, ox))
+    out = {}
+    for tag_id in outer:
+        x, y, _ = layout.offset(tag_id)
+        theta = math.degrees(math.atan2(y, x))
+        out[tag_id] = (id1_bearing_deg + (theta_ref - theta)) % 360.0
+    return out
+
+
+def wrap_deg(a: float) -> float:
+    """Angle to [-180, 180)."""
+    return (a + 180.0) % 360.0 - 180.0
+
+
+def plate_spin_error(bearings: dict[int, float], expected: dict[int, float]) -> tuple[float | None, dict[int, float]]:
+    """How far the plate is turned from the expected mounting, from whichever
+    outer tags are visible: circular mean of (measured - expected) per tag,
+    positive clockwise on screen. None when no expected tag is visible."""
+    errs = {i: wrap_deg(bearings[i] - expected[i]) for i in bearings if i in expected}
+    if not errs:
+        return None, {}
+    s = sum(math.sin(math.radians(e)) for e in errs.values())
+    c = sum(math.cos(math.radians(e)) for e in errs.values())
+    return wrap_deg(math.degrees(math.atan2(s, c))), errs
+
+
+def describe_spin(err_deg: float, slot_deg: float = 120.0) -> str:
+    """'+119 deg (one slot clockwise)' style text for a mounting error."""
+    slots = int(round(err_deg / slot_deg))
+    text = f'{err_deg:+.0f} deg'
+    if slots != 0 and abs(err_deg - slots * slot_deg) < 20.0:
+        n = abs(slots)
+        text += f' ({"one slot" if n == 1 else f"{n} slots"} {"clockwise" if slots > 0 else "counter-clockwise"})'
+    return text

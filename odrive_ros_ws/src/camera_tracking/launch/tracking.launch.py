@@ -1,6 +1,7 @@
 """
 tracking.launch.py — full platform-tracking stack:
-camera + rectification + AprilTag (one container, intra-process) + platform_pose + tag_monitor.
+camera + rectification + AprilTag (one container, intra-process) + platform_pose
++ plate_guard (is the plate mounted as expected?) + tag_monitor.
 
 Run alongside the wrist stack (odrive_can + hsa_odrive_control): platform_pose
 needs the joint states to allow /set_platform_zero and tag_monitor records
@@ -78,6 +79,14 @@ def generate_launch_description():
         parameters=[platform_config],
     )
 
+    plate_guard = Node(
+        package='camera_tracking',
+        executable='plate_guard',
+        name='plate_guard',
+        output='screen',
+        parameters=[platform_config],
+    )
+
     tag_monitor = Node(
         package='camera_tracking',
         executable='tag_monitor',
@@ -91,4 +100,4 @@ def generate_launch_description():
         }],
     )
 
-    return LaunchDescription(args + [camera, apriltag, platform_pose, tag_monitor])
+    return LaunchDescription(args + [camera, apriltag, platform_pose, plate_guard, tag_monitor])

@@ -28,6 +28,7 @@ setup(
             'platform_pose = camera_tracking.platform_pose:main',
             'tag_monitor = camera_tracking.tag_monitor:main',
             'plate_check = camera_tracking.plate_check:main',
+            'plate_guard = camera_tracking.plate_guard:main',
         ],
     },
 )

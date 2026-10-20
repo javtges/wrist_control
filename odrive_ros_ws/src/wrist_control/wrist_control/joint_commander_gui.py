@@ -7,6 +7,9 @@ controls ODrive parameters on the hsa_odrive_control node in real time.
 Also shows each ODrive's DC bus current from /odrive_axis{N}/odrive_status,
 and calls /set_platform_zero (camera_tracking platform_pose) once every HSA
 reads 0 deg, so the camera's platform zero is taken with the plate at rest.
+A banner across the top shows /plate_mount_status from camera_tracking's
+plate_guard: green when the top plate is mounted as expected, red when not,
+grey when the camera stack is not running.
 
 Usage:
     ros2 run wrist_control joint_commander_gui
@@ -28,7 +31,7 @@ from rclpy.node import Node
 from rclpy.parameter import Parameter
 from ament_index_python.packages import get_package_share_directory
 
-from std_msgs.msg import Float32MultiArray
+from std_msgs.msg import Float32MultiArray, String
 from std_srvs.srv import Empty, Trigger
 from odrive_can.msg import ODriveStatus
 
@@ -238,6 +241,9 @@ class GUINode(Node):
         self._svc_enable = self.create_client(Trigger, f"/{self._TARGET}/enable")
         self._svc_disable = self.create_client(Trigger, f"/{self._TARGET}/disable")
         self._svc_platform_zero = self.create_client(Trigger, "/set_platform_zero")
+        self._plate_lock = threading.Lock()
+        self._plate_status: tuple[str, float] | None = None   # (text, monotonic time)
+        self.create_subscription(String, "/plate_mount_status", self._on_plate_status, 10)
         self._platform_zero_lock = threading.Lock()
         self._platform_zero_result: str | None = None
 
@@ -293,6 +299,22 @@ class GUINode(Node):
             else:
                 out.append(entry[0])
         return out
+
+    # ── Plate mount status (camera_tracking plate_guard) ──────────────────────
+
+    PLATE_STATUS_STALE_S = 3.0
+
+    def _on_plate_status(self, msg: String) -> None:
+        with self._plate_lock:
+            self._plate_status = (msg.data, time.monotonic())
+
+    def get_plate_status(self) -> str | None:
+        """Latest plate_guard text, None when none or stale (camera stack off)."""
+        with self._plate_lock:
+            entry = self._plate_status
+        if entry is None or time.monotonic() - entry[1] > self.PLATE_STATUS_STALE_S:
+            return None
+        return entry[0]
 
     # ── Platform zero (camera_tracking) ───────────────────────────────────────
 
@@ -393,6 +415,7 @@ class JointCommanderApp:
         root.title(f"HSA Joint Commander  ·  {node.robot.name}")
         root.resizable(False, False)
 
+        self._build_plate_banner()
         self._build_joint_panels()
         self._build_odrive_params()
         self._build_actions()
@@ -403,9 +426,31 @@ class JointCommanderApp:
 
     # ── Layout ────────────────────────────────────────────────────────────────
 
+    PLATE_COLORS = {"ok": "#1b5e20", "bad": "#b71c1c", "none": "#616161"}
+
+    def _build_plate_banner(self) -> None:
+        """Top-plate mounting check from camera_tracking's plate_guard."""
+        self._plate_banner = tk.Label(
+            self.root, text="plate check: camera_tracking not running",
+            bg=self.PLATE_COLORS["none"], fg="white",
+            font=("Courier", 10, "bold"), anchor="w", padx=10, pady=4,
+            wraplength=900, justify="left",
+        )
+        self._plate_banner.grid(row=0, column=0, columnspan=2, sticky="ew", padx=4, pady=(4, 0))
+
+    def _poll_plate_banner(self) -> None:
+        status = self.node.get_plate_status()
+        if status is None:
+            text, key = "plate check: camera_tracking not running", "none"
+        elif status.startswith("OK"):
+            text, key = "PLATE " + status, "ok"
+        else:
+            text, key = "PLATE " + status, "bad"
+        self._plate_banner.config(text=text, bg=self.PLATE_COLORS[key])
+
     def _build_joint_panels(self) -> None:
         outer = ttk.Frame(self.root, padding=4)
-        outer.grid(row=0, column=0, columnspan=2, sticky="ew")
+        outer.grid(row=1, column=0, columnspan=2, sticky="ew")
         self.panels: list[JointPanel] = []
         for hsa in self.node.robot.hsas:
             p = JointPanel(outer, hsa, on_change=self._on_slider_change)
@@ -414,7 +459,7 @@ class JointCommanderApp:
 
     def _build_odrive_params(self) -> None:
         f = ttk.LabelFrame(self.root, text="ODrive Parameters", padding=8)
-        f.grid(row=1, column=0, padx=8, pady=6, sticky="nsew")
+        f.grid(row=2, column=0, padx=8, pady=6, sticky="nsew")
 
         # Control mode
         ttk.Label(f, text="Control mode:").grid(row=0, column=0, sticky="w", pady=4)
@@ -488,7 +533,7 @@ class JointCommanderApp:
 
     def _build_actions(self) -> None:
         f = ttk.LabelFrame(self.root, text="Actions", padding=8)
-        f.grid(row=1, column=1, padx=8, pady=6, sticky="nsew")
+        f.grid(row=2, column=1, padx=8, pady=6, sticky="nsew")
 
         # Publish toggle — prominent
         self._pub_btn = tk.Button(
@@ -563,6 +608,7 @@ class JointCommanderApp:
         for panel, amps in zip(self.panels, self.node.get_bus_currents()):
             panel.set_bus_current(amps)
         self._poll_platform_zero()
+        self._poll_plate_banner()
         self.root.after(self.MEASURED_POLL_MS, self._poll_measured)
 
     def _poll_platform_zero(self) -> None:

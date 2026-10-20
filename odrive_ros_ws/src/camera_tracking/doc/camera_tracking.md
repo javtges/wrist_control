@@ -85,6 +85,28 @@ ros2 run camera_tracking plate_check --ros-args -p drive:=true   # moves each le
 The check needs all four tags visible at rest and an approximate
 `camera_info.yaml` (distances are only compared to each other).
 
+## Guarding the mounting at every launch
+
+`plate_guard` (part of `tracking.launch.py`, so also of
+`wrist_control.launch.py`) compares the live tag bearings with the expected
+mounting and reports continuously:
+
+- terminal: `plate OK ...` once on start, `plate WRONG: plate turned +120 deg
+  (one slot clockwise); ID1 9 o'clock, ID2 1 o'clock` as an ERROR on the
+  change and a WARN every 5 s while it stays wrong, `plate NO TAGS ...` when
+  nothing is detected, `plate MIRRORED ...` if the tags run the wrong way;
+- `/plate_mount_ok` (Bool) and `/plate_mount_status` (String) at 2 Hz;
+- `joint_commander_gui` shows the status as a banner across the top: green
+  OK, red otherwise, grey when the camera stack is not running.
+
+The expected mounting is one number in `config/platform.yaml`:
+`expected_id1_bearing_deg`, ID1's bearing around the plate centre, clockwise
+from the top of the image (163.5 = ID1 at ~6 o'clock, ID2 at 9, ID3 at 1 as
+measured on 2026-10-20). One visible outer tag is enough, so the tag clipped
+at the frame edge does not matter. If the camera is remounted, read the new
+bearings from `plate_check` and update the number. `tolerance_deg` (15) is
+the allowed error before WRONG.
+
 ## Zeroing the platform
 
 The zero is the platform pose with the HSAs at 0° and the plate sitting flat
@@ -292,8 +314,13 @@ Parameters: `tag_id`, `lost_after`, `stale_after`, `capture_on_lost`, `capture_i
 | `/platform_pose/tag_consistency_mm` | std_msgs/Float32MultiArray | platform_pose, when > 1 tag visible |
 | TF `camera -> platform_zero` (static), `platform_zero -> platform` | tf2 | platform_pose (`camera -> platform` until zeroed) |
 | `/set_platform_zero` | std_srvs/Trigger (service) | platform_pose |
+| `/plate_mount_ok`, `/plate_mount_status` | std_msgs/Bool, String | plate_guard, 2 Hz |
 | `/platform_tag_detected` | std_msgs/Bool | tag_monitor |
 | `/tag_monitor/image_annotated` | sensor_msgs/Image | tag_monitor |
+
+`plate_guard` parameters (`config/platform.yaml`): `expected_id1_bearing_deg`,
+`tolerance_deg` (15), `stale_after` (1 s), `warn_period` (5 s), `rate` (2 Hz),
+`detections_topic` and the tag layout.
 
 `plate_check` parameters: `drive` (false), `wiggle_deg` (20), `settle_s` (2),
 `min_move_mm` (2), `pairs` (flat list, default 0 1 2 3 4 5), `report_period`

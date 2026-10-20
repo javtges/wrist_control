@@ -219,3 +219,37 @@ def test_solve_tag_centre_pose_lands_on_the_tag_centre():
         T_tag = pg.solve_tag_centre_pose(lay, corners, K)
         expected = T @ pg.translation(lay.offset(i))
         assert_close(T_tag, expected)
+
+
+# ------------------------------------------------------- mount orientation ---
+
+def test_expected_bearings_follow_the_layout_clockwise():
+    lay = pg.TagLayout()
+    exp = pg.expected_bearings(lay, 163.5)
+    assert exp[1] == pytest.approx(163.5)
+    assert exp[2] == pytest.approx(283.5)     # ID2 is 120 deg clockwise of ID1 on screen
+    assert exp[3] == pytest.approx(43.5)
+    exp0 = pg.expected_bearings(lay, 0.0)
+    assert exp0[2] == pytest.approx(120.0) and exp0[3] == pytest.approx(240.0)
+
+
+def test_plate_spin_error_from_any_visible_tags():
+    lay = pg.TagLayout()
+    exp = pg.expected_bearings(lay, 163.5)
+    err, per = pg.plate_spin_error({2: 284.2, 3: 42.7}, exp)      # the mounting that defined it
+    assert abs(err) < 1.0 and set(per) == {2, 3}
+    err, _ = pg.plate_spin_error({1: 163.5 + 120, 2: 283.5 + 120, 3: 43.5 + 120}, exp)
+    assert err == pytest.approx(120.0)
+    err, _ = pg.plate_spin_error({3: 43.5 - 120}, exp)             # one tag is enough
+    assert err == pytest.approx(-120.0)
+    err, _ = pg.plate_spin_error({1: 350.0}, exp)                   # wraps past 360
+    assert err == pytest.approx(pg.wrap_deg(350.0 - 163.5))
+    assert pg.plate_spin_error({9: 1.0}, exp) == (None, {})
+
+
+def test_describe_spin():
+    assert pg.describe_spin(3.0) == '+3 deg'
+    assert 'one slot clockwise' in pg.describe_spin(118.0)
+    assert 'one slot counter-clockwise' in pg.describe_spin(-121.0)
+    assert '2 slots' in pg.describe_spin(240.0)
+    assert '(' not in pg.describe_spin(60.0)

@@ -180,17 +180,31 @@ meet at the top), `leg_offset` (0: rotate the motor numbering by this many legs)
 
 ---
 
-## Step 5 (optional) — Camera tracking of the platform
+## Step 5 — Camera tracking of the platform
 
 A baseplate USB camera tracks the four AprilTags on the platform (16h5, ids
 0–3). `platform_pose` publishes the platform's pose relative to its zero on
-`/platform_pose`, and `tag_monitor` shows the camera view with the motor
+`/platform_pose`, `plate_guard` checks that the top plate is mounted the
+expected way round, and `tag_monitor` shows the camera view with the motor
 positions, saving screenshots + positions whenever the tags are lost. See
 [camera_tracking.md](../../camera_tracking/doc/camera_tracking.md).
+
+`ros2 launch wrist_control wrist_control.launch.py` starts all of this with
+the wrist (`camera:=false` to skip it, `show_window:=false` for no OpenCV
+window). On its own:
 
 ```bash
 ros2 launch camera_tracking tracking.launch.py   # Arducam OV9281 on /dev/video8, 1280x800 @ 120 fps
 ```
+
+**Plate mounting check.** The terminal prints `plate OK` or an ERROR such as
+`plate WRONG: plate turned +120 deg (one slot clockwise); ID1 9 o'clock,
+ID2 1 o'clock` (repeated as a WARN every 5 s), and `joint_commander_gui`
+shows the same text in a banner at the top: green OK, red wrong, grey when the
+camera stack is not running. Expected mounting: ID2 at 9 o'clock and ID3 at
+1 o'clock in the image (ID1 at the bottom). If the camera is ever remounted,
+run `plate_check`, read ID1's bearing and put it in
+`camera_tracking/config/platform.yaml` as `expected_id1_bearing_deg`.
 
 After mounting the top plate, `ros2 run camera_tracking plate_check` reports
 the clock position of each tag in the image (ID1 should be at 12 o'clock with
