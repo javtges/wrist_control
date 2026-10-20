@@ -9,12 +9,15 @@ platform_pose:
     zero_frame: platform_zero
 
     # Tag layout in the ID0 frame (x right, y up along the printed tag), mm.
-    # ID1 straight above ID0, ID2 lower right, ID3 lower left; 40 mm centre to
-    # centre at 120 degrees. All four tags printed with the same orientation.
+    # ID1 straight above ID0, ID2 lower right, ID3 lower left, 120 degrees apart.
+    # The drawing says 40 mm centre to centre; the plate measures 39.0 mm for ID1
+    # and ID2 with the calibrated camera (2026-10-20, tags verified 12.0 mm), and
+    # ID3 is assumed the same (it is clipped by the frame in the approved mounting).
+    # All four tags printed with the same orientation.
     tag_size: 0.012                 # edge of the black square, m (12 mm tag, 18 mm with border)
     tag_ids:  [0,   1,    2,       3]
-    tag_x_mm: [0.0, 0.0,  34.641, -34.641]
-    tag_y_mm: [0.0, 40.0, -20.0,  -20.0]
+    tag_x_mm: [0.0, 0.0,  33.775, -33.775]
+    tag_y_mm: [0.0, 39.0, -19.5, -19.5]
     tag_priority: [0, 1, 2, 3]      # ID0 when visible, else the first visible outer tag
     pose_source: priority           # priority = that one tag; all = refine over every visible tag
 
@@ -40,8 +43,8 @@ plate_guard:
     detections_topic: /apriltag/detections
     tag_size: 0.012
     tag_ids:  [0,   1,    2,       3]
-    tag_x_mm: [0.0, 0.0,  34.641, -34.641]
-    tag_y_mm: [0.0, 40.0, -20.0,  -20.0]
+    tag_x_mm: [0.0, 0.0,  33.775, -33.775]
+    tag_y_mm: [0.0, 39.0, -19.5, -19.5]
     expected_id1_bearing_deg: 283.5
     tolerance_deg: 15.0
     stale_after: 1.0
