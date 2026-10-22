@@ -5,7 +5,8 @@ joint_commander_gui — Tkinter + ROS2 GUI for commanding HSA wrist joints.
 Publishes Float32MultiArray to /hsa_odrive_control/joint_commands and
 controls ODrive parameters on the hsa_odrive_control node in real time.
 Also shows each ODrive's DC bus current from /odrive_axis{N}/odrive_status,
-and calls /set_platform_zero (camera_tracking platform_pose) once every HSA
+sets every joint at once ("All joints" entry, or "Extend Fully" = each joint's
+max_angle, the demo-collection pose), and calls /set_platform_zero (camera_tracking platform_pose) once every HSA
 reads 0 deg, so the camera's platform zero is taken with the plate at rest.
 A banner across the top shows /plate_mount_status from camera_tracking's
 plate_guard: green when the top plate is mounted as expected, red when not,
@@ -560,6 +561,23 @@ class JointCommanderApp:
             command=self.node.call_reset_zero,
         ).grid(row=2, column=0, columnspan=2, padx=6, pady=4, sticky="ew")
 
+        # Every joint at once: a typed angle, or full extension (each joint's max_angle). Both
+        # publish once immediately, like Go to Zero; the ODrives hold a position setpoint, so a
+        # single command is enough for a pose the wrist must keep for a whole session.
+        all_row = ttk.Frame(f)
+        all_row.grid(row=7, column=0, columnspan=2, padx=6, pady=(10, 2), sticky="ew")
+        ttk.Label(all_row, text="All joints (°):").pack(side="left")
+        self._all_var = tk.StringVar(value="0")
+        all_entry = ttk.Entry(all_row, textvariable=self._all_var, width=7)
+        all_entry.pack(side="left", padx=4)
+        all_entry.bind("<Return>", lambda _: self._set_all_from_entry())
+        ttk.Button(all_row, text="Set All", width=8, command=self._set_all_from_entry).pack(side="left", padx=2)
+        tk.Button(
+            all_row, text="⤒  Extend Fully", bg="#0d47a1", fg="white",
+            font=("Courier", 10, "bold"), relief="flat", padx=8,
+            command=self._extend_fully,
+        ).pack(side="left", padx=(8, 0))
+
         # Enable / Disable
         tk.Button(
             f, text="⚡  Enable", width=16,
@@ -665,6 +683,31 @@ class JointCommanderApp:
         for p in self.panels:
             p.set_angle(float(p.hsa.zero_point))
         self._publish_once()
+
+    def _set_all(self, angle: float) -> None:
+        """Move every slider to ``angle`` (clamped per joint) and publish once."""
+        for p in self.panels:
+            p.set_angle(max(p.hsa.min_angle, min(p.hsa.max_angle, float(angle))))
+        self._publish_once()
+        self.node.get_logger().info(
+            "all joints -> " + " ".join(f"{p.get_angle():.1f}" for p in self.panels) + " deg")
+
+    def _set_all_from_entry(self) -> None:
+        try:
+            angle = float(self._all_var.get())
+        except ValueError:
+            self.node.get_logger().warning(f"All joints: {self._all_var.get()!r} is not a number")
+            return
+        self._set_all(angle)
+
+    def _extend_fully(self) -> None:
+        """Every joint to its max_angle from wrist.yaml: the fully extended wrist."""
+        for p in self.panels:
+            p.set_angle(float(p.hsa.max_angle))
+        self._all_var.set(f"{self.panels[0].hsa.max_angle:g}" if self.panels else "")
+        self._publish_once()
+        self.node.get_logger().info(
+            "extend fully -> " + " ".join(f"{p.get_angle():.0f}" for p in self.panels) + " deg")
 
     def _set_zero_here(self) -> None:
         """Tell hsa_odrive_control to snapshot current positions as its zero."""

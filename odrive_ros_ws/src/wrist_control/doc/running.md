@@ -135,6 +135,11 @@ ros2 run wrist_control joint_commander_gui \
   Set a rate (Hz) in the spinbox before enabling.
 - **Go to Zero** — moves all sliders to `zero_point` from the config and
   sends one command immediately (regardless of publish state).
+- **All joints (°) + Set All** — every slider to the typed angle (clamped per
+  joint) and one command immediately. **⤒ Extend Fully** does the same with
+  each joint's `max_angle` (360° in `wrist.yaml`): the fully extended wrist
+  for data collection. The ODrives hold a position setpoint, so a single
+  command keeps the pose; publishing need not be on.
 - **Set Zero Here** — calls `/hsa_odrive_control/zero_encoders`; the node
   records current motor positions as the new zero reference (motors do not move).
 - **Enable / Disable** — calls the `enable`/`disable` services on the node.
