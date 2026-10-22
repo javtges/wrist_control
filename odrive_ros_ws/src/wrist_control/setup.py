@@ -29,6 +29,7 @@ setup(
             'joint_commander_gui = wrist_control.joint_commander_gui:main',
             'odrive_position_monitor = wrist_control.odrive_position_monitor:main',
             'spacemouse_commander = wrist_control.spacemouse_commander:main',
+            'wrist_state_publisher = wrist_control.wrist_state_publisher:main',
         ],
     },
 )

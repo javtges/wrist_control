@@ -1,5 +1,6 @@
 """
 wrist_control.launch.py — the whole wrist: ODrive CAN bridges + hsa_odrive_control,
+wrist_state_publisher (every axis's state in one stamped /hsa/wrist/state message),
 and by default the baseplate camera stack (camera_tracking tracking.launch.py:
 camera, AprilTag detector, platform_pose, plate_guard, tag_monitor), so the
 terminal and joint_commander_gui show at once whether the top plate is mounted
@@ -7,6 +8,8 @@ the expected way round.
 
 Launch arguments:
   camera        true (default) = also start the camera tracking stack
+  state         true (default) = publish /hsa/wrist/state (wrist_state_publisher)
+  state_rate    /hsa/wrist/state rate, Hz (default 100)
   show_window   true (default) = tag_monitor opens its live OpenCV window
   video_device  baseplate camera (default /dev/video8)
 
@@ -31,8 +34,11 @@ def generate_launch_description():
     camera_share = get_package_share_directory('camera_tracking')
 
     camera = LaunchConfiguration('camera')
+    state = LaunchConfiguration('state')
     args = [
         DeclareLaunchArgument('camera', default_value='true'),
+        DeclareLaunchArgument('state', default_value='true'),
+        DeclareLaunchArgument('state_rate', default_value='100.0'),
         DeclareLaunchArgument('show_window', default_value='true'),
         DeclareLaunchArgument('video_device', default_value='/dev/video8'),
     ]
@@ -57,6 +63,19 @@ def generate_launch_description():
         }],
     )
 
+    state_node = Node(
+        package='wrist_control',
+        executable='wrist_state_publisher',
+        name='wrist_state_publisher',
+        output='screen',
+        condition=IfCondition(state),
+        parameters=[{
+            'num_axes': 6,
+            'rate': LaunchConfiguration('state_rate'),
+            'topic': '/hsa/wrist/state',
+        }],
+    )
+
     tracking = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(camera_share, 'launch', 'tracking.launch.py')
@@ -68,4 +87,4 @@ def generate_launch_description():
         }.items(),
     )
 
-    return LaunchDescription(args + [odrive_nodes, control_node, tracking])
+    return LaunchDescription(args + [odrive_nodes, control_node, state_node, tracking])

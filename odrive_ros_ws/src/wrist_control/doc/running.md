@@ -181,6 +181,28 @@ meet at the top), `leg_offset` (0: rotate the motor numbering by this many legs)
 
 ---
 
+## Step 4b — One stamped state topic: `wrist_state_publisher`
+
+`wrist_control.launch.py` also starts `wrist_state_publisher` (`state:=false` to
+skip, `state_rate:=` Hz, default 100). It folds `/hsa_odrive_control/joint_states`
+and `joint_commands` plus every axis's `controller_status` and `odrive_status`
+into one `hsa_wrist_msgs/WristState` on `/hsa/wrist/state`: extension and
+command angles (deg), ODrive position (turns), velocity, torque target and
+estimate, Iq setpoint and measured, axis state, errors, bus voltage and current,
+FET and motor temperatures, disarm reason, each per axis, plus how old each
+source's newest sample was (`*_age_s`; the ODrive messages carry no stamp, so
+everything is keyed on receive time and the header is the publish time). This
+is what HSA-UMI's recorder stores per camera frame and what rollout bags carry.
+
+```bash
+ros2 run wrist_control wrist_state_publisher          # on its own
+ros2 topic hz /hsa/wrist/state                        # ~100 Hz
+ros2 topic echo --once /hsa/wrist/state --field extension_deg
+```
+
+The `hsa_wrist_msgs` package is in this workspace; build it before
+`wrist_control` (`colcon build --packages-select hsa_wrist_msgs wrist_control`).
+
 ## Step 5 — Camera tracking of the platform
 
 A baseplate USB camera tracks the four AprilTags on the platform (16h5, ids

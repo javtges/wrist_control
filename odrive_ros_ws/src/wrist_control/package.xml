@@ -13,6 +13,7 @@
   <depend>std_msgs</depend>
   <depend>std_srvs</depend>
   <depend>odrive_can</depend>
+  <depend>hsa_wrist_msgs</depend>
   <depend>ament_index_python</depend>
   <depend>launch_ros</depend>
   <exec_depend>camera_tracking</exec_depend>
