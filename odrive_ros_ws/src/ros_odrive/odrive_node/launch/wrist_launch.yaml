@@ -90,7 +90,7 @@ launch:
       name: "publish_rate"
       value: 20.0
 
-- node:
-    pkg: "wrist_control"
-    exec: "hsa_odrive_control"
-    name: "hsa_odrive_control"
+# hsa_odrive_control is NOT started here: wrist_control.launch.py starts it with its parameters
+# (robot_config, control/input mode). Starting it here as well ran two controllers on the same
+# axes: every joint command went out twice on CAN, and zero_encoders reached only one of them, so
+# the two published and commanded different angles.
