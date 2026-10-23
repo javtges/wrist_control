@@ -8,7 +8,7 @@ needs the joint states to allow /set_platform_zero and tag_monitor records
 the motor positions.
 
 Launch arguments:
-  video_device     baseplate camera device (default /dev/video8, the Arducam OV9281)
+  video_device     baseplate camera device (default: the Arducam OV9281's /dev/v4l/by-id path)
   platform_config  platform_pose parameters: tag layout, zero file, zeroing guard
                    (default config/platform.yaml)
   tag_id           tag the monitor watches for "lost"; -1 = any tag (default -1)
@@ -43,7 +43,7 @@ def generate_launch_description():
     start_camera = LaunchConfiguration('start_camera')
 
     args = [
-        DeclareLaunchArgument('video_device', default_value='/dev/video8'),
+        DeclareLaunchArgument('video_device', default_value='/dev/v4l/by-id/usb-Arducam_Technology_Co.__Ltd._Arducam_OV9281_USB_Camera_UC762-video-index0'),
         DeclareLaunchArgument(
             'platform_config',
             default_value=os.path.join(share, 'config', 'platform.yaml')),

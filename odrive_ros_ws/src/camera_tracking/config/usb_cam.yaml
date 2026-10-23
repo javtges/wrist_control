@@ -6,7 +6,7 @@
 # video_device and camera_info_url are overridden from camera.launch.py.
 /**:
   ros__parameters:
-    video_device: "/dev/video8"
+    video_device: "/dev/v4l/by-id/usb-Arducam_Technology_Co.__Ltd._Arducam_OV9281_USB_Camera_UC762-video-index0"
     framerate: 120.0
     io_method: "mmap"
     frame_id: "camera"          # TF parent of every tag frame

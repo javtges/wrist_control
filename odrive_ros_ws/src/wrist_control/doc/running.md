@@ -222,7 +222,7 @@ the wrist (`camera:=false` to skip it, `show_window:=false` for no OpenCV
 window). On its own:
 
 ```bash
-ros2 launch camera_tracking tracking.launch.py   # Arducam OV9281 on /dev/video8, 1280x800 @ 120 fps
+ros2 launch camera_tracking tracking.launch.py   # Arducam OV9281 by its /dev/v4l/by-id path, 1280x800 @ 120 fps
 ```
 
 **Plate mounting check.** The terminal prints `plate OK` or an ERROR such as

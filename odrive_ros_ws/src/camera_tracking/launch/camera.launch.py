@@ -19,7 +19,8 @@ Publishes (namespace = camera_name, default tracking_cam):
   /tracking_cam/image_rect    undistorted frames (what AprilTag consumes)
 
 Launch arguments:
-  video_device   V4L2 device of the baseplate camera (default /dev/video8, the Arducam OV9281)
+  video_device   V4L2 device of the baseplate camera (default: the Arducam OV9281's /dev/v4l/by-id path,
+                 which survives re-enumeration; /dev/videoN does not)
   camera_name    namespace of the camera topics (default tracking_cam)
   params_file    usb_cam parameter file (default config/usb_cam.yaml)
   camera_info    calibration yaml (default config/camera_info.yaml)
@@ -54,7 +55,7 @@ def generate_launch_description():
     start_camera = LaunchConfiguration('start_camera')
 
     args = [
-        DeclareLaunchArgument('video_device', default_value='/dev/video8'),
+        DeclareLaunchArgument('video_device', default_value='/dev/v4l/by-id/usb-Arducam_Technology_Co.__Ltd._Arducam_OV9281_USB_Camera_UC762-video-index0'),
         DeclareLaunchArgument('camera_name', default_value='tracking_cam'),
         DeclareLaunchArgument(
             'params_file',
@@ -77,7 +78,11 @@ def generate_launch_description():
         parameters=[
             params_file,
             {
-                'video_device': video_device,
+                # usb_cam resolves a symlink by prepending /dev/ to its target ('../../video10'),
+                # which fails, so the by-id path is resolved here. A missing device is left as given
+                # so usb_cam's own error names it.
+                'video_device': PythonExpression([
+                    "__import__('os').path.realpath('", video_device, "')"]),
                 'camera_name': camera_name,
                 'camera_info_url': PythonExpression(["'file://' + '", camera_info, "'"]),
             },

@@ -11,7 +11,7 @@ Launch arguments:
   state         true (default) = publish /hsa/wrist/state (wrist_state_publisher)
   state_rate    /hsa/wrist/state rate, Hz (default 100)
   show_window   true (default) = tag_monitor opens its live OpenCV window
-  video_device  baseplate camera (default /dev/video8)
+  video_device  baseplate camera (default: the Arducam's /dev/v4l/by-id path; /dev/videoN moves between boots)
 
   ros2 launch wrist_control wrist_control.launch.py
   ros2 launch wrist_control wrist_control.launch.py camera:=false
@@ -40,7 +40,7 @@ def generate_launch_description():
         DeclareLaunchArgument('state', default_value='true'),
         DeclareLaunchArgument('state_rate', default_value='100.0'),
         DeclareLaunchArgument('show_window', default_value='true'),
-        DeclareLaunchArgument('video_device', default_value='/dev/video8'),
+        DeclareLaunchArgument('video_device', default_value='/dev/v4l/by-id/usb-Arducam_Technology_Co.__Ltd._Arducam_OV9281_USB_Camera_UC762-video-index0'),
     ]
 
     odrive_nodes = IncludeLaunchDescription(

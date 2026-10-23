@@ -169,12 +169,13 @@ source install/setup.bash
 ```
 
 The baseplate camera is an Arducam OV9281 (global shutter, monochrome,
-1280x800). It enumerated as `/dev/video8` with the laptop webcam and RealSense
+1280x800). The launch files open it by its stable `/dev/v4l/by-id/usb-Arducam_*-video-index0`
+path: as `/dev/videoN` it enumerated as `/dev/video8` with the laptop webcam and RealSense
 also attached; check after every replug:
 
 ```bash
 v4l2-ctl --list-devices
-v4l2-ctl -d /dev/video8 --list-formats-ext     # MJPG: 120 fps at 1280x800 / 1280x720
+v4l2-ctl -d /dev/v4l/by-id/usb-Arducam*-video-index0 --list-formats-ext   # MJPG: 120 fps at 1280x800 / 1280x720
 ```
 
 `config/usb_cam.yaml` asks for 1280x800 MJPG at 120 fps: the full sensor,
