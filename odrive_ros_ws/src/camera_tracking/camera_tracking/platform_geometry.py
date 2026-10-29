@@ -214,6 +214,20 @@ def solve_multi_tag_pose(layout: TagLayout, detections: dict[int, np.ndarray], K
     return rt_to_matrix(rvec, tvec)
 
 
+def select_detections(detections, ids, min_margin: float) -> dict[int, np.ndarray]:
+    """{id: corners} from (id, decision_margin, corners): drops detections below
+    `min_margin` and keeps the highest-margin one per id. The detector now and then
+    reports a ghost (margin ~1, real tags ~120), sometimes with a real tag's id;
+    letting it through threw the pose off by up to metres."""
+    best: dict[int, tuple[float, np.ndarray]] = {}
+    for tag_id, margin, corners in detections:
+        if tag_id not in ids or margin < min_margin:
+            continue
+        if tag_id not in best or margin > best[tag_id][0]:
+            best[tag_id] = (margin, np.asarray(corners, dtype=float))
+    return {i: c for i, (_, c) in best.items()}
+
+
 def choose_source_tag(priority: list[int], visible: set[int]) -> int | None:
     """First id in `priority` that is visible (ID0 before the outer tags)."""
     for tag_id in priority:

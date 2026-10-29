@@ -84,6 +84,7 @@ class PlatformPose(Node):
         self.declare_parameter('tag_y_mm', pg.DEFAULT_TAG_Y_MM)
         self.declare_parameter('tag_priority', pg.DEFAULT_TAG_IDS)
         self.declare_parameter('pose_source', 'priority')   # priority | all
+        self.declare_parameter('min_decision_margin', 50.0)  # below = ghost detection, ignored
         self.declare_parameter('max_age', 0.1)               # s, pose freshness for zeroing
         self.declare_parameter('stale_after', 1.0)           # s without detections -> not visible
         self.declare_parameter('zero_file', '~/.config/camera_tracking/platform_zero.yaml')
@@ -109,6 +110,7 @@ class PlatformPose(Node):
         self.pose_source: str = p('pose_source')
         if self.pose_source not in ('priority', 'all'):
             raise ValueError("pose_source must be 'priority' or 'all'")
+        self.min_margin = float(p('min_decision_margin'))
         self.max_age = float(p('max_age'))
         self.stale_after = float(p('stale_after'))
         self.zero_file = os.path.expanduser(str(p('zero_file')))
@@ -166,10 +168,9 @@ class PlatformPose(Node):
             self.get_logger().warning('no camera_info yet, cannot estimate a pose',
                                       throttle_duration_sec=5.0)
             return
-        detections = {
-            int(d.id): np.array([[c.x, c.y] for c in d.corners], dtype=float)
-            for d in msg.detections if int(d.id) in self.layout.ids
-        }
+        detections = pg.select_detections(
+            ((int(d.id), float(d.decision_margin), [[c.x, c.y] for c in d.corners]) for d in msg.detections),
+            self.layout.ids, self.min_margin)
         T, tag_id = pg.platform_pose(self.layout, detections, self._K, self.priority, self.pose_source)
         self._set_visible(T is not None, tag_id)
         if T is None:

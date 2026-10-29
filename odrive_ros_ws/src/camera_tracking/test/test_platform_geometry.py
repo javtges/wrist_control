@@ -253,3 +253,14 @@ def test_describe_spin():
     assert 'one slot counter-clockwise' in pg.describe_spin(-121.0)
     assert '2 slots' in pg.describe_spin(240.0)
     assert '(' not in pg.describe_spin(60.0)
+
+
+def test_select_detections_drops_ghosts_and_keeps_best_per_id():
+    real0, ghost0, real2 = np.zeros((4, 2)), np.ones((4, 2)), np.full((4, 2), 2.0)
+    raw = [(0, 120.0, real0), (0, 1.6, ghost0), (2, 150.0, real2), (3, 1.5, ghost0), (25, 200.0, ghost0)]
+    got = pg.select_detections(raw, [0, 1, 2, 3], min_margin=30.0)
+    assert set(got) == {0, 2}
+    assert np.array_equal(got[0], real0) and np.array_equal(got[2], real2)
+    # Ghost listed first still loses to the real tag.
+    got = pg.select_detections([(0, 40.0, ghost0), (0, 120.0, real0)], [0], min_margin=30.0)
+    assert np.array_equal(got[0], real0)

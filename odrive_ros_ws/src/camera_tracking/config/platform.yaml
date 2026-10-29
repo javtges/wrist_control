@@ -26,6 +26,8 @@ platform_pose:
     pose_source: all                # all = anchor on the priority tag, refine over every visible tag's
                                     # corners (a 70 mm baseline pins the tilt a lone 12 mm tag cannot);
                                     # priority = that one tag only
+    min_decision_margin: 50.0       # ignore detections below this (real tags >= ~99, ghosts ~0.3-37);
+                                    # the best detection per id wins
 
     max_age: 0.1                    # s, the pose must be this fresh to become the zero
     stale_after: 1.0                # s without detections before "not visible"
