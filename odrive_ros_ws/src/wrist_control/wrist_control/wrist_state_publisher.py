@@ -13,7 +13,7 @@ newest sample was then. Values are held (not cleared) when a source goes quiet: 
 freshness signal.
 
 Topics subscribed:
-  /hsa_odrive_control/joint_states    (std_msgs/Float32MultiArray)  measured extension angles, deg
+  /hsa_positions                      (std_msgs/Float32MultiArray)  measured extension angles, deg (odrive_position_monitor)
   /hsa_odrive_control/joint_commands  (std_msgs/Float32MultiArray)  commanded extension angles, deg
   /odrive_axis{N}/controller_status   (odrive_can/ControllerStatus)
   /odrive_axis{N}/odrive_status       (odrive_can/ODriveStatus)
@@ -135,7 +135,7 @@ class WristStatePublisher(Node):
         self._odrive: list[tuple[float, dict] | None] = [None] * self.n
 
         qos = QoSProfile(reliability=ReliabilityPolicy.RELIABLE, history=HistoryPolicy.KEEP_LAST, depth=10)
-        self.create_subscription(Float32MultiArray, '/hsa_odrive_control/joint_states', self._on_joints, qos)
+        self.create_subscription(Float32MultiArray, '/hsa_positions', self._on_joints, qos)
         self.create_subscription(Float32MultiArray, '/hsa_odrive_control/joint_commands', self._on_command, 10)
         for i in range(self.n):
             self.create_subscription(

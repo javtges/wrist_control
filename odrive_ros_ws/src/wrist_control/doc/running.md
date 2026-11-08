@@ -235,8 +235,9 @@ meet at the top), `leg_offset` (0: rotate the motor numbering by this many legs)
 ## Step 4b — One stamped state topic: `wrist_state_publisher`
 
 `wrist_control.launch.py` also starts `wrist_state_publisher` (`state:=false` to
-skip, `state_rate:=` Hz, default 100). It folds `/hsa_odrive_control/joint_states`
-and `joint_commands` plus every axis's `controller_status` and `odrive_status`
+skip, `state_rate:=` Hz, default 100) and `odrive_position_monitor` at the same
+rate. It folds `/hsa_positions` (measured angles from the physical zero) and
+`/hsa_odrive_control/joint_commands` plus every axis's `controller_status` and `odrive_status`
 into one `hsa_wrist_msgs/WristState` on `/hsa/wrist/state`: extension and
 command angles (deg), ODrive position (turns), velocity, torque target and
 estimate, Iq setpoint and measured, axis state, errors, bus voltage and current,

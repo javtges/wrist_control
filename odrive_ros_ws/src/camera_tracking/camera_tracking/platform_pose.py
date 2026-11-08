@@ -17,7 +17,7 @@ Subscribes:
   detections_topic    (apriltag_msgs/AprilTagDetectionArray) default /apriltag/detections
   camera_info_topic   (sensor_msgs/CameraInfo)                default /tracking_cam/camera_info
   joint_states_topic  (std_msgs/Float32MultiArray) HSA extension angles, degrees,
-                      default /hsa_odrive_control/joint_states (zeroing guard)
+                      default /hsa_positions (zeroing guard)
 
 Publishes:
   /platform_pose          (geometry_msgs/PoseStamped) platform in platform_zero; only
@@ -74,7 +74,7 @@ class PlatformPose(Node):
 
         self.declare_parameter('detections_topic', '/apriltag/detections')
         self.declare_parameter('camera_info_topic', '/tracking_cam/camera_info')
-        self.declare_parameter('joint_states_topic', '/hsa_odrive_control/joint_states')
+        self.declare_parameter('joint_states_topic', '/hsa_positions')
         self.declare_parameter('camera_frame', 'camera')
         self.declare_parameter('platform_frame', 'platform')
         self.declare_parameter('zero_frame', 'platform_zero')

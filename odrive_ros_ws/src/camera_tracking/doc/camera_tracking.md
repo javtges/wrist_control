@@ -14,7 +14,7 @@ usb_cam ──► /tracking_cam/image_raw ──► rectify ──► /tracking_
                                        /apriltag/detections    ◄──────────────────┘
                                                    │
    platform_pose ◄── detections + camera_info      └─► tag_monitor ◄── detections + image_rect
-     + /hsa_odrive_control/joint_states (zero guard)      + /hsa_odrive_control/joint_states
+     + /hsa_positions (zero guard)      + /hsa_positions
      /platform_pose          (in platform_zero)           + /odrive_positions
      /platform_pose_camera   (in camera)                  + /hsa_odrive_control/joint_commands
      /platform_tag_visible, /platform_source_tag          ──► ~/wrist_captures/*.png,*.yaml,captures.csv
@@ -142,7 +142,7 @@ The zero is the platform pose with the HSAs at 0° and the plate sitting flat
    ros2 service call /set_platform_zero std_srvs/srv/Trigger
    ```
    The GUI button only enables while every HSA reads 0 ± 1° and the service
-   exists; the service itself refuses unless `/hsa_odrive_control/joint_states`
+   exists; the service itself refuses unless `/hsa_positions`
    is fresh and all within `joints_zero_tol_deg` of 0 (`require_joints_zero:
    false` drops the guard), and unless a tag was seen within `max_age`.
 

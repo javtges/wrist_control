@@ -1,5 +1,6 @@
 """
 wrist_control.launch.py — the whole wrist: ODrive CAN bridges + hsa_odrive_control,
+odrive_position_monitor (/hsa_positions, the measured angles everything else reads),
 wrist_state_publisher (every axis's state in one stamped /hsa/wrist/state message),
 and by default the baseplate camera stack (camera_tracking tracking.launch.py:
 camera, AprilTag detector, platform_pose, plate_guard, tag_monitor), so the
@@ -9,7 +10,7 @@ the expected way round.
 Launch arguments:
   camera        true (default) = also start the camera tracking stack
   state         true (default) = publish /hsa/wrist/state (wrist_state_publisher)
-  state_rate    /hsa/wrist/state rate, Hz (default 100)
+  state_rate    /hsa/wrist/state and /hsa_positions rate, Hz (default 100)
   show_window   true (default) = tag_monitor opens its live OpenCV window
   video_device  baseplate camera (default: the Arducam's /dev/v4l/by-id path; /dev/videoN moves between boots)
 
@@ -62,6 +63,14 @@ def generate_launch_description():
         }],
     )
 
+    monitor_node = Node(
+        package='wrist_control',
+        executable='odrive_position_monitor',
+        name='odrive_position_monitor',
+        output='screen',
+        parameters=[{'publish_rate': LaunchConfiguration('state_rate')}],
+    )
+
     state_node = Node(
         package='wrist_control',
         executable='wrist_state_publisher',
@@ -86,4 +95,4 @@ def generate_launch_description():
         }.items(),
     )
 
-    return LaunchDescription(args + [odrive_nodes, control_node, state_node, tracking])
+    return LaunchDescription(args + [odrive_nodes, control_node, monitor_node, state_node, tracking])

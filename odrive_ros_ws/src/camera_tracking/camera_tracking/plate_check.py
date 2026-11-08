@@ -47,7 +47,7 @@ class PlateCheck(Node):
         super().__init__('plate_check')
         self.declare_parameter('detections_topic', '/apriltag/detections')
         self.declare_parameter('camera_info_topic', '/tracking_cam/camera_info')
-        self.declare_parameter('joint_states_topic', '/hsa_odrive_control/joint_states')
+        self.declare_parameter('joint_states_topic', '/hsa_positions')
         self.declare_parameter('joint_commands_topic', '/hsa_odrive_control/joint_commands')
         self.declare_parameter('tag_size', pg.DEFAULT_TAG_SIZE_M)
         self.declare_parameter('tag_ids', pg.DEFAULT_TAG_IDS)

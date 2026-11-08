@@ -187,7 +187,7 @@ class TagMonitor(Node):
 
         self.declare_parameter('image_topic', '/tracking_cam/image_rect')
         self.declare_parameter('detections_topic', '/apriltag/detections')
-        self.declare_parameter('joint_states_topic', '/hsa_odrive_control/joint_states')
+        self.declare_parameter('joint_states_topic', '/hsa_positions')
         self.declare_parameter('odrive_positions_topic', '/odrive_positions')
         self.declare_parameter('joint_commands_topic', '/hsa_odrive_control/joint_commands')
         self.declare_parameter('tag_id', -1)

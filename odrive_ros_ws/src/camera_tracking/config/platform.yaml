@@ -3,7 +3,7 @@ platform_pose:
   ros__parameters:
     detections_topic: /apriltag/detections
     camera_info_topic: /tracking_cam/camera_info
-    joint_states_topic: /hsa_odrive_control/joint_states
+    joint_states_topic: /hsa_positions
     camera_frame: camera            # usb_cam frame_id (TF parent of everything)
     platform_frame: platform
     zero_frame: platform_zero
