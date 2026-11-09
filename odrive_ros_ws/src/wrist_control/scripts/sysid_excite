@@ -1,0 +1,3 @@
+#!/usr/bin/env python3
+from wrist_control.sysid_excite import main
+main()
