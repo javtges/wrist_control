@@ -16,7 +16,7 @@ hsas:
     min_angle: 0.0
     max_angle: 360.0
     zero_point: 0.0
-    zero_offset: 0.2786
+    zero_offset: 0.244913
     index: 0
     motor: odrive
     gear_ratio: 2.0
@@ -25,7 +25,7 @@ hsas:
     min_angle: 0.0
     max_angle: 360.0
     zero_point: 0.0
-    zero_offset: 0.3341
+    zero_offset: 0.255598
     index: 1
     motor: odrive
     gear_ratio: 2.0
@@ -34,7 +34,7 @@ hsas:
     min_angle: 0.0
     max_angle: 360.0
     zero_point: 0.0
-    zero_offset: 0.2876
+    zero_offset: 0.268981
     index: 2
     motor: odrive
     gear_ratio: 2.0
@@ -43,7 +43,7 @@ hsas:
     min_angle: 0.0
     max_angle: 360.0
     zero_point: 0.0
-    zero_offset: 0.3459
+    zero_offset: 0.277719
     index: 3
     motor: odrive
     gear_ratio: 2.0
@@ -52,7 +52,7 @@ hsas:
     min_angle: 0.0
     max_angle: 360.0
     zero_point: 0.0
-    zero_offset: 0.2495
+    zero_offset: 0.255212
     index: 4
     motor: odrive
     gear_ratio: 2.0
@@ -61,7 +61,7 @@ hsas:
     min_angle: 0.0
     max_angle: 360.0
     zero_point: 0.0
-    zero_offset: 0.2509
+    zero_offset: 0.254769
     index: 5
     motor: odrive
     gear_ratio: 2.0
