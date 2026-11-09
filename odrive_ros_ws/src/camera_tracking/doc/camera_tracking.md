@@ -283,6 +283,26 @@ ros2 topic echo /platform_pose/tag_consistency_mm
 ros2 run tf2_tools view_frames            # camera → platform_zero → platform
 ```
 
+### Measuring height and tilt
+
+```bash
+ros2 run camera_tracking platform_meter
+```
+
+Once per `report_period` (1 s) it prints the HSA angles and the pose relative
+to the rest zero: `z` along the rest normal (**+ towards the camera, so
+extending the HSAs makes it negative**, about −12 mm at 360°), the lateral
+offset, `tilt` (plate normal vs rest normal), the direction it leans (`toward`,
+deg from platform +x, 90 = ID1's side), `twist` about the normal, and the
+session maxima of tilt, |z| and lateral offset. Type a label + Enter (or
+just Enter) to append a snapshot to `csv` (default
+`~/.local/share/camera_tracking/platform_meter_<time>.csv`): every field
+averaged over the last `avg_s` (0.5 s), with the z and tilt standard
+deviations and the joint angles. `r` + Enter resets the maxima. A tilt of a
+degree or so at 0° straight after zeroing means the zero is stale: re-zero
+(see Zeroing). `-p pose_topic:=/platform_pose_camera` reads the
+camera-frame pose instead (no zero needed; z is then the camera distance).
+
 Start the wrist stack as usual (`odrive_can wrist_launch.yaml` + `hsa_odrive_control`)
 so the monitor has motor positions to record; without it the overlay shows `n/a`.
 
@@ -336,6 +356,7 @@ Parameters: `tag_id`, `lost_after`, `stale_after`, `capture_on_lost`, `capture_i
 | `/platform_source_tag` | std_msgs/Int32 | platform_pose: id anchoring the pose, -1 = none |
 | `/platform_zero_set` | std_msgs/Bool (latched) | platform_pose |
 | `/platform_pose/tag_consistency_mm` | std_msgs/Float32MultiArray | platform_pose, when > 1 tag visible |
+| `/platform_pose/pose_quality` | std_msgs/Float32MultiArray | platform_pose, every frame: `[n_tags, tag_mask, rms_px, alt_rms_px, alt_rot_deg]` |
 | TF `camera -> platform_zero` (static), `platform_zero -> platform` | tf2 | platform_pose (`camera -> platform` until zeroed) |
 | `/set_platform_zero` | std_srvs/Trigger (service) | platform_pose |
 | `/plate_mount_ok`, `/plate_mount_status` | std_msgs/Bool, String | plate_guard, 2 Hz |
@@ -384,3 +405,21 @@ and covered by `test/test_platform_geometry.py` (`python3 -m pytest test`).
   `tag_consistency_mm` with all tags visible and fix the numbers.
 - **Window never opens**: no `$DISPLAY` (ssh) — use `show_window:=false` and
   `rqt_image_view` on `/tag_monitor/image_annotated`.
+
+
+## Tilt depends on which tags are seen (2026-11-09)
+
+Each tag's IPPE solve has a mirror solution a few degrees of tilt away that reprojects almost as
+well (a 12 mm tag at 300 mm: 7 deg apart, 0.05 px). `solve_platform_pose` now seeds from both
+solutions of every visible tag, refines each over all tags, keeps the lowest reprojection RMS,
+and breaks near-ties toward the previous frame's pose, so it cannot settle on the wrong branch or
+flip between the two. Fit quality is on `~/pose_quality` and logged by `sysid_excite`.
+
+That was not the main cause of the 1.5 / 4.8 deg flicker seen in sweeps above 300 deg. With
+the HSAs at (336, 216, 0, 336, 336, 216) deg, tags 0, 2 and 3 alone gave 7.0, 9.1 and 2.8 deg of
+tilt (planes 5-9 deg apart), pairs gave 3.8-11 deg, and the 3-tag fit had 2.6 px RMS against
+0.1-0.3 px for any single tag. The tags do not agree with a flat rigid layout there, so the pose
+depends on which tags pass `min_decision_margin` (tag 0 was at 59-61 against a cutoff of 50),
+and a tag dropping in and out moves the tilt by degrees. Next: compare the same numbers at rest
+to tell a fixed per-tag mounting error (calibrate a 6-DoF pose per tag) from deformation or a
+camera calibration bias.

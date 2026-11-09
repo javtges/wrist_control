@@ -264,3 +264,71 @@ def test_select_detections_drops_ghosts_and_keeps_best_per_id():
     # Ghost listed first still loses to the real tag.
     got = pg.select_detections([(0, 40.0, ghost0), (0, 120.0, real0)], [0], min_margin=30.0)
     assert np.array_equal(got[0], real0)
+
+
+def test_plate_metrics_rest_is_zero():
+    m = pg.plate_metrics(np.eye(4))
+    assert all(v == pytest.approx(0.0, abs=1e-9) for v in m.values())
+
+
+def test_plate_metrics_rise_tilt_and_twist():
+    T = pg.translation([0.003, -0.004, -0.0123]) @ rot_x(5.0)
+    m = pg.plate_metrics(T)
+    assert m['z_mm'] == pytest.approx(-12.3)
+    assert m['lateral_mm'] == pytest.approx(5.0)
+    assert m['tilt_deg'] == pytest.approx(5.0)
+    assert m['tilt_dir_deg'] == pytest.approx(-90.0)    # about +x the normal leans to -y
+    assert m['twist_deg'] == pytest.approx(0.0, abs=1e-9)
+    m = pg.plate_metrics(rot_y(3.0) @ rot_z(10.0))         # twist does not count as tilt
+    assert m['tilt_deg'] == pytest.approx(3.0)
+    assert m['tilt_dir_deg'] == pytest.approx(0.0, abs=1e-9)
+    assert m['twist_deg'] == pytest.approx(10.0)
+
+
+def test_tag_pose_candidates_include_the_true_pose():
+    lay = pg.TagLayout()
+    T = plate_pose(z=0.1, tilt_x=180 + 3, tilt_y=2)
+    det = synth_detections(lay, T)
+    cands = pg.tag_pose_candidates(lay, 0, det[0], K)
+    assert 1 <= len(cands) <= 2
+    assert min(pg.rotation_angle_deg(pg.invert(T) @ c) for c in cands) < 0.05
+
+
+def test_reprojection_rms_is_zero_at_the_true_pose_and_grows_off_it():
+    lay = pg.TagLayout()
+    T = plate_pose()
+    det = synth_detections(lay, T)
+    assert pg.reprojection_rms_px(lay, det, K, T) < 1e-6
+    assert pg.reprojection_rms_px(lay, det, K, T @ rot_x(2)) > 1.0
+
+
+def test_solve_platform_pose_recovers_pose_and_reports_quality():
+    lay = pg.TagLayout()
+    T = plate_pose(z=0.1)
+    det = synth_detections(lay, T)
+    rng = np.random.default_rng(1)
+    noisy = {i: c + rng.normal(0, 0.2, c.shape) for i, c in det.items()}
+    sol = pg.solve_platform_pose(lay, noisy, K, [0, 1, 2, 3], source='all')
+    assert sol.tag_id == 0 and sol.n_tags == 4
+    assert_close(sol.T, T, pos_tol_m=1e-3, rot_tol_deg=0.5)
+    assert sol.rms_px < 0.5
+    assert pg.solve_platform_pose(lay, {9: det[0]}, K, [0, 1, 2, 3]) is None
+
+
+def test_ties_go_to_the_candidate_nearest_the_previous_pose():
+    # One far, near face-on tag: its two IPPE solutions are distinct. With a huge
+    # tie band both count as equally good, so `prev` alone must pick.
+    lay = pg.TagLayout()
+    T = plate_pose(z=0.3, tilt_x=180 + 4, tilt_y=0, spin=0)
+    det = {0: synth_detections(lay, T, ids=[0])[0]}
+    cands = pg.tag_pose_candidates(lay, 0, det[0], K)
+    assert len(cands) == 2
+    for want in cands:
+        sol = pg.solve_platform_pose(lay, det, K, [0], source='priority', prev=want, tie_px=100.0)
+        assert pg.rotation_angle_deg(pg.invert(want) @ sol.T) < 0.3
+    # The mirror solution reprojects within ~0.05 px of the true one here (a 12 mm
+    # tag at 300 mm), inside the default tie band: real corner noise cannot tell
+    # them apart. With no tie band the exact (true) solution wins regardless of prev.
+    for want in cands:
+        sol = pg.solve_platform_pose(lay, det, K, [0], source='priority', prev=want, tie_px=0.0, tie_ratio=0.0)
+        assert_close(sol.T, T, pos_tol_m=1e-4, rot_tol_deg=0.1)

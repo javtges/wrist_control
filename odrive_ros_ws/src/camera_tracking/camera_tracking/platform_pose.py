@@ -26,6 +26,10 @@ Publishes:
   /platform_tag_visible   (std_msgs/Bool)   a layout tag was seen in the latest frame
   /platform_source_tag    (std_msgs/Int32)  tag id the pose is anchored on, -1 = none
   /platform_zero_set      (std_msgs/Bool)   latched; true once a zero exists
+  ~/pose_quality          (std_msgs/Float32MultiArray) per frame: [n_tags, tag_mask
+                          (bit i = layout tag i used), rms_px, alt_rms_px, alt_rot_deg].
+                          rms_px >> 0.3 px means the visible tags disagree with the
+                          layout; tag_mask changing at a fixed wrist pose moves the pose
   ~/tag_consistency_mm    (std_msgs/Float32MultiArray) per layout tag, distance between
                           the platform origin as that tag alone sees it and the
                           published pose (NaN = not visible). Checks the offsets.
@@ -123,6 +127,7 @@ class PlatformPose(Node):
         self._T_cam_platform: np.ndarray | None = None   # latest pose
         self._pose_stamp: float = 0.0                     # its image stamp (s)
         self._source_tag: int | None = None
+        self._last_pose_wall: float = 0.0
         self._last_detections_wall: float = 0.0
         self._visible: bool | None = None
         self._joints: list[float] | None = None
@@ -136,6 +141,7 @@ class PlatformPose(Node):
         self._source_pub = self.create_publisher(Int32, '/platform_source_tag', 10)
         self._zero_set_pub = self.create_publisher(Bool, '/platform_zero_set', latched)
         self._consistency_pub = self.create_publisher(Float32MultiArray, '~/tag_consistency_mm', 10)
+        self._quality_pub = self.create_publisher(Float32MultiArray, '~/pose_quality', 10)
         self._tf = TransformBroadcaster(self)
         self._static_tf = StaticTransformBroadcaster(self)
 
@@ -171,10 +177,21 @@ class PlatformPose(Node):
         detections = pg.select_detections(
             ((int(d.id), float(d.decision_margin), [[c.x, c.y] for c in d.corners]) for d in msg.detections),
             self.layout.ids, self.min_margin)
-        T, tag_id = pg.platform_pose(self.layout, detections, self._K, self.priority, self.pose_source)
+        # Previous pose breaks ties between equally good candidates (no flip-flopping),
+        # but only while it is recent.
+        fresh = (self._T_cam_platform is not None
+                 and time.monotonic() - self._last_pose_wall < self.stale_after)
+        sol = pg.solve_platform_pose(self.layout, detections, self._K, self.priority, self.pose_source,
+                                     prev=self._T_cam_platform if fresh else None)
+        T, tag_id = (None, None) if sol is None else (sol.T, sol.tag_id)
         self._set_visible(T is not None, tag_id)
         if T is None:
             return
+        self._last_pose_wall = time.monotonic()
+        used = [i for i in self.layout.ids if i in detections] if self.pose_source == 'all' else [tag_id]
+        mask = sum(1 << k for k, i in enumerate(self.layout.ids) if i in used)
+        self._quality_pub.publish(Float32MultiArray(data=[
+            float(sol.n_tags), float(mask), sol.rms_px, sol.alt_rms_px, sol.alt_rot_deg]))
         self._T_cam_platform = T
         self._pose_stamp = _stamp_s(msg.header.stamp)
         self._source_tag = tag_id

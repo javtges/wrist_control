@@ -174,8 +174,10 @@ def intrinsics_from_projection(p: np.ndarray) -> np.ndarray:
 def solve_tag_pose(layout: TagLayout, tag_id: int, corners: np.ndarray, K: np.ndarray) -> np.ndarray | None:
     """camera -> platform from one tag's four corners ((4, 2) rectified pixels).
 
-    Solves the tag about its own centre with IPPE_SQUARE (the planar-square
-    solver, unambiguous for one tag) then shifts by the tag's plate offset.
+    Solves the tag about its own centre with IPPE_SQUARE then shifts by the
+    tag's plate offset. A small tag seen near face-on has two IPPE solutions
+    a few degrees of tilt apart with similar error; this keeps the lower-error
+    one. `solve_platform_pose` weighs both (see `tag_pose_candidates`).
     """
     img = np.asarray(corners, dtype=float).reshape(4, 2)
     obj = layout.centred_object_points()
@@ -214,6 +216,102 @@ def solve_multi_tag_pose(layout: TagLayout, detections: dict[int, np.ndarray], K
     return rt_to_matrix(rvec, tvec)
 
 
+def tag_pose_candidates(layout: TagLayout, tag_id: int, corners: np.ndarray, K: np.ndarray) -> list[np.ndarray]:
+    """Both IPPE_SQUARE solutions for one tag, as camera -> platform.
+
+    A planar square has a two-fold ambiguity (the plane mirrored about the line
+    of sight). For a 12 mm tag near face-on the two differ by a few degrees of
+    tilt with near-equal reprojection error, so either can be the true one."""
+    img = np.asarray(corners, dtype=float).reshape(4, 2)
+    obj = layout.centred_object_points()
+    order = [3, 2, 1, 0]
+    try:
+        _, rvecs, tvecs, _ = cv2.solvePnPGeneric(obj[order], img[order], K, None,
+                                                 flags=cv2.SOLVEPNP_IPPE_SQUARE)
+    except cv2.error:
+        return []
+    shift = translation(-layout.offset(tag_id))
+    return [rt_to_matrix(r, t) @ shift for r, t in zip(rvecs, tvecs)]
+
+
+def reprojection_rms_px(layout: TagLayout, detections: dict[int, np.ndarray], K: np.ndarray,
+                        T: np.ndarray) -> float:
+    """RMS corner reprojection error (px) of camera -> platform `T` over the layout
+    tags in `detections`."""
+    ids = [i for i in layout.ids if i in detections]
+    obj = np.vstack([layout.object_points(i) for i in ids])
+    img = np.vstack([np.asarray(detections[i], dtype=float).reshape(4, 2) for i in ids])
+    d = project_points(T, obj, K) - img
+    return float(np.sqrt(np.mean(np.sum(d * d, axis=1))))
+
+
+@dataclass
+class PoseSolution:
+    """Result of `solve_platform_pose`.
+
+    rms_px      reprojection RMS of the chosen pose over the tags used
+    n_tags      tags used in the fit
+    alt_rms_px  RMS of the best clearly different pose (NaN if none): close to
+                rms_px means the frame cannot tell the two apart
+    alt_rot_deg rotation between the chosen pose and that alternative
+    """
+    T: np.ndarray
+    tag_id: int
+    rms_px: float
+    n_tags: int
+    alt_rms_px: float = math.nan
+    alt_rot_deg: float = math.nan
+
+
+def solve_platform_pose(layout: TagLayout, detections: dict[int, np.ndarray], K: np.ndarray,
+                        priority: list[int], source: str = 'priority',
+                        prev: np.ndarray | None = None, tie_px: float = 0.05,
+                        tie_ratio: float = 0.1, distinct_deg: float = 0.3) -> PoseSolution | None:
+    """camera -> platform, robust to the per-tag IPPE ambiguity.
+
+    Seeds are both IPPE solutions of every tag used (all visible tags for
+    source='all', the priority tag only for 'priority'). With more than one tag
+    each seed is refined over every tag's corners; the pose with the lowest
+    reprojection RMS wins. Candidates within `tie_ratio`/`tie_px` of the best
+    are indistinguishable from this frame alone, so among those the one
+    closest in rotation to `prev` (the last published pose) is kept, which
+    stops the estimate flipping between the two from frame to frame.
+
+    Seeding only from the priority tag's preferred IPPE solution (the old
+    behaviour) let the local refinement settle on the wrong branch: on
+    2026-11-08 the tilt read ~1.5 or ~4.8 deg at the same wrist pose."""
+    visible = [i for i in layout.ids if i in detections]
+    tag_id = choose_source_tag(priority, set(visible))
+    if tag_id is None:
+        return None
+    use = visible if source == 'all' else [tag_id]
+    sub = {i: detections[i] for i in use}
+    cands: list[tuple[float, np.ndarray]] = []
+    for i in use:
+        for seed in tag_pose_candidates(layout, i, detections[i], K):
+            T = solve_multi_tag_pose(layout, sub, K, guess=seed) if len(use) > 1 else seed
+            if T is None or T[2, 3] <= 0.0:   # behind the camera
+                continue
+            cands.append((reprojection_rms_px(layout, sub, K, T), T))
+    if not cands:
+        return None
+    cands.sort(key=lambda c: c[0])
+    distinct: list[tuple[float, np.ndarray]] = []
+    for e, T in cands:
+        if all(rotation_angle_deg(invert(T2) @ T) > distinct_deg for _, T2 in distinct):
+            distinct.append((e, T))
+    best_e, best_T = distinct[0]
+    if prev is not None and len(distinct) > 1:
+        ties = [c for c in distinct if c[0] <= best_e * (1.0 + tie_ratio) + tie_px]
+        best_e, best_T = min(ties, key=lambda c: rotation_angle_deg(invert(prev) @ c[1]))
+    alts = [c for c in distinct if c[1] is not best_T]
+    sol = PoseSolution(best_T, tag_id, best_e, len(use))
+    if alts:
+        sol.alt_rms_px = alts[0][0]
+        sol.alt_rot_deg = rotation_angle_deg(invert(best_T) @ alts[0][1])
+    return sol
+
+
 def select_detections(detections, ids, min_margin: float) -> dict[int, np.ndarray]:
     """{id: corners} from (id, decision_margin, corners): drops detections below
     `min_margin` and keeps the highest-margin one per id. The detector now and then
@@ -242,20 +340,11 @@ def platform_pose(layout: TagLayout, detections: dict[int, np.ndarray], K: np.nd
 
     source='priority': the pose comes from the first visible tag in `priority`
     (the spec's hierarchy: ID0 when it is seen, else one of the others).
-    source='all': the priority tag seeds a refinement over every visible tag.
+    source='all': one pose refined over every visible tag.
+    Thin wrapper over `solve_platform_pose` (no temporal tie-break).
     """
-    visible = {i for i in detections if i in layout.ids}
-    tag_id = choose_source_tag(priority, visible)
-    if tag_id is None:
-        return None, None
-    T = solve_tag_pose(layout, tag_id, detections[tag_id], K)
-    if T is None:
-        return None, None
-    if source == 'all' and len(visible) > 1:
-        refined = solve_multi_tag_pose(layout, detections, K, guess=T)
-        if refined is not None:
-            T = refined
-    return T, tag_id
+    sol = solve_platform_pose(layout, detections, K, priority, source)
+    return (None, None) if sol is None else (sol.T, sol.tag_id)
 
 
 def tag_consistency_mm(layout: TagLayout, detections: dict[int, np.ndarray], K: np.ndarray,
@@ -404,3 +493,22 @@ def describe_spin(err_deg: float, slot_deg: float = 120.0) -> str:
         n = abs(slots)
         text += f' ({"one slot" if n == 1 else f"{n} slots"} {"clockwise" if slots > 0 else "counter-clockwise"})'
     return text
+
+
+def plate_metrics(T: np.ndarray) -> dict[str, float]:
+    """Readable numbers for a platform pose in the zero frame (T = /platform_pose).
+
+    z_mm along the rest normal (+ towards the camera), x_mm / y_mm and lateral_mm
+    in the rest plane; tilt_deg is the angle between the plate normal and the
+    rest normal, tilt_dir_deg the way it leans (atan2(ny, nx) in the zero
+    frame, 0 = +x, 90 = +y, ID1's side); twist_deg is the turn about the normal
+    left after removing the tilt (swing-twist split)."""
+    R = T[:3, :3]
+    x, y, z = (float(v) * 1e3 for v in T[:3, 3])
+    n = R[:, 2]
+    tilt = math.degrees(math.acos(max(-1.0, min(1.0, float(n[2])))))
+    tilt_dir = math.degrees(math.atan2(float(n[1]), float(n[0]))) if tilt > 1e-6 else 0.0
+    _, _, qz, qw = matrix_to_quat(T)
+    twist = wrap_deg(math.degrees(2.0 * math.atan2(qz, qw)))
+    return {'z_mm': z, 'x_mm': x, 'y_mm': y, 'lateral_mm': math.hypot(x, y),
+            'tilt_deg': tilt, 'tilt_dir_deg': tilt_dir, 'twist_deg': twist}
