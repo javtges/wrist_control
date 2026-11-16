@@ -13,6 +13,8 @@ Topics subscribed:
                      from its current setpoint; may go below min_angle, down to
                      JOG_MIN_DEG, so the physical zero can be found below the
                      current zero. Only joint_commander_gui's jog buttons use it.
+  /odrive_watchdog/status (diagnostic_msgs/DiagnosticStatus) — ~/enable is
+                     refused unless this is OK and fresh (see require_watchdog)
 
 Topics published:
   /odrive_axis{N}/control_message  (odrive_can/ControlMessage)
@@ -31,7 +33,8 @@ Services provided:
   ~/reset_zero     (std_srvs/Empty)   — clear the software zero offset (in wrist.yaml
                      too), so extension angle 0 goes back to meaning the ODrive's
                      own raw pos_estimate 0
-  ~/enable         (std_srvs/Trigger) — put all axes in CLOSED_LOOP_CONTROL
+  ~/enable         (std_srvs/Trigger) — put all axes in CLOSED_LOOP_CONTROL;
+                     refused while odrive_watchdog reports a fault or isn't running
   ~/disable        (std_srvs/Trigger) — put all axes in IDLE
 
 Services called:
@@ -43,6 +46,8 @@ Parameters:
   input_mode     (int)   — ODrive InputMode   (1 = passthrough, 5 = trap_traj)
   vel_ff         (float) — velocity feed-forward in turns/s (position mode only)
   torque_ff      (float) — torque feed-forward in Nm
+  require_watchdog (bool) — refuse ~/enable unless odrive_watchdog_node reports
+                     OK (default true). Only turn off for bench work without it.
 """
 
 import math
@@ -52,6 +57,7 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, QoSProfile, ReliabilityPolicy, HistoryPolicy
 
+from diagnostic_msgs.msg import DiagnosticStatus
 from std_msgs.msg import Float32MultiArray
 from std_srvs.srv import Empty, Trigger
 from odrive_can.msg import ControlMessage, ControllerStatus
@@ -69,6 +75,9 @@ from .robot_config import default_robot_config
 # ODrive axis state constants
 AXIS_STATE_IDLE = 1
 AXIS_STATE_CLOSED_LOOP = 8
+
+# odrive_watchdog_node publishes status at 10 Hz; older than this = not running.
+WATCHDOG_STATUS_MAX_AGE_S = 2.0
 
 # ODrive control mode defaults
 CONTROL_MODE_POSITION = 3
@@ -93,6 +102,7 @@ class HSAODriveControl(Node):
         self.declare_parameter('input_mode', INPUT_MODE_PASSTHROUGH)
         self.declare_parameter('vel_ff', 0.0)
         self.declare_parameter('torque_ff', 0.0)
+        self.declare_parameter('require_watchdog', True)
 
         config_path: str = self.get_parameter('robot_config').value or default_robot_config()
 
@@ -147,6 +157,18 @@ class HSAODriveControl(Node):
         )
         self.create_subscription(Float32MultiArray, '~/jog', self._on_jog, 10)
 
+        # Safety watchdog status: (level, message, receipt time) of the latest
+        self._watchdog_status: tuple[bytes, str, float] | None = None
+        self.create_subscription(
+            DiagnosticStatus, '/odrive_watchdog/status', self._on_watchdog_status,
+            QoSProfile(
+                reliability=ReliabilityPolicy.RELIABLE,
+                durability=DurabilityPolicy.TRANSIENT_LOCAL,
+                history=HistoryPolicy.KEEP_LAST,
+                depth=1,
+            ),
+        )
+
         # Services provided by this node
         self.create_service(Empty, '~/zero_encoders', self._svc_zero_encoders)
         self.create_service(Empty, '~/reset_zero', self._svc_reset_zero)
@@ -178,6 +200,31 @@ class HSAODriveControl(Node):
 
     def _on_controller_status(self, axis_idx: int, msg: ControllerStatus) -> None:
         self._pos_estimate[axis_idx] = msg.pos_estimate
+
+    def _on_watchdog_status(self, msg: DiagnosticStatus) -> None:
+        was_faulted = (
+            self._watchdog_status is not None
+            and self._watchdog_status[0] == DiagnosticStatus.ERROR
+        )
+        if msg.level == DiagnosticStatus.ERROR and not was_faulted:
+            # The ODrives were just E-stopped; any held setpoint is stale.
+            self._setpoints = [None] * self.n
+            self.get_logger().error(f'odrive_watchdog: {msg.message}')
+        self._watchdog_status = (msg.level, msg.message, time.monotonic())
+
+    def _watchdog_block_reason(self) -> str | None:
+        """Why enabling is not allowed right now, or None if it is."""
+        if not self.get_parameter('require_watchdog').value:
+            return None
+        if self._watchdog_status is None:
+            return 'no status from odrive_watchdog_node; is it running?'
+        level, message, received = self._watchdog_status
+        age = time.monotonic() - received
+        if age > WATCHDOG_STATUS_MAX_AGE_S:
+            return f'odrive_watchdog status is {age:.1f} s old; is it still running?'
+        if level != DiagnosticStatus.OK:
+            return f'odrive_watchdog: {message}'
+        return None
 
     def _on_joint_commands(self, msg: Float32MultiArray) -> None:
         if len(msg.data) != self.n:
@@ -329,6 +376,12 @@ class HSAODriveControl(Node):
         return response
 
     def _svc_enable(self, _request: Trigger.Request, response: Trigger.Response):
+        blocked = self._watchdog_block_reason()
+        if blocked:
+            response.success = False
+            response.message = f'Enable refused: {blocked}'
+            self.get_logger().error(response.message)
+            return response
         # Each ODrive holds its current position on entering closed loop, so
         # any setpoint remembered from before is stale.
         self._setpoints = [None] * self.n

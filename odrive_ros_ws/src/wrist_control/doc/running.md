@@ -66,11 +66,67 @@ messages into CAN frames for its ODrive controller on `can0`.
 ros2 launch odrive_can wrist_launch.yaml
 ```
 
+This also starts `odrive_position_monitor` and the safety watchdog
+(`odrive_watchdog`, see [Safety watchdog](#safety-watchdog) below). It does
+**not** start `hsa_odrive_control`; that's Step 3.
+
+(`ros2 launch wrist_control wrist_control.launch.py` does Steps 2 and 3 in one
+command. Use one or the other, not both.)
+
 Verify it is running:
 
 ```bash
 ros2 node list        # should show /odrive_axis0/can_node ... /odrive_axis5/can_node
+                      # and /odrive_watchdog
+ros2 topic echo /odrive_watchdog/status --field message   # should say "all limits OK"
 ```
+
+---
+
+## Safety watchdog
+
+`odrive_watchdog` E-stops **all six** ODrives if any one of them breaks a limit:
+
+| Limit | Default | Parameter |
+|-------|---------|-----------|
+| FET temperature | > 80 °C | `max_temperature_c` |
+| Instantaneous current | > 3.5 A | `max_current_a` |
+| 1-minute average current | > 3.0 A | `avg_1min_limit_a` |
+| 5-minute average current | > 2.0 A | `avg_5min_limit_a` |
+| Status messages stop arriving | > 1 s | `stale_timeout_s` |
+
+"Current" is the motor phase current (`iq_measured`) by default. Set
+`current_source: "bus"` in `ros_odrive/odrive_node/launch/wrist_launch.yaml`
+to use DC bus current instead. All limits are set in that file.
+
+On a trip it sends the CAN Estop frame straight to every ODrive on `can0`
+(each disarms with `ESTOP_REQUESTED`), latches the fault, and
+`hsa_odrive_control` refuses **Enable** until it is reset. The reason is in
+the log and on `/odrive_watchdog/status`.
+
+The fault does not clear by itself. Once things have cooled down / settled:
+
+```bash
+ros2 service call /odrive_watchdog/reset_fault std_srvs/srv/Trigger
+```
+
+The reset is refused, with the reason, until every limit is OK again:
+temperature 5 °C under its limit, and both current averages under theirs.
+The 5-minute average comes down slowly, so after a current trip this can
+take a few minutes.
+
+To test the whole chain (motors disarm, Enable is refused):
+
+```bash
+ros2 service call /odrive_watchdog/trip std_srvs/srv/Trigger
+```
+
+Each ODrive must have `temperature_msg_rate_ms`, `bus_voltage_msg_rate_ms`,
+`error_msg_rate_ms` and `iq_msg_rate_ms` enabled. Until every axis is
+reporting, the watchdog status is "waiting" and Enable is refused.
+
+The ODrives' own firmware limits (current trip, temperature) are set
+separately, once, with `tools/odrive_safety_limits.py`; see its docstring.
 
 ---
 
@@ -255,6 +311,11 @@ The `hsa_odrive_control` node is not running or is not yet initialised.
 **Motors jerk on first enable**
 The zero has not been set. Enable, jog to the physical zero, and click
 **Set Physical Zero** before turning PUBLISHING on.
+
+**Enable does nothing; log says "Enable refused: odrive_watchdog: ..."**
+The safety watchdog has a fault latched, is still waiting for data from an
+axis, or isn't running. The message says which. For a fault, fix the cause,
+then call `/odrive_watchdog/reset_fault` (see [Safety watchdog](#safety-watchdog)).
 
 **No `/hsa_odrive_control/joint_commands` topic visible**
 Publishing is toggled off. Click the toggle button in the GUI.

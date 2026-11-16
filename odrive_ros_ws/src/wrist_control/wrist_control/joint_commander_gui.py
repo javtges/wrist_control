@@ -337,10 +337,18 @@ class GUINode(Node):
 
     def call_enable(self) -> None:
         if self._svc_enable.service_is_ready():
-            self._svc_enable.call_async(Trigger.Request())
+            self._svc_enable.call_async(Trigger.Request()).add_done_callback(
+                self._on_enable_result
+            )
             self.get_logger().info("enable called.")
         else:
             self.get_logger().warning("enable service not ready.")
+
+    def _on_enable_result(self, fut) -> None:
+        # Enable is refused while odrive_watchdog reports a fault; say why.
+        resp = fut.result()
+        if resp is not None and not resp.success:
+            self.get_logger().error(resp.message)
 
     def call_disable(self) -> None:
         if self._svc_disable.service_is_ready():

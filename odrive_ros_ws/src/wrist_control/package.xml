@@ -12,6 +12,7 @@
   <depend>rclpy</depend>
   <depend>std_msgs</depend>
   <depend>std_srvs</depend>
+  <depend>diagnostic_msgs</depend>
   <depend>odrive_can</depend>
   <depend>ament_index_python</depend>
   <depend>launch_ros</depend>

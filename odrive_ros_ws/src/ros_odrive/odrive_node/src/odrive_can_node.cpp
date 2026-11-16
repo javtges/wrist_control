@@ -39,7 +39,7 @@ enum ControlMode : uint64_t {
 // than being written once to non-volatile memory. See send_startup_gains().
 // ---------------------------------------------------------------------------
 namespace StartupGains {
-    constexpr float kPosGain           = 100.0f;  // [(turn/s) / turn]
+    constexpr float kPosGain           = 50.0f;  // [(turn/s) / turn]
     constexpr float kVelGain           = 0.01f;   // [Nm / (turn/s)]
     constexpr float kVelIntegratorGain = 0.01f;   // [Nm / turn]
 }

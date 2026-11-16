@@ -1,3 +1,5 @@
+# ODrive CAN bridge for the HSA wrist: one odrive_can_node per axis, plus
+# odrive_position_monitor and odrive_watchdog. Does not start hsa_odrive_control.
 launch:
 
 - node:
@@ -78,6 +80,36 @@ launch:
       name: "interface"
       value: "can0"
 
+# Safety watchdog: E-stops all ODrives on over-temperature / over-current
+# (see wrist_control/odrive_watchdog_node.py). hsa_odrive_control refuses to
+# enable unless this node is running and reports OK.
+- node:
+    pkg: "wrist_control"
+    exec: "odrive_watchdog_node"
+    name: "odrive_watchdog"
+    param:
+    -
+      name: "can_interface"
+      value: "can0"
+    -
+      name: "node_ids"
+      value: [0, 1, 2, 3, 4, 5]
+    -
+      name: "current_source"
+      value: "phase"
+    -
+      name: "max_temperature_c"
+      value: 80.0
+    -
+      name: "max_current_a"
+      value: 3.5
+    -
+      name: "avg_1min_limit_a"
+      value: 3.0
+    -
+      name: "avg_5min_limit_a"
+      value: 2.0
+
 - node:
     pkg: "wrist_control"
     exec: "odrive_position_monitor"
@@ -90,7 +122,6 @@ launch:
       name: "publish_rate"
       value: 20.0
 
-- node:
-    pkg: "wrist_control"
-    exec: "hsa_odrive_control"
-    name: "hsa_odrive_control"
+# hsa_odrive_control is deliberately NOT started here: run it separately
+# (RUNNING.md Step 3), or use `ros2 launch wrist_control wrist_control.launch.py`,
+# which includes this file and adds it. Starting it here too gave two nodes.

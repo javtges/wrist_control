@@ -39,8 +39,11 @@ your publisher ──► ~/joint_commands ──► hsa_odrive_control ──►
 ros2 launch wrist_control wrist_control.launch.py
 ```
 
-This starts six `odrive_can_node` instances (axes 0–5 on `can0`) **and** the
-`hsa_odrive_control` node.
+This starts everything in `odrive_can`'s `wrist_launch.yaml` (six
+`odrive_can_node` instances on `can0`, `odrive_position_monitor` and the
+`odrive_watchdog` safety node) **and** one `hsa_odrive_control` node.
+
+Don't also `ros2 run hsa_odrive_control` with this; that would start a second one.
 
 ### Wrist control node only (ODrives already running)
 

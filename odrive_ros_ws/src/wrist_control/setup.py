@@ -30,6 +30,7 @@ setup(
             'hsa_odrive_control = wrist_control.hsa_odrive_control:main',
             'joint_commander_gui = wrist_control.joint_commander_gui:main',
             'odrive_position_monitor = wrist_control.odrive_position_monitor:main',
+            'odrive_watchdog_node = wrist_control.odrive_watchdog_node:main',
             'spacemouse_commander = wrist_control.spacemouse_commander:main',
         ],
     },
